@@ -1,0 +1,20 @@
+# Overlay for an isolated IP:port deploy (no domain / no system-nginx changes).
+#   docker compose -f docker-compose.yml -f docker-compose.deploy.yml up -d --build
+#
+# Adds a dedicated Caddy that fronts frontend + backend same-origin on one high
+# host port (18080), so nothing collides with an existing :80/:443 proxy.
+services:
+  caddy:
+    image: caddy:2-alpine
+    depends_on:
+      - backend
+      - frontend
+    ports:
+      - "18080:80"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+    restart: unless-stopped
+
+volumes:
+  caddy-data:

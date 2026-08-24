@@ -1,0 +1,29 @@
+User-agent: *
+Allow: /
+Disallow: /scan/
+Disallow: /api/
+Disallow: /media/
+Disallow: /export
+Disallow: /studio
+Disallow: /gallery
+Disallow: /de/export
+Disallow: /de/studio
+Disallow: /de/gallery
+
+# AI / LLM crawlers are welcome on public pages
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://ink-preview.com/sitemap.xml

@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+/* ─────────────────────────  Acid Ink design tokens  ───────────────────────── */
+@theme {
+  /* Ink base (near-black studio) */
+  --color-ink-950: #07070a;
+  --color-ink-900: #0a0a0f;
+  --color-ink-850: #101019;
+  --color-ink-800: #16161f;
+  --color-ink-700: #20202c;
+  --color-ink-600: #2c2c3a;
+  --color-ink-500: #3a3a4d;
+
+  /* Acid-rave accents */
+  --color-acid: #c6ff1a; /* acid lime */
+  --color-cyan: #22e6ff; /* electric cyan */
+  --color-magenta: #ff2db8; /* hot magenta */
+  --color-violet: #b18cff; /* uv violet */
+
+  /* Type */
+  --font-display: "Unbounded", system-ui, sans-serif;
+  --font-sans: "Space Grotesk", system-ui, sans-serif;
+
+  /* Radii */
+  --radius-blob: 1.75rem;
+
+  /* Glows */
+  --shadow-glow-acid: 0 0 48px -10px color-mix(in srgb, var(--color-acid) 70%, transparent);
+  --shadow-glow-cyan: 0 0 48px -10px color-mix(in srgb, var(--color-cyan) 70%, transparent);
+  --shadow-glow-magenta: 0 0 48px -10px color-mix(in srgb, var(--color-magenta) 70%, transparent);
+
+  /* Motion */
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-pulse-glow: pulseGlow 3.2s ease-in-out infinite;
+  --animate-spin-slow: spin 18s linear infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+@keyframes pulseGlow {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ─────────────────────────  Base  ───────────────────────── */
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    margin: 0;
+    background: var(--color-ink-950);
+    color: #fff;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100dvh;
+  }
+  ::selection {
+    background: var(--color-acid);
+    color: var(--color-ink-950);
+  }
+}
+
+/* Film-grain overlay (apply class to a fixed full-screen element). */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

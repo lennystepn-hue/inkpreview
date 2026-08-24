@@ -1,0 +1,11 @@
+# Single-entry reverse proxy for an isolated IP:port deploy.
+# Serves the SPA + proxies /api and /media to the backend, same-origin.
+:80 {
+	encode zstd gzip
+
+	# Server-rendered SEO pages (share, style/body-part landing EN+DE, sitemap) — backend.
+	@backend path /api/* /media/* /d/* /style/* /tattoo/* /de/style/* /de/tattoo/* /sitemap.xml
+	reverse_proxy @backend backend:8000
+
+	reverse_proxy frontend:80
+}
