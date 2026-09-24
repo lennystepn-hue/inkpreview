@@ -1,18 +1,20 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Layers, X } from "lucide-react";
+import { Layers, PenTool, X } from "lucide-react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-import { Eyebrow } from "@/components/ui/Ornament";
+import { buttonClass } from "@/components/ui/Button";
+import { FlashCard } from "@/components/ui/FlashCard";
+import { Label } from "@/components/ui/Label";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { type Design, type Mockup, deleteMockup, listDesigns, listMockups } from "@/lib/api";
-import { cn } from "@/lib/cn";
+import { flashNo, flashTilt, styleName } from "@/lib/flash";
 import { groupFamilies } from "@/lib/lineage";
+import { useStyles } from "@/lib/useStyles";
 import { useLangPath, useT } from "@/lib/useT";
 import { useDraft } from "@/store/useDraft";
 import { useLightbox } from "@/store/useLightbox";
 import { CompareModal } from "./CompareModal";
-
-const TILT = ["rotate-1", "rotate-0", "-rotate-1", "rotate-0"];
 
 export function GalleryScreen() {
   const navigate = useNavigate();
@@ -20,6 +22,7 @@ export function GalleryScreen() {
   const lp = useLangPath();
   const qc = useQueryClient();
   const setDraft = useDraft((s) => s.setDesign);
+  const { data: styles = [] } = useStyles();
   const { data: designs = [], isLoading } = useQuery<Design[]>({
     queryKey: ["designs"],
     queryFn: listDesigns,
@@ -44,90 +47,102 @@ export function GalleryScreen() {
   };
 
   const enlarge = (d: Design) =>
-    openLightbox({ id: d.id, src: d.clean_png_url ?? d.thumb_url ?? "", prompt: d.prompt, design: d });
+    openLightbox({
+      id: d.id,
+      src: d.clean_png_url ?? d.thumb_url ?? "",
+      prompt: d.prompt,
+      design: d,
+    });
 
   return (
-    <div className="mx-auto max-w-md">
-      <Eyebrow className="mb-3 max-w-[15rem]">{t("gallery.eyebrow")}</Eyebrow>
-      <h1 className="font-display text-2xl font-extrabold tracking-tight">{t("gallery.title")}</h1>
-      <p className="mt-1 text-sm text-white/45">{t("gallery.subtitle")}</p>
+    <div className="flex flex-col gap-10 md:gap-14">
+      <PageHeader label={t("gallery.eyebrow")} title={t("gallery.title")}>
+        {t("gallery.subtitle")}
+      </PageHeader>
 
       {isLoading ? (
-        <div className="mt-6 grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-3 lg:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="aspect-square animate-pulse rounded-2xl bg-white/5" />
+            <div
+              key={i}
+              className="aspect-[1/1.1] animate-pulse rounded-[var(--radius-paper)] bg-raised"
+            />
           ))}
         </div>
       ) : done.length === 0 ? (
-        <div className="mt-14 text-center">
-          <img
-            src="/ink/moth.png"
-            alt=""
-            aria-hidden
-            className="mx-auto h-20 w-20 object-contain opacity-25 invert"
-          />
-          <p className="mt-4 text-base text-white/60">{t("gallery.empty")}</p>
-          <button
-            onClick={() => navigate(lp("/"))}
-            className="mt-5 inline-block rounded-full bg-acid px-6 py-3 font-display text-sm font-bold text-ink-950 shadow-[var(--shadow-glow-acid)]"
-          >
+        <div className="flex flex-col items-center gap-6 py-10 text-center">
+          <div className="grid aspect-[1/1.1] w-40 place-items-center rounded-[var(--radius-paper)] border-2 border-dashed border-line-strong">
+            <PenTool aria-hidden className="h-8 w-8 text-text-3" />
+          </div>
+          <p className="max-w-[28ch] text-lg text-text-2">{t("gallery.empty")}</p>
+          <Link to={lp("/")} className={buttonClass("neon", "lg")}>
             {t("explore.cta")}
-          </button>
+          </Link>
         </div>
       ) : (
-        <div className="mt-6 grid grid-cols-2 gap-4">
-          {families.map((fam, i) => {
+        <ul className="grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-3 lg:grid-cols-4 lg:gap-x-8 lg:gap-y-10">
+          {families.map((fam) => {
             const latest = fam[fam.length - 1];
             return (
-              <div key={latest.id} className={cn("relative transition-transform", TILT[i % TILT.length])}>
-                <button
+              <li key={latest.id} className="relative">
+                <FlashCard
+                  src={latest.thumb_url ?? latest.clean_png_url ?? ""}
+                  alt={latest.prompt}
+                  label={latest.prompt}
+                  no={flashNo(latest.id)}
+                  caption={styleName(latest.styles, styles)}
+                  tilt={flashTilt(latest.id, 1.6)}
                   onClick={() => enlarge(latest)}
-                  className="group block aspect-square w-full overflow-hidden rounded-2xl border border-white/10 bg-white transition-all hover:border-acid/60 hover:shadow-[var(--shadow-glow-acid)] active:scale-[0.96]"
-                >
-                  <img
-                    src={latest.thumb_url ?? latest.clean_png_url ?? ""}
-                    alt={latest.prompt}
-                    className="h-full w-full object-contain p-2 transition-transform group-hover:scale-105"
-                  />
-                </button>
+                />
                 {fam.length > 1 && (
                   <button
+                    type="button"
                     onClick={() => setCompare(fam)}
                     aria-label={t("compare.title", { n: fam.length })}
-                    className="absolute right-2 bottom-2 flex items-center gap-1 rounded-full bg-ink-950/80 px-2.5 py-1.5 font-display text-[11px] font-bold text-acid backdrop-blur"
+                    className="t-label absolute -top-2.5 -right-2 z-10 flex h-8 items-center gap-1.5 rounded-full bg-paper-ink px-3 text-paper shadow-[0_4px_10px_rgb(0_0_0/0.45)] transition-transform hover:scale-105"
                   >
-                    <Layers className="h-3 w-3" /> {fam.length}
+                    <Layers aria-hidden className="h-3.5 w-3.5" /> {fam.length}
                   </button>
                 )}
-              </div>
+              </li>
             );
           })}
-        </div>
+        </ul>
       )}
 
       {mockups.length > 0 && (
-        <section className="mt-12">
-          <Eyebrow className="mb-4 max-w-[15rem]">{t("gallery.mockups.title")}</Eyebrow>
-          <div className="grid grid-cols-2 gap-4">
+        <section className="mt-6 flex flex-col gap-6" aria-labelledby="mockups-title">
+          <div className="flex flex-col gap-3">
+            <Label dot="stencil">{t("gallery.mockups.badge")}</Label>
+            <h2 id="mockups-title" className="heading text-[2rem] text-text md:text-4xl">
+              {t("gallery.mockups.title")}
+            </h2>
+          </div>
+          <ul className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4 lg:gap-8">
             {mockups.map((m) => (
-              <div
-                key={m.id}
-                className="group relative aspect-square overflow-hidden rounded-2xl border border-magenta/25 bg-ink-850"
-              >
-                <img src={m.output_url} alt="" className="h-full w-full object-cover" />
-                <span className="absolute bottom-2 left-2 rounded-full bg-ink-950/80 px-2 py-0.5 font-display text-[9px] font-bold tracking-[0.15em] text-magenta uppercase backdrop-blur">
-                  {t("gallery.mockups.badge")}
-                </span>
+              <li key={m.id} className="relative">
+                {/* a print of the healed-look photo, like the ones pinned in every shop */}
+                <figure className="rounded-[4px] bg-paper p-2 pb-8 shadow-[var(--shadow-paper)]">
+                  <img
+                    src={m.output_url}
+                    alt={t("gallery.mockups.badge")}
+                    className="aspect-square w-full rounded-[2px] object-cover"
+                  />
+                  <figcaption className="t-label absolute bottom-2.5 left-3.5 text-[0.5625rem] text-paper-mute">
+                    {flashNo(m.id)} · {t("gallery.mockups.badge")}
+                  </figcaption>
+                </figure>
                 <button
+                  type="button"
                   onClick={() => removeMockup.mutate(m.id)}
                   aria-label={t("common.remove")}
-                  className="absolute top-1.5 right-1.5 grid h-7 w-7 place-items-center rounded-full bg-ink-950/70 text-white/70 backdrop-blur transition-colors hover:text-magenta"
+                  className="absolute -top-2.5 -right-2 grid h-8 w-8 place-items-center rounded-full bg-surface text-text-2 shadow-[0_4px_10px_rgb(0_0_0/0.45),inset_0_0_0_1px_var(--color-line-strong)] transition-colors hover:text-neon-hi"
                 >
-                  <X className="h-3.5 w-3.5" />
+                  <X aria-hidden className="h-4 w-4" />
                 </button>
-              </div>
+              </li>
             ))}
-          </div>
+          </ul>
         </section>
       )}
 

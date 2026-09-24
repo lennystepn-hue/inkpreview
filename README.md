@@ -4,7 +4,7 @@
 
 > **The one rule:** the **clean design is canonical**. It's generated once and is exactly what the tattoo artist receives — it is *never* round-tripped through the body composite. The on-skin preview is a separate, AI-derived visualization layer.
 
-Mobile-first PWA · GenZ "Acid Ink" aesthetic · 43-style catalog · powered by OpenAI **GPT Image 2.5** (flare for designs, sunburst for the on-skin edit).
+Mobile-first PWA · "Night Parlour" design (a tattoo shop after dark: flash paper, one neon sign, stencil violet) · 43-style catalog · powered by OpenAI **GPT Image 2.5** (flare for designs, sunburst for the on-skin edit).
 
 ---
 
@@ -34,7 +34,8 @@ Cloudflare Worker (TypeScript, Hono) ── /api/* ── Queue ──► job co
 - **Image processing** (thumbnails, placement guide, watermark, stencil, EXIF strip) is pure
   TypeScript — no native deps.
 - **Frontend:** React + Tailwind v4 + Framer Motion + TanStack Query + zustand. Installable PWA,
-  anonymous session.
+  anonymous session. Design system: tokens in `frontend/src/styles/theme.css`, design context in
+  [`.impeccable.md`](.impeccable.md); fonts are self-hosted in `frontend/public/fonts` (no Google Fonts).
 - **Privacy:** body photos & previews are **ephemeral** (24h TTL + sweeper, EXIF stripped on upload),
   all data stored in the EU.
 

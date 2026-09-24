@@ -1,75 +1,110 @@
 import { motion, useReducedMotion } from "motion/react";
+import { useEffect, useState } from "react";
 
+import { cn } from "@/lib/cn";
+import type { DictKey } from "@/lib/i18n";
 import { useT } from "@/lib/useT";
 
-const ORBITERS = [
-  { color: "bg-acid", dur: 3.2, inset: "inset-0" },
-  { color: "bg-cyan", dur: 4.4, inset: "inset-6" },
-  { color: "bg-magenta", dur: 5.6, inset: "inset-12" },
+// Line art that cycles through the printer while a new design is being drawn.
+const MOTIFS = [
+  "/ink/rose.png",
+  "/ink/swallow.png",
+  "/ink/dagger.png",
+  "/ink/moth.png",
+  "/ink/eye.png",
+  "/ink/moon.png",
+  "/ink/snake.png",
+  "/ink/mountains.png",
 ];
 
-export function ConjuringRitual({ label }: { label?: string }) {
+const GEN_STEPS: DictKey[] = ["ritual.gen.1", "ritual.gen.2", "ritual.gen.3"];
+const PLACE_STEPS: DictKey[] = ["ritual.place.1", "ritual.place.2", "ritual.place.3"];
+
+const PRINT_MS = 2600; // one pass of the print head
+const CYCLE_MS = 3400; // pass + a beat to admire it
+const STEP_MS = 7000; // status line advances, then rests on the last step
+
+type Props = {
+  label?: string;
+  /** "draw": a new design is being generated. "place": the design goes onto skin. */
+  mode?: "draw" | "place";
+  /** The design being stenciled (place mode) — printed in stencil violet. */
+  motif?: string | null;
+};
+
+/** Full-screen wait state — a thermal stencil printer running off flash
+ *  sheets, with the shop's real steps as the status line. */
+export function ConjuringRitual({ label, mode = "draw", motif }: Props) {
   const reduce = useReducedMotion();
   const t = useT();
-  const text = label ?? t("ritual.default");
+  const [tick, setTick] = useState(0);
+  const [step, setStep] = useState(0);
+  const steps = mode === "place" ? PLACE_STEPS : GEN_STEPS;
+  const own = mode === "place" && motif;
+
+  useEffect(() => {
+    const cycle = window.setInterval(() => setTick((n) => n + 1), CYCLE_MS);
+    const advance = window.setInterval(
+      () => setStep((n) => Math.min(n + 1, steps.length - 1)),
+      STEP_MS,
+    );
+    return () => {
+      window.clearInterval(cycle);
+      window.clearInterval(advance);
+    };
+  }, [steps.length]);
+
+  const src = own ? motif : MOTIFS[tick % MOTIFS.length];
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[70] flex flex-col items-center justify-center bg-ink-950/92 px-6 backdrop-blur-xl"
+      className="fixed inset-0 z-[70] flex flex-col items-center justify-center bg-ground px-6 text-center"
     >
-      <div className="relative h-56 w-56">
-        {/* morphing core */}
-        <motion.div
-          animate={reduce ? { opacity: [0.5, 0.9, 0.5] } : { rotate: 360, scale: [1, 1.14, 1] }}
-          transition={{
-            rotate: { duration: 9, repeat: Infinity, ease: "linear" },
-            scale: { duration: 2.4, repeat: Infinity, ease: "easeInOut" },
-            opacity: { duration: 2, repeat: Infinity, ease: "easeInOut" },
-          }}
-          className="absolute inset-8 rounded-full bg-gradient-to-br from-acid via-cyan to-magenta opacity-80 blur-2xl"
-        />
-
-        {/* expanding rings */}
-        {!reduce &&
-          [0, 1, 2].map((i) => (
-            <motion.div
-              key={i}
-              animate={{ scale: [0.5, 1.6], opacity: [0.5, 0] }}
-              transition={{ duration: 2.6, repeat: Infinity, delay: i * 0.85, ease: "easeOut" }}
-              className="absolute inset-0 rounded-full border border-acid/40"
+      <div className="relative w-[min(62vw,16rem)]">
+        <div className="flash-card overflow-hidden" style={{ rotate: "-2deg" }}>
+          <span aria-hidden className="tape tape-t" />
+          <div className="relative aspect-square">
+            <img
+              key={`${src}-${tick}`}
+              src={src ?? ""}
+              alt=""
+              draggable={false}
+              className={cn(
+                "absolute inset-0 h-full w-full object-contain",
+                own ? "stencil-ghost p-[12%]" : "flash-art p-[16%]",
+              )}
+              style={reduce ? undefined : { animation: `print-reveal ${PRINT_MS}ms linear both` }}
             />
-          ))}
-
-        {/* orbiting ink specks */}
-        {!reduce &&
-          ORBITERS.map((o, i) => (
-            <motion.div
-              key={i}
-              className={`absolute ${o.inset}`}
-              animate={{ rotate: 360 }}
-              transition={{ duration: o.dur, repeat: Infinity, ease: "linear" }}
-            >
+            {!reduce && (
               <span
-                className={`absolute left-1/2 top-0 h-2 w-2 -translate-x-1/2 rounded-full ${o.color} shadow-[0_0_12px_currentColor]`}
+                key={`head-${tick}`}
+                aria-hidden
+                className={cn(
+                  "absolute inset-x-[4%] h-[2px] rounded-full",
+                  own
+                    ? "bg-stencil shadow-[0_0_14px_2px_var(--color-stencil)]"
+                    : "bg-neon shadow-[0_0_14px_2px_var(--color-neon)]",
+                )}
+                style={{ animation: `print-head ${PRINT_MS}ms linear both` }}
               />
-            </motion.div>
-          ))}
+            )}
+          </div>
+        </div>
       </div>
 
-      <motion.p
-        initial={{ y: 8, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.2 }}
-        className="mt-10 font-display text-lg font-extrabold tracking-tight"
-      >
-        <span className="bg-gradient-to-r from-acid via-cyan to-magenta bg-clip-text text-transparent">
-          {text}
+      <h2 className="heading mt-12 text-[2rem] text-text md:text-[2.5rem]">
+        {label ?? t("ritual.default")}
+      </h2>
+      <p role="status" aria-live="polite" className="typewriter mt-3 text-[0.9375rem] text-text-2">
+        {t(steps[step])}
+        <span aria-hidden className="motion-safe:animate-[blink_1s_steps(1,end)_infinite]">
+          _
         </span>
-      </motion.p>
-      <p className="mt-1.5 font-tattoo text-lg text-white/35">{t("ritual.footer")}</p>
+      </p>
+      <p className="gothic mt-10 text-[1.75rem] text-text-3">{t("ritual.footer")}</p>
     </motion.div>
   );
 }

@@ -1,60 +1,76 @@
 import { type HTMLMotionProps, motion } from "motion/react";
-import type { ReactNode } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 
 import { cn } from "@/lib/cn";
 
-type Variant = "primary" | "outline" | "ghost" | "magenta";
-type Size = "sm" | "md" | "lg";
+export type ButtonVariant = "neon" | "outline" | "paper" | "ink" | "quiet";
+export type ButtonSize = "sm" | "md" | "lg";
 
-const VARIANTS: Record<Variant, string> = {
-  primary: "bg-acid text-ink-950 shadow-[var(--shadow-glow-acid)]",
-  magenta: "bg-magenta text-white shadow-[var(--shadow-glow-magenta)]",
-  outline: "border border-white/15 text-white hover:border-acid/60 hover:text-acid",
-  ghost: "text-white/70 hover:text-white",
+const BASE =
+  "relative inline-flex select-none items-center justify-center gap-2 rounded-full font-sans cond font-extrabold uppercase tracking-[0.05em] whitespace-nowrap transition-[background-color,color,box-shadow,transform] duration-200";
+
+const VARIANTS: Record<ButtonVariant, string> = {
+  // The lit tube. Disabled = the same tube switched off.
+  neon: "bg-neon text-neon-ink shadow-[var(--shadow-neon)] hover:bg-neon-hi disabled:bg-transparent disabled:text-text-3 disabled:shadow-[inset_0_0_0_1.5px_var(--color-line-strong)]",
+  outline:
+    "text-text shadow-[inset_0_0_0_1.5px_var(--color-line-strong)] hover:bg-raised hover:shadow-[inset_0_0_0_1.5px_var(--color-text-3)] disabled:text-text-3 disabled:hover:bg-transparent",
+  paper: "bg-paper text-paper-ink hover:bg-white disabled:opacity-50",
+  // For use on paper surfaces.
+  ink: "bg-paper-ink text-paper hover:bg-black disabled:opacity-40",
+  quiet: "text-text-2 hover:text-text disabled:opacity-40",
 };
 
-const SIZES: Record<Size, string> = {
-  sm: "px-4 py-2 text-xs",
-  md: "px-5 py-3.5 text-sm",
-  lg: "px-6 py-4 text-base",
+const SIZES: Record<ButtonSize, string> = {
+  sm: "h-9 px-4 text-[0.8125rem]",
+  md: "h-11 px-5 text-[0.9375rem]",
+  lg: "h-14 px-7 text-[1.0625rem]",
 };
+
+/** Class list for anchors / router links that should look like a Button. */
+export function buttonClass(
+  variant: ButtonVariant = "neon",
+  size: ButtonSize = "md",
+  extra?: string,
+) {
+  return cn(BASE, VARIANTS[variant], SIZES[size], extra);
+}
 
 type Props = Omit<HTMLMotionProps<"button">, "children"> & {
-  variant?: Variant;
-  size?: Size;
-  /** Hero CTA treatment: breathing glow + a periodic light sweep. */
-  shine?: boolean;
+  variant?: ButtonVariant;
+  size?: ButtonSize;
   children?: ReactNode;
 };
 
 export function Button({
-  variant = "primary",
+  variant = "neon",
   size = "md",
-  shine = false,
   className,
   children,
+  disabled,
+  onAnimationEnd,
   ...rest
 }: Props) {
+  // A neon button that becomes enabled "switches on" (one flicker, CSS-only;
+  // neutralized by prefers-reduced-motion).
+  const [flicker, setFlicker] = useState(false);
+  const wasDisabled = useRef(disabled);
+  useEffect(() => {
+    if (variant === "neon" && wasDisabled.current && !disabled) setFlicker(true);
+    wasDisabled.current = disabled;
+  }, [disabled, variant]);
+
   return (
     <motion.button
-      whileTap={{ scale: 0.96 }}
-      whileHover={{ y: -1 }}
-      className={cn(
-        "relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-blob font-display font-extrabold tracking-tight transition-colors disabled:opacity-40",
-        VARIANTS[variant],
-        SIZES[size],
-        shine && "motion-safe:animate-[breatheGlow_3.2s_ease-in-out_infinite]",
-        className,
-      )}
+      whileTap={disabled ? undefined : { scale: 0.97 }}
+      disabled={disabled}
+      className={cn(buttonClass(variant, size), flicker && "animate-button-on", className)}
+      onAnimationEnd={(e) => {
+        setFlicker(false);
+        onAnimationEnd?.(e);
+      }}
       {...rest}
     >
       {children}
-      {shine && (
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-white/35 blur-md motion-safe:animate-[shine_4.5s_ease-in-out_infinite]"
-        />
-      )}
     </motion.button>
   );
 }

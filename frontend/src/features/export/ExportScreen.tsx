@@ -1,13 +1,16 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { Bookmark, Download, Share2 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { Bookmark, Check, Download, RotateCcw, Share2 } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { Button } from "@/components/ui/Button";
-import { Eyebrow } from "@/components/ui/Ornament";
+import { Dagger } from "@/components/brand/Dagger";
+import { Button, buttonClass } from "@/components/ui/Button";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { trackEvent } from "@/lib/analytics";
 import { type Export, createExport, downloadAsset, saveMockup, shareAsset } from "@/lib/api";
 import { googleLoginUrl } from "@/lib/auth";
+import { cn } from "@/lib/cn";
+import { flashNo } from "@/lib/flash";
 import { useBillingConfig } from "@/lib/useBilling";
 import { useSession } from "@/lib/useSession";
 import { useLang, useLangPath, useT } from "@/lib/useT";
@@ -34,14 +37,14 @@ function SaveMockupButton({ previewId }: { previewId: string }) {
   };
 
   return (
-    <button
-      onClick={onSave}
-      disabled={state !== "idle"}
-      className="flex w-full items-center justify-center gap-1.5 rounded-full border border-acid/30 bg-acid/5 py-2.5 text-xs font-semibold text-acid transition-colors hover:bg-acid/10 disabled:opacity-60"
-    >
-      <Bookmark className="h-3.5 w-3.5" />
+    <Button variant="outline" className="w-full" onClick={onSave} disabled={state !== "idle"}>
+      {state === "saved" ? (
+        <Check aria-hidden className="h-4 w-4 text-jade" />
+      ) : (
+        <Bookmark aria-hidden className="h-4 w-4" />
+      )}
       {state === "saved" ? t("export.saveMockup.saved") : t("export.saveMockup")}
-    </button>
+    </Button>
   );
 }
 
@@ -55,65 +58,83 @@ function WatermarkUnlock() {
   const loggedIn = Boolean(session && !session.is_anonymous);
 
   return (
-    <div className="rounded-blob border border-acid/50 p-4 text-center shadow-[var(--shadow-glow-acid)]">
-      <p className="font-display text-sm font-bold text-acid">{t("export.unlock.title")}</p>
-      <p className="mt-1 text-xs text-white/55">{t("export.unlock.body")}</p>
+    <div className="rounded-[var(--radius-panel)] bg-surface p-5 shadow-[inset_0_0_0_1px_var(--color-line)]">
+      <p className="t-label flex items-center gap-2 text-gold">
+        <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-gold" />
+        {t("export.unlock.title")}
+      </p>
+      <p className="mt-2 text-[0.9375rem] text-text-2">{t("export.unlock.body")}</p>
       {billing?.enabled ? (
         loggedIn ? (
           <button
+            type="button"
             onClick={openUpgrade}
-            className="mt-3 w-full rounded-full bg-acid py-2.5 font-display text-sm font-bold text-ink-950 transition-opacity hover:opacity-90"
+            className={buttonClass("paper", "md", "mt-4 w-full")}
           >
             {t("billing.upgrade")}
           </button>
         ) : (
-          <a
-            href={googleLoginUrl(lang)}
-            className="mt-3 block w-full rounded-full bg-acid py-2.5 font-display text-sm font-bold text-ink-950 transition-opacity hover:opacity-90"
-          >
+          <a href={googleLoginUrl(lang)} className={buttonClass("paper", "md", "mt-4 w-full")}>
             {t("export.unlock.signin")}
           </a>
         )
       ) : (
-        <p className="mt-2 text-xs text-cyan">{t("export.watermark.notice")}</p>
+        <p className="mt-3 text-[0.8125rem] text-text-3">{t("export.watermark.notice")}</p>
       )}
     </div>
   );
 }
 
-function AssetCard({
+/** One file on the ticket: preview, what it is, and its download. */
+function TicketFile({
   title,
+  meta,
   url,
   filename,
-  light = false,
-  badge,
+  kind,
+  className,
 }: {
   title: string;
+  meta: string;
   url: string;
   filename: string;
-  light?: boolean;
-  badge?: string;
+  kind: "art" | "photo";
+  className?: string;
 }) {
   const t = useT();
   return (
-    <div
-      className={`relative overflow-hidden rounded-blob border border-white/10 ${light ? "bg-white" : "bg-ink-850"}`}
-    >
-      {badge && (
-        <span className="absolute top-3 left-3 z-10 rounded-full bg-ink-950/85 px-2.5 py-1 font-display text-[9px] font-bold tracking-[0.2em] text-acid uppercase">
-          ✦ {badge}
-        </span>
-      )}
-      <img src={url} alt={title} className="mx-auto max-h-[34dvh] w-full object-contain p-3" />
+    <div className={cn("flex flex-col gap-3", className)}>
       <div
-        className={`flex items-center justify-between px-4 py-3 ${light ? "border-t border-ink-950/10 bg-ink-950" : "border-t border-white/5"}`}
+        className={cn(
+          "overflow-hidden rounded-[3px]",
+          kind === "photo" ? "bg-paper-ink" : "shadow-[inset_0_0_0_1px_var(--color-paper-line)]",
+        )}
       >
-        <span className="font-display text-sm font-bold text-white">{title}</span>
+        <img
+          src={url}
+          alt={title}
+          className={cn(
+            "mx-auto block w-full",
+            kind === "art"
+              ? "flash-art aspect-square object-contain p-[6%]"
+              : "aspect-square object-cover",
+          )}
+        />
+      </div>
+      <div className="flex items-end justify-between gap-3">
+        <div className="min-w-0">
+          <p className="font-sans cond text-[1rem] leading-tight font-extrabold tracking-[0.02em] text-paper-ink uppercase">
+            {title}
+          </p>
+          <p className="t-label mt-1 text-[0.5625rem] text-paper-mute">{meta}</p>
+        </div>
         <button
+          type="button"
           onClick={() => downloadAsset(url, filename)}
-          className="flex items-center gap-1.5 rounded-full bg-acid px-3.5 py-1.5 text-xs font-bold text-ink-950"
+          className={buttonClass("ink", "sm", "shrink-0 px-3.5!")}
         >
-          <Download className="h-3.5 w-3.5" /> {t("common.download")}
+          <Download aria-hidden className="h-4 w-4" />
+          {t("common.download")}
         </button>
       </div>
     </div>
@@ -123,6 +144,7 @@ function AssetCard({
 export function ExportScreen() {
   const navigate = useNavigate();
   const t = useT();
+  const lang = useLang();
   const lp = useLangPath();
   const design = useDraft((s) => s.design);
   const preview = useDraft((s) => s.preview);
@@ -130,6 +152,17 @@ export function ExportScreen() {
   const [exp, setExp] = useState<Export | null>(null);
   const [error, setError] = useState<string | null>(null);
   const ran = useRef(false);
+  const today = useMemo(
+    () =>
+      new Intl.DateTimeFormat(lang === "de" ? "de-DE" : "en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })
+        .format(new Date())
+        .toUpperCase(),
+    [lang],
+  );
 
   useEffect(() => {
     if (!design) {
@@ -147,84 +180,142 @@ export function ExportScreen() {
   }, [design, preview, navigate, lp]);
 
   if (!design) return null;
+  const no = flashNo(design.id);
 
   return (
-    <div className="mx-auto flex max-w-md flex-col gap-5">
-      <header>
-        <Eyebrow className="mb-3 max-w-[15rem]">{t("export.eyebrow")}</Eyebrow>
-        <h1 className="font-display text-2xl font-extrabold tracking-tight">{t("export.title")}</h1>
-        <p className="mt-1 text-sm text-white/45">{t("export.subtitle")}</p>
-      </header>
+    <div className="flex flex-col gap-9 md:gap-12">
+      <PageHeader label={t("export.eyebrow")} title={t("export.title")}>
+        {t("export.subtitle")}
+      </PageHeader>
 
       {error ? (
-        <p className="rounded-2xl border border-magenta/40 bg-magenta/10 p-3 text-sm text-magenta">
+        <p
+          role="alert"
+          className="rounded-[var(--radius-panel)] bg-surface p-4 text-[0.9375rem] text-text shadow-[inset_0_0_0_1.5px_var(--color-neon)]"
+        >
           {error}
         </p>
-      ) : !exp ? (
-        <div className="space-y-3">
-          <div className="aspect-square animate-pulse rounded-blob bg-white/5" />
-          <p className="text-center text-xs text-white/40">{t("export.preparing")}</p>
-        </div>
       ) : (
-        <>
-          {exp.hires_url && (
-            <div>
-              <AssetCard
-                title={t("export.asset.cleanDesign")}
-                url={exp.hires_url}
-                filename="inkpreview-design.png"
-                badge={t("export.asset.badge")}
-                light
-              />
-              {!exp.watermarked && (
-                <p className="mt-1.5 text-center font-display text-[10px] tracking-[0.18em] text-white/35 uppercase">
-                  {t("export.specs")}
-                </p>
+        <div className="grid items-start gap-8 md:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] md:gap-12">
+          {/* ── The artist ticket ── */}
+          <article
+            className="paper relative rounded-[var(--radius-paper)] shadow-[var(--shadow-paper)]"
+            aria-label={t("export.ticket.title")}
+          >
+            <header className="flex flex-col gap-4 p-5 md:p-6">
+              <div className="flex items-center justify-between gap-3">
+                <span className="flex items-center gap-2.5">
+                  <Dagger className="h-6 w-auto text-paper-ink" />
+                  <span className="font-sans cond text-[1.125rem] font-extrabold tracking-[0.04em] text-paper-ink uppercase">
+                    {t("export.ticket.title")}
+                  </span>
+                </span>
+                <span className="t-label text-paper-ink">{no}</span>
+              </div>
+              <dl className="grid grid-cols-2 gap-3 border-t-[1.5px] border-dashed border-paper-line pt-4">
+                <div>
+                  <dt className="t-label text-[0.5625rem] text-paper-mute">
+                    {t("export.ticket.date")}
+                  </dt>
+                  <dd className="typewriter mt-1 text-[0.9375rem] font-bold text-paper-ink">
+                    {today}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="t-label text-[0.5625rem] text-paper-mute">
+                    {t("export.ticket.flash")}
+                  </dt>
+                  <dd className="typewriter mt-1 text-[0.9375rem] font-bold text-paper-ink">
+                    {no}
+                  </dd>
+                </div>
+              </dl>
+              <p className="typewriter text-[0.9375rem] leading-snug text-paper-ink">
+                “{design.prompt}”
+              </p>
+            </header>
+
+            <div className="perforation" aria-hidden />
+
+            <div className="p-5 md:p-6">
+              <p className="t-label mb-4 text-paper-mute">{t("export.ticket.files")}</p>
+              {!exp ? (
+                <div className="flex flex-col gap-3">
+                  <div className="aspect-square animate-pulse rounded-[3px] bg-paper-2" />
+                  <p className="typewriter text-center text-[0.875rem] text-paper-mute">
+                    {t("export.preparing")}
+                  </p>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-7">
+                  {exp.hires_url && (
+                    <TicketFile
+                      kind="art"
+                      title={t("export.asset.cleanDesign")}
+                      meta={exp.watermarked ? t("export.asset.cleanMeta.free") : t("export.specs")}
+                      url={exp.hires_url}
+                      filename="inkpreview-design.png"
+                    />
+                  )}
+                  {(exp.stencil_url || exp.mockup_url) && (
+                    <div className="grid grid-cols-1 gap-7 border-t-[1.5px] border-dashed border-paper-line pt-6 sm:grid-cols-2 sm:gap-5">
+                      {exp.stencil_url && (
+                        <TicketFile
+                          kind="art"
+                          title={t("export.asset.stencil")}
+                          meta={t("export.asset.stencilMeta")}
+                          url={exp.stencil_url}
+                          filename="inkpreview-stencil.png"
+                        />
+                      )}
+                      {exp.mockup_url && (
+                        <TicketFile
+                          kind="photo"
+                          title={t("export.asset.bodyMockup")}
+                          meta={t("export.asset.mockupMeta")}
+                          url={exp.mockup_url}
+                          filename="inkpreview-mockup.png"
+                        />
+                      )}
+                    </div>
+                  )}
+                </div>
               )}
             </div>
-          )}
-          {exp.stencil_url && (
-            <AssetCard
-              title={t("export.asset.stencil")}
-              url={exp.stencil_url}
-              filename="inkpreview-stencil.png"
-              badge={t("export.asset.stencilBadge")}
-              light
-            />
-          )}
-          {exp.mockup_url && (
-            <AssetCard
-              title={t("export.asset.bodyMockup")}
-              url={exp.mockup_url}
-              filename="inkpreview-mockup.png"
-            />
-          )}
-          {exp.mockup_url && preview && <SaveMockupButton previewId={preview.id} />}
 
-          <Button
-            size="lg"
-            className="w-full"
-            onClick={() =>
-              shareAsset(exp.mockup_url ?? exp.hires_url ?? "", t("export.shareText"))
-            }
-          >
-            <Share2 className="h-4 w-4" /> {t("export.share")}
-          </Button>
+            <div className="perforation" aria-hidden />
+            <p className="t-label px-5 pt-1 pb-5 text-center text-[0.5625rem] text-paper-mute md:px-6">
+              {t("export.preview.disclaimer")}
+            </p>
+          </article>
 
-          {exp.watermarked && <WatermarkUnlock />}
-
-          <p className="text-center text-xs text-white/35">{t("export.preview.disclaimer")}</p>
-
-          <button
-            onClick={() => {
-              setDesign(null);
-              navigate(lp("/"));
-            }}
-            className="text-center text-xs text-white/40 hover:text-white/70"
-          >
-            {t("export.newDesign")}
-          </button>
-        </>
+          {/* ── Actions ── */}
+          <div className="flex flex-col gap-4 md:sticky md:top-28">
+            <Button
+              size="lg"
+              className="w-full"
+              disabled={!exp}
+              onClick={() =>
+                exp && shareAsset(exp.mockup_url ?? exp.hires_url ?? "", t("export.shareText"))
+              }
+            >
+              <Share2 aria-hidden className="h-5 w-5" /> {t("export.share")}
+            </Button>
+            {exp?.mockup_url && preview && <SaveMockupButton previewId={preview.id} />}
+            {exp?.watermarked && <WatermarkUnlock />}
+            <button
+              type="button"
+              onClick={() => {
+                setDesign(null);
+                navigate(lp("/"));
+              }}
+              className={buttonClass("quiet", "sm", "self-center")}
+            >
+              <RotateCcw aria-hidden className="h-4 w-4" />
+              {t("export.newDesign")}
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );

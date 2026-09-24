@@ -1,29 +1,38 @@
+import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 
-import { useLang, useLangPath } from "@/lib/useT";
+import { useLang, useLangPath, useT } from "@/lib/useT";
 import { type LegalDocKey, legalDocs } from "./legalDocs";
 
 export function LegalScreen({ doc }: { doc: LegalDocKey }) {
   const lang = useLang();
   const lp = useLangPath();
+  const t = useT();
   const d = legalDocs[doc][lang];
 
   return (
-    <article className="mx-auto max-w-2xl pb-10">
-      <Link to={lp("/")} className="font-display text-xs font-semibold text-white/40 hover:text-white/70">
-        ← InkPreview
+    <article className="mx-auto flex max-w-[44rem] flex-col gap-8 pb-6">
+      <Link
+        to={lp("/")}
+        className="t-label inline-flex items-center gap-2 self-start text-text-3 transition-colors hover:text-text"
+      >
+        <ArrowLeft aria-hidden className="h-3.5 w-3.5" /> {t("legal.back")}
       </Link>
-      <h1 className="mt-4 font-display text-3xl font-extrabold tracking-tight">{d.title}</h1>
-      <p className="mt-1 text-xs text-white/35">{d.updated}</p>
+      <header className="flex flex-col gap-3 border-b border-line pb-8">
+        <h1 className="heading text-[2.5rem] text-text md:text-[3.5rem]">{d.title}</h1>
+        <p className="t-label text-text-3">{d.updated}</p>
+      </header>
 
-      <div className="mt-7 flex flex-col gap-6">
+      <div className="flex flex-col gap-9">
         {d.sections.map((s) => (
-          <section key={s.h}>
-            <h2 className="font-display text-base font-bold text-white/90">{s.h}</h2>
+          <section key={s.h} className="flex flex-col gap-2.5">
+            <h2 className="font-sans cond text-[1.25rem] font-extrabold tracking-[0.02em] text-text uppercase">
+              {s.h}
+            </h2>
             {s.p.map((para, j) => (
               <p
                 key={j}
-                className="mt-1.5 text-sm leading-relaxed whitespace-pre-line text-white/55"
+                className="text-[0.96875rem] leading-relaxed whitespace-pre-line text-text-2"
               >
                 {para}
               </p>

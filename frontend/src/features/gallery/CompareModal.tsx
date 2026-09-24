@@ -1,6 +1,10 @@
-import { X } from "lucide-react";
+import { PersonStanding, X } from "lucide-react";
+import { useEffect, useRef } from "react";
 
+import { Button } from "@/components/ui/Button";
+import { FlashCard } from "@/components/ui/FlashCard";
 import type { Design } from "@/lib/api";
+import { flashNo } from "@/lib/flash";
 import { useT } from "@/lib/useT";
 
 type Props = {
@@ -12,47 +16,65 @@ type Props = {
 /** Side-by-side comparison of a design's versions (its parent→refine lineage). */
 export function CompareModal({ versions, onPick, onClose }: Props) {
   const t = useT();
+  const closeRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    closeRef.current?.focus();
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
   return (
     <div
-      className="fixed inset-0 z-[70] flex flex-col bg-ink-950/90 backdrop-blur"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="compare-title"
+      className="fixed inset-0 z-[70] flex flex-col bg-ground"
       onClick={onClose}
     >
-      <div className="flex items-center justify-between p-4">
-        <span className="font-display text-sm font-bold">
+      <div className="flex items-center justify-between px-5 pt-3 pb-2">
+        <h2 id="compare-title" className="heading text-[1.75rem] text-text">
           {t("compare.title", { n: versions.length })}
-        </span>
-        <button onClick={onClose} aria-label={t("common.cancel")} className="text-white/60">
-          <X className="h-5 w-5" />
+        </h2>
+        <button
+          ref={closeRef}
+          type="button"
+          onClick={onClose}
+          aria-label={t("common.cancel")}
+          className="grid h-11 w-11 place-items-center rounded-full text-text-2 hover:bg-raised hover:text-text"
+        >
+          <X className="h-6 w-6" />
         </button>
       </div>
 
       <div
-        className="flex-1 snap-x snap-mandatory overflow-x-auto px-4 pb-6"
+        className="flex-1 snap-x snap-mandatory overflow-x-auto px-5 pt-6 pb-8"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex h-full gap-4">
+        <ol className="mx-auto flex w-max items-start gap-6">
           {versions.map((d, i) => (
-            <div key={d.id} className="flex w-[85vw] max-w-sm shrink-0 snap-center flex-col sm:w-72">
-              <div className="flex items-center justify-between pb-2">
-                <span className="font-display text-xs font-bold text-acid">v{i + 1}</span>
-              </div>
-              <div className="overflow-hidden rounded-2xl border border-white/10 bg-white">
-                <img
-                  src={d.clean_png_url ?? d.thumb_url ?? ""}
-                  alt={d.prompt}
-                  className="aspect-square w-full object-contain p-3"
-                />
-              </div>
-              <p className="mt-2 line-clamp-3 text-xs text-white/50">„{d.prompt}"</p>
-              <button
-                onClick={() => onPick(d)}
-                className="mt-2 rounded-full bg-acid py-3 font-display text-xs font-bold text-ink-950"
-              >
+            <li
+              key={d.id}
+              className="flex w-[78vw] max-w-[20rem] shrink-0 snap-center flex-col gap-4"
+            >
+              <span className="t-label text-text-3">
+                v{i + 1} · {flashNo(d.id)}
+              </span>
+              <FlashCard
+                src={d.clean_png_url ?? d.thumb_url ?? ""}
+                alt={d.prompt}
+                tilt={i % 2 ? 1 : -1}
+                tape="t"
+              />
+              <p className="typewriter line-clamp-3 text-[0.875rem] text-text-2">“{d.prompt}”</p>
+              <Button variant="paper" onClick={() => onPick(d)}>
+                <PersonStanding aria-hidden className="h-4 w-4" />
                 {t("compare.pick")}
-              </button>
-            </div>
+              </Button>
+            </li>
           ))}
-        </div>
+        </ol>
       </div>
     </div>
   );

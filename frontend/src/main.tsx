@@ -1,9 +1,4 @@
-import "@fontsource/unbounded/600.css";
-import "@fontsource/unbounded/800.css";
-import "@fontsource/space-grotesk/400.css";
-import "@fontsource/space-grotesk/500.css";
-import "@fontsource/space-grotesk/700.css";
-import "@fontsource/pirata-one/400.css";
+// Fonts are self-hosted in public/fonts and declared in theme.css.
 import "./styles/theme.css";
 
 import React from "react";

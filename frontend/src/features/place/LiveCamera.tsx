@@ -10,7 +10,7 @@ type Props = {
   onClose: () => void;
 };
 
-/** Live-camera AR-lite: position the design on the live feed, then snap a frame.
+/** Live-camera AR-lite: position the stencil on the live feed, then snap a frame.
  *  The captured photo is the CLEAN camera frame (no baked-in ghost) — the design
  *  is composited server-side using the placement chosen here. */
 export function LiveCamera({ designGhost, onCapture, onClose }: Props) {
@@ -38,6 +38,7 @@ export function LiveCamera({ designGhost, onCapture, onClose }: Props) {
         if (videoRef.current) videoRef.current.srcObject = stream;
       })
       .catch(() => setError(true));
+    if (!navigator.mediaDevices) setError(true);
     return () => {
       cancelled = true;
       streamRef.current?.getTracks().forEach((tr) => tr.stop());
@@ -74,18 +75,19 @@ export function LiveCamera({ designGhost, onCapture, onClose }: Props) {
   };
 
   return (
-    <div className="fixed inset-0 z-[80] flex flex-col bg-ink-950">
+    <div role="dialog" aria-modal="true" className="fixed inset-0 z-[80] flex flex-col bg-ground">
       <button
+        type="button"
         onClick={onClose}
         aria-label={t("common.cancel")}
-        className="absolute top-4 right-4 z-10 grid h-10 w-10 place-items-center rounded-full bg-ink-950/60 text-white backdrop-blur"
+        className="absolute top-[max(1rem,env(safe-area-inset-top))] right-4 z-10 grid h-11 w-11 place-items-center rounded-full bg-ground/70 text-text backdrop-blur"
       >
         <X className="h-5 w-5" />
       </button>
 
       <div className="relative flex-1 overflow-hidden" {...gestures}>
         {error ? (
-          <div className="grid h-full place-items-center px-8 text-center text-sm text-white/60">
+          <div className="grid h-full place-items-center px-8 text-center text-[0.9375rem] text-text-2">
             {t("studio.camera.error")}
           </div>
         ) : (
@@ -108,7 +110,7 @@ export function LiveCamera({ designGhost, onCapture, onClose }: Props) {
                   width: `${p.scale * 100}%`,
                   transform: `translate(-50%, -50%) rotate(${p.rotation}deg)`,
                 }}
-                className="pointer-events-none absolute opacity-90 mix-blend-multiply"
+                className="stencil-ghost pointer-events-none absolute"
               />
             )}
           </>
@@ -116,12 +118,13 @@ export function LiveCamera({ designGhost, onCapture, onClose }: Props) {
       </div>
 
       {!error && (
-        <div className="flex flex-col items-center gap-2 p-5">
-          <p className="text-xs text-white/45">{t("studio.camera.hint")}</p>
+        <div className="flex flex-col items-center gap-3 bg-ground px-5 pt-4 pb-[max(1.25rem,env(safe-area-inset-bottom))]">
+          <p className="t-label text-text-2">{t("studio.camera.hint")}</p>
           <button
+            type="button"
             onClick={capture}
             aria-label={t("studio.camera.capture")}
-            className="grid h-16 w-16 place-items-center rounded-full border-4 border-white/80 bg-acid text-ink-950"
+            className="grid h-[4.5rem] w-[4.5rem] place-items-center rounded-full bg-neon text-neon-ink shadow-[0_0_0_4px_var(--color-ground),0_0_0_6px_var(--color-paper),var(--shadow-neon)] transition-transform active:scale-95"
           >
             <Camera className="h-7 w-7" />
           </button>

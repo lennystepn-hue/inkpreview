@@ -1,14 +1,18 @@
-import { Share2, Sparkles, X } from "lucide-react";
-import { motion } from "motion/react";
-import { useState } from "react";
+import { PersonStanding, PenTool, Share2, X } from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { Button } from "@/components/ui/Button";
+import { FlashCard } from "@/components/ui/FlashCard";
 import { trackEvent } from "@/lib/analytics";
+import { flashNo, styleName } from "@/lib/flash";
+import { useStyles } from "@/lib/useStyles";
 import { useLangPath, useT } from "@/lib/useT";
 import { useDraft } from "@/store/useDraft";
 import { useLightbox } from "@/store/useLightbox";
 
-/** Full-screen enlarge view for a design, opened from explore/gallery/result.
+/** Full-screen view of one flash, opened from explore/gallery/result.
  *  Offers share (the public /d/{id} link) and either "try on" (own design) or
  *  "create your own" (a community design). */
 export function DesignLightbox() {
@@ -18,7 +22,18 @@ export function DesignLightbox() {
   const lp = useLangPath();
   const navigate = useNavigate();
   const setDraft = useDraft((s) => s.setDesign);
+  const { data: styles = [] } = useStyles();
+  const reduce = useReducedMotion();
   const [copied, setCopied] = useState(false);
+  const closeRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!item) return;
+    closeRef.current?.focus();
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && close();
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [item, close]);
 
   if (!item) return null;
 
@@ -49,56 +64,65 @@ export function DesignLightbox() {
     }
   };
 
+  const caption = styleName(item.design?.styles, styles);
+
   return (
     <div
-      className="fixed inset-0 z-[75] flex flex-col bg-ink-950/92 p-4 backdrop-blur"
+      role="dialog"
+      aria-modal="true"
+      aria-label={item.prompt ?? t("explore.alt")}
+      className="fixed inset-0 z-[75] flex flex-col overflow-y-auto bg-ground px-5 pt-3 pb-[max(1.5rem,env(safe-area-inset-bottom))]"
       onClick={close}
     >
-      <div className="flex justify-end">
+      <div className="flex shrink-0 justify-end">
         <button
-          onClick={(e) => {
-            e.stopPropagation();
-            close();
-          }}
+          ref={closeRef}
+          type="button"
+          onClick={close}
           aria-label={t("common.cancel")}
-          className="p-2 text-white/70"
+          className="grid h-11 w-11 place-items-center rounded-full text-text-2 hover:bg-raised hover:text-text"
         >
           <X className="h-6 w-6" />
         </button>
       </div>
 
       <div
-        className="flex flex-1 flex-col items-center justify-center gap-4"
+        className="mx-auto flex w-full max-w-md flex-1 flex-col items-center justify-center gap-6"
         onClick={(e) => e.stopPropagation()}
       >
-        <motion.img
+        <motion.div
           key={item.src}
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.25 }}
-          src={item.src}
-          alt={item.prompt ?? t("explore.alt")}
-          className="max-h-[60dvh] w-auto max-w-full rounded-2xl bg-white object-contain p-3"
-        />
+          initial={reduce ? false : { opacity: 0, scale: 0.97, rotate: -1.5 }}
+          animate={{ opacity: 1, scale: 1, rotate: 0 }}
+          transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          className="w-full max-w-[min(100%,60dvh)]"
+        >
+          <FlashCard
+            src={item.src}
+            alt={item.prompt ?? t("explore.alt")}
+            no={flashNo(item.id)}
+            caption={caption}
+            tape="lr"
+            pad="md"
+            loading="eager"
+          />
+        </motion.div>
+
         {item.prompt && (
-          <p className="max-w-md text-center text-sm text-white/55">„{item.prompt}"</p>
+          <p className="typewriter max-w-[40ch] text-center text-[0.9375rem] leading-relaxed text-text-2">
+            “{item.prompt}”
+          </p>
         )}
 
-        <div className="flex w-full max-w-xs flex-col gap-2">
-          <button
-            onClick={tryOn}
-            className="flex items-center justify-center gap-2 rounded-full bg-acid py-3 font-display text-sm font-bold text-ink-950 transition-opacity hover:opacity-90"
-          >
-            <Sparkles className="h-4 w-4" />
+        <div className="flex w-full max-w-xs flex-col gap-2.5">
+          <Button size="lg" onClick={tryOn}>
+            {item.design ? <PersonStanding className="h-5 w-5" /> : <PenTool className="h-5 w-5" />}
             {item.design ? t("result.tryOn") : t("explore.cta")}
-          </button>
-          <button
-            onClick={share}
-            className="flex items-center justify-center gap-2 rounded-full border border-white/15 py-3 text-xs font-semibold text-white/75 transition-colors hover:text-white"
-          >
+          </Button>
+          <Button variant="outline" size="md" onClick={share}>
             <Share2 className="h-4 w-4" />
             {copied ? t("result.share.copied") : t("result.share")}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

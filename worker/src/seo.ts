@@ -26,6 +26,7 @@ const UI = content.ui as unknown as Record<Lang, {
   parts: string;
   cta: string;
   free: string;
+  tagline: string;
 }>;
 
 export const bodyPartSlugs = () => Object.keys(BODY_PARTS);
@@ -111,58 +112,75 @@ function page(o: PageOpts): string {
 <link rel="canonical" href="${esc(o.url)}">
 ${hreflang}
 ${ld}
+<link rel="preload" href="/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
 <style>
-  :root{color-scheme:dark}
+  @font-face{font-family:"Archivo";font-style:normal;font-display:swap;font-weight:100 900;
+    font-stretch:62% 125%;src:url(/fonts/archivo-latin.woff2) format("woff2")}
+  @font-face{font-family:"Grenze Gotisch";font-style:normal;font-display:swap;font-weight:100 900;
+    src:url(/fonts/grenze-gotisch-latin.woff2) format("woff2")}
+  @font-face{font-family:"Courier Prime";font-style:normal;font-display:swap;font-weight:700;
+    src:url(/fonts/courier-prime-latin-700.woff2) format("woff2")}
+  :root{color-scheme:dark;--ground:#0f0d0c;--surface:#1b1715;--line:#362f2a;--text:#f5efe6;
+    --text2:#c9beb3;--text3:#9c9086;--paper:#f1e8d8;--neon:#ff3d57;--neon-ink:#22060b}
   *{box-sizing:border-box}
-  body{margin:0;background:#07070a;color:#fff;
-    font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.6}
-  main{max-width:680px;margin:0 auto;padding:40px 22px 60px}
-  header.site{display:flex;justify-content:space-between;align-items:center;
-    padding:14px 22px;border-bottom:1px solid rgba(198,255,26,.15)}
-  header.site a{color:#fff;text-decoration:none;font-weight:800;font-size:14px;
-    letter-spacing:.02em}
-  header.site a span{color:#c6fb50}
-  h1{font-size:30px;font-weight:800;line-height:1.15;margin:18px 0 10px}
-  h2{font-size:19px;font-weight:800;margin:38px 0 12px}
-  p{color:rgba(255,255,255,.6);font-size:15px;margin:0 0 14px}
-  .lead{font-size:16px;color:rgba(255,255,255,.7)}
-  .eyebrow{color:rgba(198,255,26,.75);font-size:11px;font-weight:700;
-    letter-spacing:.25em;text-transform:uppercase;margin:0}
-  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}
-  .grid a{display:block;background:#fff;border-radius:14px;overflow:hidden;aspect-ratio:1;
-    border:1px solid rgba(255,255,255,.08)}
-  .grid img{width:100%;height:100%;object-fit:contain;padding:6px}
-  ol{padding-left:20px;color:rgba(255,255,255,.7);font-size:15px}
+  body{margin:0;color:var(--text);font-family:Archivo,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    line-height:1.6;background:radial-gradient(1100px 520px at 50% -180px,rgb(255 196 150/.07),transparent 70%),var(--ground)}
+  main{max-width:720px;margin:0 auto;padding:44px 20px 64px}
+  header.site{display:flex;justify-content:space-between;align-items:center;gap:16px;
+    padding:12px 20px;border-bottom:1px solid var(--line)}
+  .wm{color:var(--text);text-decoration:none;display:inline-flex;align-items:baseline;gap:6px}
+  .wm b{font-family:"Grenze Gotisch",Georgia,serif;font-weight:700;font-size:25px;color:var(--paper);line-height:1}
+  .wm span{font-stretch:70%;font-weight:800;font-size:14px;letter-spacing:.16em;text-transform:uppercase}
+  .wm i{width:6px;height:6px;border-radius:50%;background:var(--neon);box-shadow:0 0 8px var(--neon);align-self:center}
+  .go{color:var(--text);text-decoration:none;font-stretch:76%;font-weight:800;font-size:13px;
+    letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:7px 14px}
+  .go:hover{border-color:var(--text3)}
+  h1{font-stretch:70%;font-weight:800;text-transform:uppercase;font-size:clamp(34px,7vw,52px);
+    line-height:.95;letter-spacing:-.004em;margin:16px 0 14px;text-wrap:balance}
+  h2{font-stretch:72%;font-weight:800;text-transform:uppercase;font-size:24px;line-height:1.05;margin:44px 0 14px}
+  p{color:var(--text2);font-size:15.5px;margin:0 0 14px}
+  .lead{font-size:17px;color:var(--text2)}
+  .eyebrow{display:flex;align-items:center;gap:8px;color:var(--text3);font-family:"Courier Prime",monospace;
+    font-weight:700;font-size:11px;letter-spacing:.16em;text-transform:uppercase;margin:0}
+  .eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--neon);box-shadow:0 0 8px var(--neon)}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:22px 0}
+  .grid a,.art{display:block;background:var(--paper);border-radius:3px;overflow:hidden;
+    box-shadow:0 1px 0 rgb(255 255 255/.55) inset,0 16px 30px -16px rgb(0 0 0/.9),0 2px 6px rgb(0 0 0/.55)}
+  .grid a{aspect-ratio:1;transition:transform .25s}
+  .grid a:nth-child(3n+1){transform:rotate(-1deg)}.grid a:nth-child(3n){transform:rotate(1deg)}
+  .grid a:hover{transform:translateY(-3px) rotate(0)}
+  .grid img{width:100%;height:100%;object-fit:contain;padding:9%;mix-blend-mode:multiply}
+  .art{padding:18px;margin:22px 0}
+  .art img{width:100%;height:auto;display:block;mix-blend-mode:multiply}
+  ol{padding-left:22px;color:var(--text2);font-size:15.5px}
   ol li{margin-bottom:8px}
-  details{border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:13px 16px;
-    margin-bottom:10px}
-  summary{font-weight:700;font-size:14.5px;cursor:pointer;color:rgba(255,255,255,.85)}
-  details p{margin:10px 0 2px;font-size:14px}
-  .mesh{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
-  .mesh a{color:rgba(255,255,255,.65);text-decoration:none;font-size:13px;
-    border:1px solid rgba(255,255,255,.14);
-    border-radius:999px;padding:6px 13px}
-  .mesh a:hover{color:#c6fb50;border-color:rgba(198,255,26,.5)}
-  .cta{display:block;text-align:center;background:#c6fb50;color:#07070a;font-weight:800;
-    text-decoration:none;padding:15px 28px;border-radius:999px;margin:34px auto 8px;max-width:330px;
-    box-shadow:0 0 42px -10px rgba(198,255,26,.6)}
-  .sub{text-align:center;color:rgba(255,255,255,.35);font-size:12px}
-  .art{background:#fff;border-radius:24px;padding:16px;
-    border:1px solid rgba(255,255,255,.08);margin:18px 0}
-  .art img{width:100%;height:auto;display:block;border-radius:12px}
-  footer{text-align:center;color:rgba(255,255,255,.28);font-size:12px;padding:30px 0 40px}
+  details{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin-bottom:10px}
+  summary{font-weight:700;font-size:15px;cursor:pointer;color:var(--text)}
+  details p{margin:10px 0 2px;font-size:14.5px}
+  .mesh{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+  .mesh a{color:var(--text2);text-decoration:none;font-stretch:76%;font-weight:700;font-size:13px;
+    letter-spacing:.04em;text-transform:uppercase;border:1.5px solid #4a413a;border-radius:999px;padding:6px 14px}
+  .mesh a:hover{color:var(--text);border-color:var(--text3)}
+  .cta{display:block;text-align:center;background:var(--neon);color:var(--neon-ink);font-stretch:76%;font-weight:800;
+    font-size:17px;letter-spacing:.05em;text-transform:uppercase;text-decoration:none;padding:17px 28px;
+    border-radius:999px;margin:40px auto 10px;max-width:360px;
+    box-shadow:0 0 0 1px rgb(255 107 127/.75) inset,0 0 20px -4px var(--neon),0 0 54px -14px var(--neon)}
+  .sub{text-align:center;color:var(--text3);font-family:"Courier Prime",monospace;font-weight:700;font-size:11px;
+    letter-spacing:.15em;text-transform:uppercase}
+  footer{text-align:center;color:var(--text3);padding:34px 0 44px}
+  footer b{display:block;font-family:"Grenze Gotisch",Georgia,serif;font-weight:700;font-size:28px;color:var(--text3)}
+  footer span{font-family:"Courier Prime",monospace;font-weight:700;font-size:11px;letter-spacing:.15em;text-transform:uppercase}
 </style></head>
 <body>
-<header class="site"><a href="${home}">INK<span>PREVIEW</span> ✦</a>
-<a href="${home}"
- style="color:#c6fb50;font-size:13px">${esc(ui.cta)}</a></header>
+<header class="site"><a class="wm" href="${home}"><b>Ink</b><span>Preview</span><i></i></a>
+<a class="go" href="${home}">${esc(ui.cta)}</a></header>
 <main>${o.body}
   <a class="cta"
    href="${home}"
   >${esc(ui.cta)}</a>
   <p class="sub">${esc(ui.free)}</p>
 </main>
-<footer>ink-preview.com</footer>
+<footer><b>${esc(ui.tagline)}</b><span>ink-preview.com</span></footer>
 </body></html>`;
 }
 
@@ -257,7 +275,7 @@ export function sharePage(base: string, designId: string, design: Design | null,
     ]),
   ];
   const body =
-    `<p class="eyebrow">✦ AI Tattoo Flash</p>` +
+    `<p class="eyebrow">AI Tattoo Flash</p>` +
     `<h1>${esc(prompt.slice(0, 80) || "AI tattoo design")}</h1>` +
     `<div class="art"><img src="${esc(img)}" alt="${esc(desc.slice(0, 100))}"></div>` +
     `<p class="lead">${esc(desc)}</p>` +
@@ -309,7 +327,7 @@ export function stylePage(base: string, slug: string, lang: Lang, recentDone: De
     ]),
   ];
   const body =
-    `<p class="eyebrow">✦ ${esc(crumbsRoot)}</p>` +
+    `<p class="eyebrow">${esc(crumbsRoot)}</p>` +
     `<h1>${esc(h1)}</h1>` +
     `<p class="lead">${esc(lead)}</p>` +
     `<h2>${esc(ui.examples)}</h2>${grid(base, examples)}` +
@@ -370,7 +388,7 @@ export function bodyPartPage(base: string, part: string, lang: Lang, recentDone:
     ]),
   ];
   const body =
-    `<p class="eyebrow">✦ ${esc(crumbsRoot)}</p>` +
+    `<p class="eyebrow">${esc(crumbsRoot)}</p>` +
     `<h1>${esc(h1)}</h1>` +
     `<p class="lead">${esc(lead)}</p>` +
     `<h2>${esc(ui.examples)}</h2>${grid(base, recentDone)}` +

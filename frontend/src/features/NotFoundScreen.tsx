@@ -1,30 +1,26 @@
 import { Link } from "react-router-dom";
 
+import { Dagger } from "@/components/brand/Dagger";
+import { buttonClass } from "@/components/ui/Button";
+import { NeonWord } from "@/components/ui/Neon";
 import { useLangPath, useT } from "@/lib/useT";
 
-/** Friendly catch-all for unmatched client routes — with tattoo flavor. */
+/** Catch-all for unmatched client routes: an empty spot on the flash wall. */
 export function NotFoundScreen() {
   const t = useT();
   const lp = useLangPath();
   return (
-    <div className="relative mx-auto flex min-h-[60dvh] max-w-md flex-col items-center justify-center text-center">
-      <img
-        src="/ink/dagger.png"
-        alt=""
-        aria-hidden
-        className="pointer-events-none absolute top-1/2 left-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rotate-12 object-contain opacity-[0.07] invert"
-      />
-      <p className="relative font-tattoo text-8xl text-acid drop-shadow-[0_0_28px_var(--color-acid)]">
-        404
-      </p>
-      <h1 className="relative mt-4 font-display text-xl font-extrabold tracking-tight">
-        {t("notfound.title")}
-      </h1>
-      <p className="relative mt-1.5 text-sm text-white/45">{t("notfound.body")}</p>
-      <Link
-        to={lp("/")}
-        className="relative mt-7 rounded-full bg-acid px-7 py-3.5 font-display text-sm font-bold text-ink-950 shadow-[var(--shadow-glow-acid)]"
-      >
+    <div className="mx-auto flex min-h-[56dvh] max-w-md flex-col items-center justify-center gap-7 text-center">
+      <div className="relative grid aspect-[1/1.1] w-44 place-items-center rounded-[var(--radius-paper)] border-2 border-dashed border-line-strong">
+        <span aria-hidden className="tape tape-t" />
+        <Dagger className="h-24 w-auto rotate-12 text-line-strong" />
+      </div>
+      <NeonWord className="text-[5.5rem]">404</NeonWord>
+      <div className="flex flex-col gap-2">
+        <h1 className="heading text-[2.25rem] text-text">{t("notfound.title")}</h1>
+        <p className="text-[0.9375rem] text-text-2">{t("notfound.body")}</p>
+      </div>
+      <Link to={lp("/")} className={buttonClass("neon", "lg")}>
         {t("notfound.cta")}
       </Link>
     </div>

@@ -1,3 +1,4 @@
+import { Smartphone } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { useEffect, useRef, useState } from "react";
 
@@ -48,7 +49,7 @@ export function QrPanel({
         timer = window.setTimeout(poll, 2500);
       };
       timer = window.setTimeout(poll, 2500);
-    })();
+    })().catch(() => {});
 
     return () => {
       stopped = true;
@@ -58,20 +59,28 @@ export function QrPanel({
 
   return (
     <div className={className}>
-      <div className="flex h-full flex-col items-center justify-center gap-3 rounded-blob border border-white/10 bg-white/[0.02] p-6 text-center">
-        <div className="rounded-2xl border border-acid/30 bg-white p-3 shadow-[var(--shadow-glow-acid)]">
+      <div className="paper flex items-center gap-5 rounded-[var(--radius-paper)] p-5 shadow-[var(--shadow-paper)]">
+        <div className="shrink-0 rounded-[4px] bg-white p-2.5 shadow-[inset_0_0_0_1px_var(--color-paper-line)]">
           {url ? (
-            <QRCodeSVG value={url} size={132} />
+            <QRCodeSVG value={url} size={124} fgColor="#1c1714" bgColor="#ffffff" />
           ) : (
-            <div className="h-[132px] w-[132px] animate-pulse rounded bg-white/10" />
+            <div className="h-[124px] w-[124px] animate-pulse rounded-[2px] bg-paper-2" />
           )}
         </div>
-        <p className="font-display text-sm font-bold">{t("qr.title")}</p>
-        <p className="max-w-[16rem] text-xs text-white/45">{t("qr.body")}</p>
-        <p className="flex items-center gap-1.5 text-[11px] text-acid/70">
-          <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-acid" />
-          {t("qr.waiting")}
-        </p>
+        <div className="flex min-w-0 flex-col gap-2">
+          <p className="flex items-center gap-2 font-sans cond text-[1.125rem] font-extrabold tracking-[0.02em] text-paper-ink uppercase">
+            <Smartphone aria-hidden className="h-5 w-5" />
+            {t("qr.title")}
+          </p>
+          <p className="text-[0.875rem] leading-snug text-paper-mute">{t("qr.body")}</p>
+          <p className="t-label mt-1 flex items-center gap-2 text-stencil-ink">
+            <span
+              aria-hidden
+              className="h-1.5 w-1.5 rounded-full bg-stencil-ink motion-safe:animate-pulse"
+            />
+            {t("qr.waiting")}
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -18,3 +18,7 @@
   `npm run dev` proxies to :8787.
 - Secrets (OPENAI_API_KEY, GOOGLE_*, STRIPE_*, SESSION_SECRET) live only in Cloudflare;
   never write them into files.
+- Frontend design ("Night Parlour"): read `.impeccable.md` first. Tokens live in
+  `frontend/src/styles/theme.css` (Tailwind v4 `@theme`; the default palette is cleared, so only
+  the named tokens exist). Fonts are self-hosted in `frontend/public/fonts` and are also used by
+  the Worker's SEO pages (`worker/src/seo.ts`) — don't add Google Fonts requests (GDPR).

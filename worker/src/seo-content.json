@@ -85,7 +85,8 @@
    "faq": "Frequently asked questions",
    "styles": "Explore tattoo styles",
    "parts": "Popular placements",
-   "cta": "Create your own ✦",
+   "cta": "Create your own",
+   "tagline": "see it before you ink it",
    "free": "Free to try · no signup"
   },
   "de": {
@@ -99,7 +100,8 @@
    "faq": "Häufige Fragen",
    "styles": "Tattoo-Stile entdecken",
    "parts": "Beliebte Körperstellen",
-   "cta": "Eigenes erstellen ✦",
+   "cta": "Eigenes erstellen",
+   "tagline": "erst sehen, dann stechen",
    "free": "Kostenlos testen · ohne Anmeldung"
   }
  },

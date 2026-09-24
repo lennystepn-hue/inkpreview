@@ -1,8 +1,12 @@
-import { Camera, Check, Video } from "lucide-react";
-import { motion } from "motion/react";
+import { Camera, Check, Upload, Video } from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
 import { type ChangeEvent, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 
+import { Wordmark } from "@/components/brand/Wordmark";
+import { StencilDefs } from "@/components/StencilDefs";
+import { Button } from "@/components/ui/Button";
+import { Label } from "@/components/ui/Label";
 import { getCaptureInfo, uploadCapturePhoto } from "@/lib/api";
 import { useT } from "@/lib/useT";
 import { LiveCamera } from "./LiveCamera";
@@ -15,6 +19,7 @@ import type { Placement } from "./usePlacementGestures";
 export function CaptureScreen() {
   const { token = "" } = useParams();
   const t = useT();
+  const reduce = useReducedMotion();
   const fileRef = useRef<HTMLInputElement>(null);
   const [state, setState] = useState<"idle" | "uploading" | "done" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
@@ -33,13 +38,15 @@ export function CaptureScreen() {
     };
   }, [token]);
 
-  const onFile = async (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const send = async (file: File, p?: Placement) => {
     setState("uploading");
     setError(null);
     try {
-      await uploadCapturePhoto(token, file);
+      await uploadCapturePhoto(
+        token,
+        file,
+        p ? { x_pct: p.pos.x, y_pct: p.pos.y, scale: p.scale, rotation: p.rotation } : undefined,
+      );
       setState("done");
     } catch (err) {
       setError((err as Error).message || t("errors.uploadFailed"));
@@ -47,114 +54,118 @@ export function CaptureScreen() {
     }
   };
 
-  const onLiveCapture = async (file: File, p: Placement) => {
-    setCameraOn(false);
-    setState("uploading");
-    setError(null);
-    try {
-      await uploadCapturePhoto(token, file, {
-        x_pct: p.pos.x,
-        y_pct: p.pos.y,
-        scale: p.scale,
-        rotation: p.rotation,
-      });
-      setState("done");
-    } catch (err) {
-      setError((err as Error).message || t("errors.uploadFailed"));
-      setState("error");
-    }
+  const onFile = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (file) void send(file);
   };
 
   if (cameraOn && designThumb) {
     return (
-      <LiveCamera
-        designGhost={designThumb}
-        onCapture={onLiveCapture}
-        onClose={() => setCameraOn(false)}
-      />
+      <>
+        <StencilDefs />
+        <LiveCamera
+          designGhost={designThumb}
+          onCapture={(file, p) => {
+            setCameraOn(false);
+            void send(file, p);
+          }}
+          onClose={() => setCameraOn(false)}
+        />
+      </>
     );
   }
 
+  const busy = state === "uploading";
+
   return (
-    <div className="grain relative flex min-h-[100dvh] flex-col items-center justify-center bg-ink-950 px-6 text-center text-white">
-      <div className="pointer-events-none fixed -top-24 left-1/4 h-72 w-72 rounded-full bg-acid/15 blur-[110px]" />
-      <div className="pointer-events-none fixed right-1/4 bottom-0 h-72 w-72 rounded-full bg-magenta/15 blur-[110px]" />
+    <div className="flex min-h-[100dvh] flex-col px-6 pt-[max(1.25rem,env(safe-area-inset-top))] pb-[max(1.5rem,env(safe-area-inset-bottom))] text-text">
+      <StencilDefs />
+      <header className="flex justify-center text-[0.9375rem]">
+        <Wordmark />
+      </header>
 
-      <div className="relative">
-        <p className="font-display text-sm font-extrabold tracking-tight">
-          INK<span className="text-acid">PREVIEW</span>
-        </p>
-
+      <main className="mx-auto flex w-full max-w-sm flex-1 flex-col items-center justify-center gap-8 text-center">
         {state === "done" ? (
           <>
             <motion.div
-              initial={{ scale: 0, rotate: -20 }}
-              animate={{ scale: 1, rotate: 0 }}
+              initial={reduce ? false : { scale: 0.6, rotate: -12 }}
+              animate={{ scale: 1, rotate: -3 }}
               transition={{ type: "spring", stiffness: 260, damping: 16 }}
-              className="mx-auto mt-10 grid h-28 w-28 place-items-center rounded-blob bg-acid text-ink-950 shadow-[var(--shadow-glow-acid)]"
+              className="paper grid h-32 w-32 place-items-center rounded-[var(--radius-paper)] shadow-[var(--shadow-paper)]"
             >
-              <Check className="h-14 w-14" />
+              <Check aria-hidden className="h-14 w-14 text-stencil-ink" strokeWidth={2.5} />
             </motion.div>
-            <motion.h1
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.25 }}
-              className="mt-6 font-display text-2xl font-extrabold tracking-tight"
-            >
-              {t("capture.done.title")}
-            </motion.h1>
-            <p className="mt-2 text-sm text-white/55">{t("capture.done.body")}</p>
-            <p className="mt-5 font-tattoo text-xl text-white/30">✦ ✦ ✦</p>
+            <div className="flex flex-col gap-3">
+              <h1 className="heading text-[2.75rem] text-text">{t("capture.done.title")}</h1>
+              <p className="text-[0.9375rem] text-text-2">{t("capture.done.body")}</p>
+            </div>
           </>
         ) : (
           <>
-            <h1 className="mt-10 font-display text-3xl leading-tight font-extrabold tracking-tight">
-              {t("capture.title")}
-            </h1>
-            <p className="mx-auto mt-2 max-w-xs text-sm text-white/55">{t("capture.body")}</p>
+            {designThumb && (
+              <div className="w-32">
+                <div className="flash-card aspect-square rotate-[-3deg] bg-[#f4f1fb]!">
+                  <span aria-hidden className="tape tape-t" />
+                  <img
+                    src={designThumb}
+                    alt=""
+                    className="stencil-ghost h-full w-full object-contain p-[12%]"
+                  />
+                </div>
+              </div>
+            )}
+            <div className="flex flex-col items-center gap-3">
+              <Label dot="stencil">{t("studio.eyebrow")}</Label>
+              <h1 className="heading text-[2.75rem] text-text">{t("capture.title")}</h1>
+              <p className="text-[0.9375rem] text-text-2">{t("capture.body")}</p>
+            </div>
 
-            <div className="mt-8 flex flex-col items-center gap-3">
-              {designThumb && (
-                <button
-                  onClick={() => setCameraOn(true)}
-                  disabled={state === "uploading"}
-                  className="flex h-24 w-24 flex-col items-center justify-center gap-1 rounded-blob bg-acid text-ink-950 shadow-[var(--shadow-glow-acid)] disabled:opacity-50"
+            <div className="flex w-full flex-col gap-3">
+              {designThumb ? (
+                <>
+                  <Button
+                    size="lg"
+                    className="w-full"
+                    disabled={busy}
+                    onClick={() => setCameraOn(true)}
+                  >
+                    <Video aria-hidden className="h-5 w-5" />
+                    {t("capture.live")}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    disabled={busy}
+                    onClick={() => fileRef.current?.click()}
+                  >
+                    <Upload aria-hidden className="h-4 w-4" />
+                    {busy ? t("common.loading") : t("capture.uploadInstead")}
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  size="lg"
+                  className="w-full"
+                  disabled={busy}
+                  onClick={() => fileRef.current?.click()}
                 >
-                  <Video className="h-9 w-9" />
-                  <span className="text-[11px] font-bold">{t("capture.live")}</span>
-                </button>
+                  <Camera aria-hidden className="h-5 w-5" />
+                  {busy ? t("common.loading") : t("capture.camera")}
+                </Button>
               )}
-              <button
-                onClick={() => fileRef.current?.click()}
-                disabled={state === "uploading"}
-                className={
-                  designThumb
-                    ? "text-xs font-semibold text-white/55 underline"
-                    : "flex h-24 w-24 flex-col items-center justify-center gap-1 rounded-blob bg-acid text-ink-950 shadow-[var(--shadow-glow-acid)] disabled:opacity-50"
-                }
-              >
-                {designThumb ? (
-                  t("capture.uploadInstead")
-                ) : (
-                  <>
-                    <Camera className="h-9 w-9" />
-                    <span className="text-[11px] font-bold">
-                      {state === "uploading" ? "…" : t("capture.camera")}
-                    </span>
-                  </>
-                )}
-              </button>
             </div>
 
             {state === "error" && (
-              <p className="mt-5 text-sm text-magenta">
+              <p role="alert" className="text-[0.9375rem] text-neon-hi">
                 {error} {t("capture.errorSuffix")}
               </p>
             )}
-            <p className="mt-8 text-xs text-white/30">{t("capture.privacy")}</p>
           </>
         )}
-      </div>
+      </main>
+
+      <p className="t-label text-center text-text-3">{t("capture.privacy")}</p>
 
       <input
         ref={fileRef}

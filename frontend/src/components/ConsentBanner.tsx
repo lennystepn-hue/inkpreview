@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+import { buttonClass } from "@/components/ui/Button";
 import { CONSENT_EVENT, type Consent, getConsent, setConsent } from "@/lib/consent";
 import { useLangPath, useT } from "@/lib/useT";
 
@@ -22,26 +23,33 @@ export function ConsentBanner() {
     setOpen(false);
   };
 
+  // Both choices get the same weight (no nudging toward "accept").
+  const choice = buttonClass("outline", "sm", "flex-1 sm:flex-none sm:min-w-28");
+
   return (
-    <div className="fixed inset-x-0 bottom-0 z-[60] p-3 md:p-4">
-      <div className="mx-auto flex max-w-3xl flex-col gap-3 rounded-2xl border border-white/10 bg-ink-850/95 p-4 shadow-xl backdrop-blur-xl sm:flex-row sm:items-center">
-        <p className="flex-1 text-xs leading-relaxed text-white/65">
-          {t("consent.text")}{" "}
-          <Link to={lp("/datenschutz")} className="text-acid underline-offset-2 hover:underline">
-            {t("consent.learn")}
-          </Link>
-        </p>
-        <div className="flex shrink-0 gap-2">
-          <button
-            onClick={() => choose("denied")}
-            className="flex-1 rounded-full border border-white/15 px-4 py-2 font-display text-xs font-semibold text-white/70 transition-colors hover:text-white sm:flex-none"
-          >
+    <div
+      role="region"
+      aria-label={t("consent.title")}
+      className="fixed inset-x-0 bottom-0 z-[60] p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] md:p-5"
+    >
+      <div className="mx-auto flex max-w-3xl flex-col gap-4 rounded-[var(--radius-panel)] bg-surface p-4 shadow-[var(--shadow-panel),inset_0_0_0_1px_var(--color-line)] sm:flex-row sm:items-center sm:gap-6 md:p-5">
+        <div className="flex-1">
+          <p className="t-label text-text-3">{t("consent.title")}</p>
+          <p className="mt-1.5 text-[0.875rem] leading-relaxed text-text-2">
+            {t("consent.text")}{" "}
+            <Link
+              to={lp("/datenschutz")}
+              className="text-text underline decoration-line-strong underline-offset-4 hover:decoration-text"
+            >
+              {t("consent.learn")}
+            </Link>
+          </p>
+        </div>
+        <div className="flex shrink-0 gap-2.5">
+          <button type="button" onClick={() => choose("denied")} className={choice}>
             {t("consent.reject")}
           </button>
-          <button
-            onClick={() => choose("granted")}
-            className="flex-1 rounded-full bg-acid px-4 py-2 font-display text-xs font-extrabold text-ink-950 transition-opacity hover:opacity-90 sm:flex-none"
-          >
+          <button type="button" onClick={() => choose("granted")} className={choice}>
             {t("consent.accept")}
           </button>
         </div>

@@ -1,196 +1,488 @@
 @import "tailwindcss";
 
-/* ─────────────────────────  Acid Ink design tokens  ───────────────────────── */
+/* ═══════════════════════════  Night Parlour  ═══════════════════════════
+   A tattoo parlour after dark: lacquer-black wall, flash paper pinned to it,
+   one neon sign in the window, stencil violet for placement.
+   See /.impeccable.md for the design context. */
+
+/* ─────────────  Fonts — self-hosted (public/fonts), no third-party requests  ───────────── */
+@font-face {
+  font-family: "Archivo";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  src: url("/fonts/archivo-latin.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Archivo";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  src: url("/fonts/archivo-latin-ext.woff2") format("woff2");
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
+}
+@font-face {
+  font-family: "Grenze Gotisch";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("/fonts/grenze-gotisch-latin.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Courier Prime";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("/fonts/courier-prime-latin-400.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Courier Prime";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("/fonts/courier-prime-latin-ext-400.woff2") format("woff2");
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
+}
+@font-face {
+  font-family: "Courier Prime";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url("/fonts/courier-prime-latin-700.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ─────────────  Tokens  ───────────── */
 @theme {
-  /* Ink base (near-black studio) */
-  --color-ink-950: #07070a;
-  --color-ink-900: #0a0a0f;
-  --color-ink-850: #101019;
-  --color-ink-800: #16161f;
-  --color-ink-700: #20202c;
-  --color-ink-600: #2c2c3a;
-  --color-ink-500: #3a3a4d;
+  /* Only these colors exist — no stray Tailwind palette colors. */
+  --color-*: initial;
+  --color-white: #fff;
+  --color-black: #000;
 
-  /* Acid-rave accents */
-  --color-acid: #c6ff1a; /* acid lime */
-  --color-cyan: #22e6ff; /* electric cyan */
-  --color-magenta: #ff2db8; /* hot magenta */
-  --color-violet: #b18cff; /* uv violet */
+  /* The wall — warm lacquer black */
+  --color-ground: #0f0d0c;
+  --color-wall: #141110;
+  --color-surface: #1b1715;
+  --color-raised: #25201d;
+  --color-line: #362f2a;
+  --color-line-strong: #4a413a;
 
-  /* Type */
-  --font-display: "Unbounded", system-ui, sans-serif;
-  --font-sans: "Space Grotesk", system-ui, sans-serif;
-  /* Tattoo-lettering accent (blackletter) — single words only, never body copy. */
-  --font-tattoo: "Pirata One", "Unbounded", system-ui, sans-serif;
+  /* Text on the wall (all ≥ 4.5:1 on ground and surface) */
+  --color-text: #f5efe6;
+  --color-text-2: #c9beb3;
+  --color-text-3: #9c9086;
 
-  /* Radii */
-  --radius-blob: 1.75rem;
+  /* Flash paper */
+  --color-paper: #f1e8d8;
+  --color-paper-2: #e5d9c3;
+  --color-paper-line: #cbbda5;
+  --color-paper-ink: #1c1714;
+  --color-paper-mute: #5f5046;
 
-  /* Glows */
-  --shadow-glow-acid: 0 0 48px -10px color-mix(in srgb, var(--color-acid) 70%, transparent);
-  --shadow-glow-cyan: 0 0 48px -10px color-mix(in srgb, var(--color-cyan) 70%, transparent);
-  --shadow-glow-magenta: 0 0 48px -10px color-mix(in srgb, var(--color-magenta) 70%, transparent);
+  /* The neon sign — primary action + the one hero word */
+  --color-neon: #ff3d57;
+  --color-neon-hi: #ff6b7f;
+  --color-neon-core: #ffe0e4;
+  --color-neon-ink: #22060b;
 
-  /* Motion */
-  --animate-float: float 6s ease-in-out infinite;
-  --animate-pulse-glow: pulseGlow 3.2s ease-in-out infinite;
-  --animate-spin-slow: spin 18s linear infinite;
+  /* Thermal stencil — placement only */
+  --color-stencil: #8a6cff;
+  --color-stencil-ink: #4a2fb2;
+
+  /* Flash highlights — tiny doses */
+  --color-gold: #f3b93b;
+  --color-jade: #3fa36f;
+
+  --font-sans: "Archivo", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-gothic: "Grenze Gotisch", "Archivo", Georgia, serif;
+  --font-type: "Courier Prime", ui-monospace, "Courier New", monospace;
+
+  --radius-paper: 3px;
+  --radius-panel: 14px;
+
+  --shadow-paper:
+    0 1px 0 rgb(255 255 255 / 0.55) inset, 0 16px 30px -16px rgb(0 0 0 / 0.9),
+    0 2px 6px rgb(0 0 0 / 0.55);
+  --shadow-paper-lift:
+    0 1px 0 rgb(255 255 255 / 0.55) inset, 0 26px 40px -18px rgb(0 0 0 / 0.95),
+    0 4px 10px rgb(0 0 0 / 0.5);
+  --shadow-neon:
+    0 0 0 1px color-mix(in srgb, var(--color-neon-hi) 75%, transparent) inset,
+    0 0 20px -4px var(--color-neon), 0 0 54px -14px var(--color-neon);
+  --shadow-panel: 0 24px 60px -24px rgb(0 0 0 / 0.9);
+
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-12px);
-  }
-}
-@keyframes pulseGlow {
-  0%,
-  100% {
-    opacity: 0.5;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-/* Light sweep across the primary CTA — one pass, long pause (club-flyer shine). */
-@keyframes shine {
-  0% {
-    transform: translateX(-130%) skewX(-18deg);
-  }
-  18%,
-  100% {
-    transform: translateX(230%) skewX(-18deg);
-  }
-}
-/* Breathing glow for the main CTA while it waits. */
-@keyframes breatheGlow {
-  0%,
-  100% {
-    box-shadow: 0 0 28px -10px color-mix(in srgb, var(--color-acid) 65%, transparent);
-  }
-  50% {
-    box-shadow: 0 0 52px -8px color-mix(in srgb, var(--color-acid) 85%, transparent);
-  }
+:root {
+  /* Warm paper fibre — a faint brown noise over the paper color. */
+  --paper-grain:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.36  0 0 0 0 0.27  0 0 0 0 0.18  0 0 0 0.2 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    radial-gradient(130% 110% at 50% 35%, transparent 55%, rgb(120 88 48 / 0.12));
 }
 
-/* ─────────────────────────  Base  ───────────────────────── */
+/* ─────────────  Base  ───────────── */
 @layer base {
   html {
+    color-scheme: dark;
+    background: var(--color-ground);
     -webkit-tap-highlight-color: transparent;
   }
   body {
     margin: 0;
-    background: var(--color-ink-950);
-    color: #fff;
-    font-family: var(--font-sans);
-    -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
     min-height: 100dvh;
+    overflow-x: hidden;
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* lacquer grain + the shop lamp: a warm pool of light at the top of the wall */
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 0.92  0 0 0 0 0.85  0 0 0 0.045 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+      radial-gradient(1100px 520px at 50% -180px, rgb(255 196 150 / 0.07), transparent 70%) fixed,
+      var(--color-ground);
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
   }
   ::selection {
-    background: var(--color-acid);
-    color: var(--color-ink-950);
+    background: var(--color-neon);
+    color: var(--color-neon-ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--focus-ring, var(--color-neon-hi));
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  button:not(:disabled),
+  [role="button"],
+  summary {
+    cursor: pointer;
+  }
+  input::placeholder,
+  textarea::placeholder {
+    color: currentColor;
+    opacity: 0.55;
   }
 }
 
-/* ─────────────────────────  Components  ───────────────────────── */
+/* ─────────────  Type utilities  ───────────── */
 
-/* Tattoo-lettering accent — single display words. */
-.font-tattoo {
-  font-family: var(--font-tattoo);
-  font-weight: 400;
-  letter-spacing: 0.02em;
-}
-
-/* Flash-sheet section eyebrow: ✦──── TEXT ────✦ */
-.eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-family: var(--font-display);
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.28em;
+/* Shop-sign heading: condensed heavy caps. */
+@utility heading {
+  font-family: var(--font-sans);
+  font-stretch: 70%;
+  font-weight: 800;
   text-transform: uppercase;
-  color: rgb(255 255 255 / 0.38);
+  line-height: 0.92;
+  letter-spacing: -0.004em;
 }
-.eyebrow::before,
-.eyebrow::after {
-  content: "";
-  height: 1px;
-  flex: 1;
-  background: linear-gradient(to right, transparent, rgb(255 255 255 / 0.16), transparent);
+/* Condensed UI text (buttons, nav, chips). */
+@utility cond {
+  font-stretch: 76%;
 }
-
-/* Custom range slider — chunky acid thumb, visible track (Studio controls). */
-.slider {
-  appearance: none;
-  -webkit-appearance: none;
-  width: 100%;
-  height: 28px; /* generous touch target */
-  background: transparent;
-  cursor: pointer;
+/* Blackletter — single words / short phrases only. */
+@utility gothic {
+  font-family: var(--font-gothic);
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: 0;
+  line-height: 0.86;
 }
-.slider::-webkit-slider-runnable-track {
-  height: 6px;
-  border-radius: 9999px;
-  background: rgb(255 255 255 / 0.12);
+/* Typewriter. */
+@utility typewriter {
+  font-family: var(--font-type);
 }
-.slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  margin-top: -8px;
-  height: 22px;
-  width: 22px;
-  border-radius: 9999px;
-  background: var(--color-acid);
-  border: 3px solid var(--color-ink-950);
-  box-shadow: 0 0 14px -2px color-mix(in srgb, var(--color-acid) 80%, transparent);
-}
-.slider::-moz-range-track {
-  height: 6px;
-  border-radius: 9999px;
-  background: rgb(255 255 255 / 0.12);
-}
-.slider::-moz-range-thumb {
-  height: 22px;
-  width: 22px;
-  border-radius: 9999px;
-  background: var(--color-acid);
-  border: 3px solid var(--color-ink-950);
-  box-shadow: 0 0 14px -2px color-mix(in srgb, var(--color-acid) 80%, transparent);
-}
-.slider-cyan::-webkit-slider-thumb {
-  background: var(--color-cyan);
-  box-shadow: 0 0 14px -2px color-mix(in srgb, var(--color-cyan) 80%, transparent);
-}
-.slider-cyan::-moz-range-thumb {
-  background: var(--color-cyan);
-  box-shadow: 0 0 14px -2px color-mix(in srgb, var(--color-cyan) 80%, transparent);
+/* Typewriter label: flash numbers, meta, form labels. */
+@utility t-label {
+  font-family: var(--font-type);
+  font-weight: 700;
+  font-size: 0.6875rem;
+  line-height: 1.3;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
 }
 
-/* Keyboard focus — acid ring everywhere. */
-:focus-visible {
-  outline: 2px solid color-mix(in srgb, var(--color-acid) 70%, transparent);
-  outline-offset: 2px;
-  border-radius: 4px;
+/* The neon tube: pale core + red halo. */
+@utility neon-text {
+  color: var(--color-neon-core);
+  text-shadow:
+    0 0 1px rgb(255 255 255 / 0.6),
+    0 0 6px var(--color-neon),
+    0 0 16px var(--color-neon),
+    0 0 40px color-mix(in srgb, var(--color-neon) 62%, transparent),
+    0 0 78px color-mix(in srgb, var(--color-neon) 34%, transparent);
 }
 
-/* Film-grain overlay (apply class to a fixed full-screen element). */
-.grain::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 60;
-  opacity: 0.05;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+/* Flash paper surface. */
+@utility paper {
+  background-color: var(--color-paper);
+  background-image: var(--paper-grain);
+  color: var(--color-paper-ink);
+  --focus-ring: var(--color-stencil-ink);
 }
 
-/* Reduced motion */
+/* ─────────────  Components  ───────────── */
+@layer components {
+  /* A design pinned to the wall. The art multiplies into the paper, so the
+     generated white background reads as flash paper. */
+  .flash-card {
+    position: relative;
+    border-radius: var(--radius-paper);
+    background-color: var(--color-paper);
+    background-image: var(--paper-grain);
+    color: var(--color-paper-ink);
+    box-shadow: var(--shadow-paper);
+    --focus-ring: var(--color-neon-hi);
+  }
+  .flash-art {
+    mix-blend-mode: multiply;
+  }
+
+  /* Masking tape with torn ends. */
+  .tape {
+    position: absolute;
+    z-index: 2;
+    width: 58px;
+    height: 19px;
+    pointer-events: none;
+    background:
+      linear-gradient(180deg, rgb(255 255 255 / 0.18), transparent 40%, rgb(0 0 0 / 0.05)),
+      rgb(233 220 190 / 0.74);
+    box-shadow: 0 1px 1.5px rgb(0 0 0 / 0.28);
+    clip-path: polygon(
+      0 12%,
+      5% 0,
+      95% 0,
+      100% 14%,
+      97% 32%,
+      100% 52%,
+      96.5% 72%,
+      100% 90%,
+      94% 100%,
+      6% 100%,
+      0 88%,
+      3.5% 68%,
+      0 50%,
+      3% 30%
+    );
+  }
+  .tape-l {
+    top: -8px;
+    left: -15px;
+    transform: rotate(-34deg);
+  }
+  .tape-r {
+    top: -8px;
+    right: -15px;
+    transform: rotate(33deg);
+  }
+  .tape-t {
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-2deg);
+  }
+
+  /* Ticket perforation: a dashed tear line with notches cut into both edges. */
+  .perforation {
+    position: relative;
+    height: 22px;
+    background:
+      radial-gradient(circle at 0 50%, var(--color-ground) 10px, transparent 10.5px),
+      radial-gradient(circle at 100% 50%, var(--color-ground) 10px, transparent 10.5px);
+  }
+  .perforation::after {
+    content: "";
+    position: absolute;
+    left: 18px;
+    right: 18px;
+    top: 50%;
+    border-top: 2px dashed var(--color-paper-line);
+  }
+
+  /* Ruled lines on the consultation slip. */
+  .ruled {
+    background-image: repeating-linear-gradient(
+      transparent 0,
+      transparent calc(var(--rule, 1.75rem) - 1px),
+      var(--color-paper-line) calc(var(--rule, 1.75rem) - 1px),
+      var(--color-paper-line) var(--rule, 1.75rem)
+    );
+    background-attachment: local;
+    line-height: var(--rule, 1.75rem);
+  }
+
+  /* Placement ghost — the design as a purple thermal-stencil transfer
+     (filter defined in <StencilDefs/>; multiply keeps a sane fallback). */
+  .stencil-ghost {
+    filter: url(#ink-stencil);
+    mix-blend-mode: multiply;
+  }
+
+  /* Ruler slider (studio size/rotation): tick-marked track, stencil thumb. */
+  .ruler {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 100%;
+    height: 34px;
+    background: transparent;
+    cursor: pointer;
+    --tick: var(--color-line-strong);
+  }
+  .ruler::-webkit-slider-runnable-track {
+    height: 14px;
+    background:
+      linear-gradient(var(--tick), var(--tick)) bottom / 100% 1px no-repeat,
+      repeating-linear-gradient(90deg, var(--tick) 0 1px, transparent 1px 10%) bottom / 100% 14px
+        no-repeat,
+      repeating-linear-gradient(90deg, var(--tick) 0 1px, transparent 1px 2%) bottom / 100% 7px
+        no-repeat;
+  }
+  .ruler::-moz-range-track {
+    height: 14px;
+    background:
+      linear-gradient(var(--tick), var(--tick)) bottom / 100% 1px no-repeat,
+      repeating-linear-gradient(90deg, var(--tick) 0 1px, transparent 1px 10%) bottom / 100% 14px
+        no-repeat,
+      repeating-linear-gradient(90deg, var(--tick) 0 1px, transparent 1px 2%) bottom / 100% 7px
+        no-repeat;
+  }
+  .ruler::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    margin-top: -6px;
+    height: 26px;
+    width: 26px;
+    border-radius: 9999px;
+    background: var(--color-stencil);
+    border: 4px solid var(--color-ground);
+    box-shadow:
+      0 0 0 1.5px var(--color-stencil),
+      0 0 18px -2px color-mix(in srgb, var(--color-stencil) 80%, transparent);
+  }
+  .ruler::-moz-range-thumb {
+    height: 18px;
+    width: 18px;
+    border-radius: 9999px;
+    background: var(--color-stencil);
+    border: 4px solid var(--color-ground);
+    box-shadow:
+      0 0 0 1.5px var(--color-stencil),
+      0 0 18px -2px color-mix(in srgb, var(--color-stencil) 80%, transparent);
+  }
+  .ruler:focus-visible {
+    outline-offset: 4px;
+  }
+}
+
+/* ─────────────  Motion  ───────────── */
+
+/* A neon tube catching: two stutters, then steady. */
+@keyframes tube-on {
+  0% {
+    opacity: 0.25;
+  }
+  7% {
+    opacity: 1;
+  }
+  11% {
+    opacity: 0.35;
+  }
+  19% {
+    opacity: 1;
+  }
+  23% {
+    opacity: 0.6;
+  }
+  32%,
+  100% {
+    opacity: 1;
+  }
+}
+/* Same, for a lit button (brightness instead of opacity, so the label stays legible). */
+@keyframes button-on {
+  0% {
+    filter: brightness(0.55) saturate(0.7);
+  }
+  8% {
+    filter: brightness(1.12);
+  }
+  14% {
+    filter: brightness(0.6) saturate(0.8);
+  }
+  24% {
+    filter: brightness(1.08);
+  }
+  30% {
+    filter: brightness(0.8);
+  }
+  40%,
+  100% {
+    filter: none;
+  }
+}
+/* Stencil printer: the paper is printed top to bottom as the head passes. */
+@keyframes print-reveal {
+  from {
+    clip-path: inset(0 0 94% 0);
+  }
+  to {
+    clip-path: inset(0 0 6% 0);
+  }
+}
+@keyframes print-head {
+  from {
+    top: 6%;
+  }
+  to {
+    top: 94%;
+  }
+}
+@keyframes blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.animate-tube-on {
+  animation: tube-on 1.1s steps(1, end) both;
+}
+.animate-button-on {
+  animation: button-on 0.9s steps(1, end) both;
+}
+
+/* Reduced motion: no flicker, no travel — everything simply appears. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -198,5 +490,6 @@
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
 }

@@ -1,3 +1,6 @@
+import { Check } from "lucide-react";
+
+import { Button } from "@/components/ui/Button";
 import { Chip } from "@/components/ui/Chip";
 import { Sheet } from "@/components/ui/Sheet";
 import type { Style } from "@/lib/api";
@@ -11,6 +14,7 @@ type Props = {
   onToggle: (slug: string) => void;
 };
 
+/** The style book: every style grouped by family, on paper. */
 export function StyleSheet({ open, onClose, styles, selected, onToggle }: Props) {
   const t = useT();
   const byCat = new Map<string, Style[]>();
@@ -22,31 +26,31 @@ export function StyleSheet({ open, onClose, styles, selected, onToggle }: Props)
 
   return (
     <Sheet open={open} onClose={onClose} title={t("styleSheet.title")}>
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-6 pt-2 pb-4">
         {[...byCat.entries()].map(([cat, list]) => (
-          <div key={cat}>
-            <p className="mb-2 text-xs tracking-wide text-white/35 uppercase">{cat}</p>
+          <div key={cat} className="flex flex-col gap-2.5">
+            <p className="t-label border-b-[1.5px] border-dashed border-paper-line pb-2 text-paper-mute">
+              {cat}
+            </p>
             <div className="flex flex-wrap gap-2">
-              {list.map((s, i) => (
-                <Chip
-                  key={s.slug}
-                  tilt={(i % 3) - 1}
-                  selected={selected.includes(s.slug)}
-                  onClick={() => onToggle(s.slug)}
-                >
-                  {s.name}
-                </Chip>
-              ))}
+              {list.map((s) => {
+                const on = selected.includes(s.slug);
+                return (
+                  <Chip key={s.slug} tone="paper" selected={on} onClick={() => onToggle(s.slug)}>
+                    {on && <Check aria-hidden className="h-3.5 w-3.5" />}
+                    {s.name}
+                  </Chip>
+                );
+              })}
             </div>
           </div>
         ))}
       </div>
-      <button
-        onClick={onClose}
-        className="mt-5 w-full rounded-blob bg-acid py-3.5 font-display text-sm font-extrabold text-ink-950"
-      >
-        {t("styleSheet.done", { count: selected.length })}
-      </button>
+      <div className="sticky bottom-0 -mx-5 bg-gradient-to-t from-paper via-paper to-transparent px-5 pt-4 pb-1">
+        <Button variant="ink" size="lg" className="w-full" onClick={onClose}>
+          {t("styleSheet.done", { count: selected.length })}
+        </Button>
+      </div>
     </Sheet>
   );
 }

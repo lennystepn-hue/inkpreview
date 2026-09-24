@@ -1,100 +1,57 @@
 import { motion, useReducedMotion } from "motion/react";
 
+import { FlashCard } from "@/components/ui/FlashCard";
 import { cn } from "@/lib/cn";
+import { flashNo, flashTilt } from "@/lib/flash";
 import { useFeed } from "@/lib/useFeed";
+import { useT } from "@/lib/useT";
+import { useLightbox } from "@/store/useLightbox";
 
-type Glow = "acid" | "cyan" | "magenta";
-
-const GLOW: Record<Glow, string> = {
-  acid: "shadow-[var(--shadow-glow-acid)]",
-  cyan: "shadow-[var(--shadow-glow-cyan)]",
-  magenta: "shadow-[var(--shadow-glow-magenta)]",
-};
-
-const GLOWS: Glow[] = ["acid", "cyan", "magenta"];
-
-// Bundled samples — shown until the live feed has enough real designs.
-const BUNDLED = [
-  "/flash/snake-dagger.png",
-  "/flash/koi.png",
-  "/flash/moth.png",
-  "/flash/mandala.png",
-  "/flash/heart.png",
-  "/flash/celestial.png",
+/** The shop's own flash (bundled, curated) — the hero never depends on what
+ *  the live feed happens to contain. */
+export const HOUSE_FLASH = [
+  { src: "/flash/snake-dagger.png", caption: "Fine line" },
+  { src: "/flash/heart.png", caption: "Traditional" },
+  { src: "/flash/moth.png", caption: "Blackwork" },
+  { src: "/flash/koi.png", caption: "Irezumi" },
+  { src: "/flash/mandala.png", caption: "Mandala" },
+  { src: "/flash/celestial.png", caption: "Fine line" },
 ];
 
-/** Newest real designs first (the feed), topped up with bundled samples. */
-function useFlashSrcs(count: number): string[] {
-  const { data } = useFeed();
-  const live = (data ?? [])
-    .map((d) => d.thumb_url ?? d.clean_png_url)
-    .filter((s): s is string => Boolean(s));
-  const seen = new Set<string>();
-  const merged: string[] = [];
-  for (const s of [...live, ...BUNDLED]) {
-    if (!seen.has(s)) {
-      seen.add(s);
-      merged.push(s);
-    }
-  }
-  return merged.slice(0, count);
-}
+const ease = [0.22, 1, 0.36, 1] as const;
 
-function FlashCard({
-  src,
-  tilt,
-  glow,
-  delay = 0,
-  className,
-}: {
-  src: string;
-  tilt: number;
-  glow: Glow;
-  delay?: number;
-  className?: string;
-}) {
+/** Mobile hero: three flash sheets fanned out on the wall. */
+export function HeroFan({ className }: { className?: string }) {
   const reduce = useReducedMotion();
+  const t = useT();
+  const cards = [
+    { ...HOUSE_FLASH[2], x: "-5.75rem", rot: -8, w: "w-[8.5rem]", z: "z-0", delay: 0.1 },
+    { ...HOUSE_FLASH[3], x: "5.75rem", rot: 7, w: "w-[8.5rem]", z: "z-0", delay: 0.16 },
+    { ...HOUSE_FLASH[0], x: "0rem", rot: -1.5, w: "w-[10rem]", z: "z-10", delay: 0 },
+  ];
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.92, rotate: tilt }}
-      animate={
-        reduce ? { opacity: 1, rotate: tilt } : { opacity: 1, scale: 1, rotate: tilt, y: [0, -8, 0] }
-      }
-      transition={{
-        opacity: { duration: 0.5, delay },
-        scale: { duration: 0.5, delay },
-        y: { duration: 5 + delay * 2, repeat: Infinity, ease: "easeInOut", delay },
-      }}
+    <div
       className={cn(
-        "overflow-hidden rounded-2xl border border-white/12 bg-white",
-        GLOW[glow],
+        "relative mx-auto flex h-[12.5rem] w-full items-center justify-center",
         className,
       )}
     >
-      <img src={src} alt="AI tattoo flash" loading="lazy" className="h-full w-full object-cover" />
-    </motion.div>
-  );
-}
-
-/** Desktop editorial: a clean curated grid (live feed + bundled) with hover lift. */
-export function FlashGallery({ className }: { className?: string }) {
-  const srcs = useFlashSrcs(6);
-  return (
-    <div className={cn("grid grid-cols-2 gap-5 lg:grid-cols-3", className)}>
-      {srcs.map((src, i) => (
+      {cards.map((c) => (
         <motion.div
-          key={src + i}
-          initial={{ opacity: 0, y: 18 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-8%" }}
-          transition={{ duration: 0.5, delay: (i % 3) * 0.08 }}
-          className="group overflow-hidden rounded-2xl border border-white/10 bg-white shadow-xl transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[var(--shadow-glow-acid)]"
+          key={c.src}
+          initial={reduce ? false : { y: 24 }}
+          animate={{ y: 0 }}
+          transition={{ duration: 0.6, delay: c.delay, ease }}
+          className={cn("absolute", c.z, c.w)}
+          style={{ translateX: c.x }}
         >
-          <img
-            src={src}
-            alt="AI tattoo flash"
-            loading="lazy"
-            className="aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+          <FlashCard
+            src={c.src}
+            alt={t("explore.alt")}
+            no={flashNo(c.src)}
+            tilt={c.rot}
+            tape={c.z === "z-10" ? "t" : "none"}
+            loading="eager"
           />
         </motion.div>
       ))}
@@ -102,87 +59,69 @@ export function FlashGallery({ className }: { className?: string }) {
   );
 }
 
-/** Tiny acid sparks scattered around the hero fan. */
-function Sparks() {
+/** Desktop hero: a loose, hand-pinned collage of house flash. */
+export function HeroWall({ className }: { className?: string }) {
   const reduce = useReducedMotion();
-  const SPOTS = [
-    { left: "8%", top: "6%", size: "text-sm", color: "text-acid/80", delay: 0 },
-    { left: "88%", top: "14%", size: "text-xs", color: "text-cyan/70", delay: 0.8 },
-    { left: "16%", top: "78%", size: "text-xs", color: "text-magenta/70", delay: 1.4 },
-    { left: "80%", top: "82%", size: "text-base", color: "text-acid/60", delay: 0.4 },
+  const t = useT();
+  const layout = [
+    { i: 0, left: "3%", top: "0%", w: "45%", rot: -4, tape: "l" as const },
+    { i: 1, left: "53%", top: "6%", w: "43%", rot: 3.5, tape: "r" as const },
+    { i: 4, left: "0%", top: "51%", w: "37%", rot: 2.5, tape: "t" as const },
+    { i: 2, left: "35%", top: "47%", w: "38%", rot: -2.5, tape: "lr" as const },
+    { i: 3, left: "71%", top: "57%", w: "29%", rot: 5, tape: "t" as const },
   ];
   return (
-    <>
-      {SPOTS.map((s, i) => (
-        <motion.span
-          key={i}
-          aria-hidden
-          className={cn("absolute select-none", s.size, s.color)}
-          style={{ left: s.left, top: s.top }}
-          animate={reduce ? undefined : { opacity: [0.25, 1, 0.25], scale: [0.9, 1.15, 0.9] }}
-          transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut", delay: s.delay }}
-        >
-          ✦
-        </motion.span>
-      ))}
-    </>
+    <div className={cn("relative aspect-[1/1.02] w-full", className)}>
+      {layout.map((l, n) => {
+        const f = HOUSE_FLASH[l.i];
+        return (
+          <motion.div
+            key={f.src}
+            initial={reduce ? false : { y: 28 }}
+            animate={{ y: 0 }}
+            transition={{ duration: 0.7, delay: 0.08 * n, ease }}
+            className="absolute"
+            style={{ left: l.left, top: l.top, width: l.w }}
+          >
+            <FlashCard
+              src={f.src}
+              alt={t("explore.alt")}
+              no={flashNo(f.src)}
+              caption={f.caption}
+              tilt={l.rot}
+              tape={l.tape}
+              loading="eager"
+            />
+          </motion.div>
+        );
+      })}
+    </div>
   );
 }
 
-/** Mobile hero: an oversized fanned hand of real flash — the wow moment. */
-export function FlashStrip({ className }: { className?: string }) {
-  const srcs = useFlashSrcs(5);
-  const reduce = useReducedMotion();
-  if (srcs.length < 3) return null;
-  const five = srcs.length >= 5;
+/** The newest community designs, pinned in a tidy grid. Visible at rest —
+ *  no scroll-triggered reveal. */
+export function FreshWall({ limit = 8, className }: { limit?: number; className?: string }) {
+  const t = useT();
+  const { data } = useFeed();
+  const openLightbox = useLightbox((s) => s.open);
+  const items = (data ?? []).filter((d) => d.thumb_url || d.clean_png_url).slice(0, limit);
+  if (items.length === 0) return null;
   return (
-    <div className={cn("relative mx-auto flex h-48 w-full items-center justify-center", className)}>
-      <Sparks />
-      {/* far edges — peeking cards (only when we have 5) */}
-      {five && (
-        <>
-          <motion.div
-            initial={{ opacity: 0, x: -40, rotate: -18 }}
-            animate={{ opacity: 1, x: 0, rotate: -18 }}
-            transition={{ duration: 0.6, delay: 0.25 }}
-            className="absolute z-0 h-24 w-24 -translate-x-[8.25rem] overflow-hidden rounded-2xl border border-white/10 bg-white opacity-70"
-          >
-            <img src={srcs[3]} alt="" loading="lazy" className="h-full w-full object-cover" />
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, x: 40, rotate: 18 }}
-            animate={{ opacity: 1, x: 0, rotate: 18 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="absolute z-0 h-24 w-24 translate-x-[8.25rem] overflow-hidden rounded-2xl border border-white/10 bg-white opacity-70"
-          >
-            <img src={srcs[4]} alt="" loading="lazy" className="h-full w-full object-cover" />
-          </motion.div>
-        </>
-      )}
-      <motion.div
-        initial={reduce ? { opacity: 0 } : { opacity: 0, x: -60, rotate: -24 }}
-        animate={{ opacity: 1, x: 0, rotate: 0 }}
-        transition={{ duration: 0.55, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-        className="absolute z-10 -translate-x-[4.75rem]"
-      >
-        <FlashCard src={srcs[0]} glow={GLOWS[0]} tilt={-10} className="h-36 w-36" />
-      </motion.div>
-      <motion.div
-        initial={reduce ? { opacity: 0 } : { opacity: 0, x: 60, rotate: 24 }}
-        animate={{ opacity: 1, x: 0, rotate: 0 }}
-        transition={{ duration: 0.55, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
-        className="absolute z-10 translate-x-[4.75rem]"
-      >
-        <FlashCard src={srcs[2]} glow={GLOWS[2]} tilt={10} className="h-36 w-36" />
-      </motion.div>
-      <motion.div
-        initial={reduce ? { opacity: 0 } : { opacity: 0, y: 36, scale: 0.85 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="absolute z-20"
-      >
-        <FlashCard src={srcs[1]} glow={GLOWS[1]} tilt={0} className="h-44 w-44" />
-      </motion.div>
+    <div
+      className={cn("grid grid-cols-2 gap-x-5 gap-y-7 sm:grid-cols-3 lg:grid-cols-4", className)}
+    >
+      {items.map((d) => (
+        <FlashCard
+          key={d.id}
+          src={d.thumb_url ?? d.clean_png_url ?? ""}
+          alt={t("explore.alt")}
+          no={flashNo(d.id)}
+          tilt={flashTilt(d.id, 1.6)}
+          label={`${t("explore.alt")} ${flashNo(d.id)}`}
+          onClick={() => openLightbox({ id: d.id, src: d.clean_png_url ?? d.thumb_url ?? "" })}
+        />
+      ))}
     </div>
   );
 }

@@ -1,53 +1,51 @@
-import { Zap } from "lucide-react";
+import { ArrowRight, Dices, Plus, WandSparkles, X, Zap } from "lucide-react";
 import { AnimatePresence } from "motion/react";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 import { ConjuringRitual } from "@/components/magic/ConjuringRitual";
-import { FlashGallery, FlashStrip } from "@/components/magic/FlashWall";
-import { InkMargins } from "@/components/magic/InkMargins";
+import { FreshWall, HeroFan, HeroWall } from "@/components/magic/FlashWall";
 import { Paywall, QuotaMeter } from "@/components/Quota";
-import { trackEvent } from "@/lib/analytics";
 import { Button } from "@/components/ui/Button";
 import { Chip } from "@/components/ui/Chip";
-import { GlowText } from "@/components/ui/GlowText";
-import { Eyebrow, InkStroke } from "@/components/ui/Ornament";
+import { Label } from "@/components/ui/Label";
+import { NeonWord } from "@/components/ui/Neon";
+import { Segmented } from "@/components/ui/Segmented";
+import { trackEvent } from "@/lib/analytics";
 import { enhancePrompt } from "@/lib/api";
 import { cn } from "@/lib/cn";
 import { MAGIC } from "@/lib/magicPrompts";
 import { useGeneration } from "@/lib/useGeneration";
 import { useStyles } from "@/lib/useStyles";
-import { useLangPath, useT } from "@/lib/useT";
+import { useLang, useLangPath, useT } from "@/lib/useT";
 import { useDraft } from "@/store/useDraft";
+import { HowItWorks } from "./HowItWorks";
 import { ResultView } from "./ResultView";
 import { StyleSheet } from "./StyleSheet";
 
-function Segmented({
-  value,
-  onChange,
-  options,
-}: {
-  value: string;
-  onChange: (v: string) => void;
-  options: { v: string; label: string }[];
-}) {
-  return (
-    <div className="flex gap-1 rounded-full border border-white/10 bg-white/5 p-1">
-      {options.map((o) => (
-        <button
-          key={o.v}
-          onClick={() => onChange(o.v)}
-          className={cn(
-            "flex-1 rounded-full px-2 py-1.5 font-display text-[11px] font-semibold whitespace-nowrap transition-all",
-            value === o.v
-              ? "scale-[1.04] bg-acid text-ink-950 shadow-[0_0_16px_-4px_var(--color-acid)]"
-              : "text-white/55 hover:text-white",
-          )}
-        >
-          {o.label}
-        </button>
-      ))}
-    </div>
+/** Today's date as a shop would stamp it on a consultation slip. */
+function useStampDate() {
+  const lang = useLang();
+  return useMemo(
+    () =>
+      new Intl.DateTimeFormat(lang === "de" ? "de-DE" : "en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })
+        .format(new Date())
+        .toUpperCase(),
+    [lang],
+  );
+}
+
+function SlipLabel({ children, htmlFor }: { children: string; htmlFor?: string }) {
+  return htmlFor ? (
+    <label htmlFor={htmlFor} className="t-label block text-paper-mute">
+      {children}
+    </label>
+  ) : (
+    <p className="t-label text-paper-mute">{children}</p>
   );
 }
 
@@ -55,6 +53,7 @@ export function CreateScreen() {
   const navigate = useNavigate();
   const t = useT();
   const lp = useLangPath();
+  const stamp = useStampDate();
   const { data: styles = [] } = useStyles();
   const gen = useGeneration();
   const setDraft = useDraft((s) => s.setDesign);
@@ -70,9 +69,10 @@ export function CreateScreen() {
   const selected = styles.filter((s) => slugs.includes(s.slug));
   const toggle = (slug: string) =>
     setSlugs((p) => (p.includes(slug) ? p.filter((s) => s !== slug) : [...p, slug]));
+  const ready = Boolean(prompt.trim());
 
   const onEnhance = async () => {
-    if (!prompt.trim()) return;
+    if (!ready) return;
     setEnhancing(true);
     try {
       const r = await enhancePrompt(prompt, slugs);
@@ -89,8 +89,7 @@ export function CreateScreen() {
   };
 
   const onSubmit = () => {
-    if (prompt.trim())
-      gen.start({ prompt, styles: slugs, color, complexity, line_weight: lineWeight });
+    if (ready) gen.start({ prompt, styles: slugs, color, complexity, line_weight: lineWeight });
   };
 
   const onTryOn = () => {
@@ -101,30 +100,32 @@ export function CreateScreen() {
     }
   };
 
+  const styleSheet = (
+    <StyleSheet
+      open={sheetOpen}
+      onClose={() => setSheetOpen(false)}
+      styles={styles}
+      selected={slugs}
+      onToggle={toggle}
+    />
+  );
+
   if (gen.state === "done" && gen.design) {
     return (
       <>
-        <div className="mx-auto max-w-md md:max-w-lg md:pt-6">
-          <ResultView
-            design={gen.design}
-            variants={gen.variants}
-            variantsLoading={gen.variantsLoading}
-            refining={gen.refining}
-            error={gen.error}
-            onVariants={gen.makeVariants}
-            onRefine={gen.refine}
-            onReset={gen.reset}
-            onTryOn={onTryOn}
-            onChoose={gen.choose}
-          />
-        </div>
-        <StyleSheet
-          open={sheetOpen}
-          onClose={() => setSheetOpen(false)}
-          styles={styles}
-          selected={slugs}
-          onToggle={toggle}
+        <ResultView
+          design={gen.design}
+          variants={gen.variants}
+          variantsLoading={gen.variantsLoading}
+          refining={gen.refining}
+          error={gen.error}
+          onVariants={gen.makeVariants}
+          onRefine={gen.refine}
+          onReset={gen.reset}
+          onTryOn={onTryOn}
+          onChoose={gen.choose}
         />
+        {styleSheet}
       </>
     );
   }
@@ -133,165 +134,207 @@ export function CreateScreen() {
     <>
       <AnimatePresence>{gen.state === "conjuring" && <ConjuringRitual />}</AnimatePresence>
 
-      <InkMargins />
+      <h1 className="sr-only">{t("create.srHeading")}</h1>
 
-      <div className="relative z-10 mx-auto w-full max-w-5xl">
-        <h1 className="sr-only">{t("create.srHeading")}</h1>
-        <FlashStrip className="mt-1 mb-8 md:hidden" />
+      <div className="grid items-start gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] md:gap-12 lg:gap-20">
+        {/* ── Hero + consultation slip ── */}
+        <div className="flex flex-col gap-7 md:gap-9 md:pt-4">
+          <HeroFan className="-mt-1 md:hidden" />
 
-        {/* Editorial hero */}
-        <div className="text-center md:mx-auto md:max-w-2xl md:pt-8">
-          <Eyebrow className="mx-auto mb-3.5 max-w-[16rem] md:max-w-xs">
-            {t("create.hero.eyebrow")}
-          </Eyebrow>
-          <h2 className="font-display text-[2.4rem] leading-[1.04] font-extrabold tracking-tight md:text-6xl">
-            {t("create.hero.titlePre")}
-            <span className="relative inline-block px-0.5">
-              <GlowText className="font-tattoo text-[1.22em] leading-none font-normal">
+          <div className="flex flex-col items-center gap-4 text-center md:items-start md:text-left">
+            <Label dot="neon">{t("create.hero.eyebrow")}</Label>
+            <h2 className="heading text-[2.6rem] text-text sm:text-6xl lg:text-[4.625rem]">
+              {t("create.hero.titlePre")}
+              <br />
+              <NeonWord className="text-[1.34em] leading-[0.95]">
                 {t("create.hero.titleGlow")}
-              </GlowText>
-              <InkStroke className="absolute -bottom-1.5 left-0 h-3 w-full md:-bottom-2.5" />
-            </span>
-            {t("create.hero.titlePost")}
-          </h2>
-          <p className="mt-4 text-sm text-white/50 md:mt-6 md:text-lg">{t("create.hero.tagline")}</p>
-        </div>
-
-        {/* Generator — the prompt box is the one elevated "portal" card */}
-        <div className="mx-auto mt-7 flex w-full max-w-md flex-col gap-5 md:mt-10 md:max-w-xl md:gap-6 md:rounded-[2rem] md:border md:border-white/10 md:bg-white/[0.02] md:p-8">
-          <div className="rounded-blob border border-white/10 bg-white/5 p-4 transition-all duration-300 focus-within:border-acid/50 focus-within:shadow-[0_0_36px_-10px_var(--color-acid)]">
-            <p className="mb-1.5 font-display text-[10px] font-bold tracking-[0.25em] text-acid/60 uppercase">
-              {t("create.prompt.label")}
+                {t("create.hero.titlePost")}
+              </NeonWord>
+            </h2>
+            <p className="max-w-[34ch] text-base text-balance text-text-2 md:max-w-none md:text-lg md:text-pretty">
+              {t("create.hero.tagline")}
             </p>
-            <textarea
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              rows={3}
-              placeholder={t("create.prompt.placeholder")}
-              className="w-full resize-none bg-transparent text-sm text-white placeholder-white/30 outline-none md:text-base"
-            />
-            <div className="mt-3 flex items-center justify-between">
-              <button
-                onClick={onEnhance}
-                disabled={enhancing || !prompt.trim()}
-                className="font-display text-xs font-semibold text-cyan transition-opacity disabled:opacity-40"
-              >
-                {enhancing ? t("create.enhance.loading") : t("create.enhance")}
-              </button>
-              <button onClick={onMagic} className="text-xs text-white/40 hover:text-white/70">
-                {t("create.magic")}
-              </button>
-            </div>
           </div>
 
-          <div>
-            <div className="mb-2.5 flex items-center justify-between">
-              <p className="text-xs tracking-wide text-white/35 uppercase">{t("create.style.label")}</p>
-              <button
-                onClick={() => setSheetOpen(true)}
-                className="font-display text-xs font-semibold text-acid"
-              >
-                {t("create.style.pick")}
-              </button>
+          {/* The consultation slip — the idea goes on paper */}
+          <form
+            className="paper flex flex-col gap-5 rounded-[var(--radius-paper)] p-5 shadow-[var(--shadow-paper)] md:p-6"
+            onSubmit={(e) => {
+              e.preventDefault();
+              onSubmit();
+            }}
+          >
+            <div className="flex items-center justify-between border-b-[1.5px] border-dashed border-paper-line pb-3">
+              <span className="t-label text-paper-ink">{t("create.form.title")}</span>
+              <span className="t-label text-paper-mute">{stamp}</span>
             </div>
-            <div className="flex flex-wrap gap-2">
-              {selected.length === 0 ? (
-                <span className="text-xs text-white/30">{t("create.style.empty")}</span>
-              ) : (
-                selected.map((s, i) => (
-                  <Chip key={s.slug} tilt={(i % 3) - 1} selected onClick={() => toggle(s.slug)}>
-                    {s.name} ✕
+
+            <div>
+              <SlipLabel htmlFor="idea">{t("create.prompt.label")}</SlipLabel>
+              <textarea
+                id="idea"
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) onSubmit();
+                }}
+                rows={3}
+                placeholder={t("create.prompt.placeholder")}
+                className="ruled typewriter mt-1 block w-full resize-none bg-transparent text-[1.0625rem] text-paper-ink outline-none [--rule:1.9rem] placeholder:text-paper-mute placeholder:opacity-100"
+              />
+              <div className="mt-2 flex items-center justify-between gap-3">
+                <button
+                  type="button"
+                  onClick={onEnhance}
+                  disabled={enhancing || !ready}
+                  className="inline-flex h-9 items-center gap-1.5 rounded-full px-1 font-sans cond text-[0.8125rem] font-bold tracking-[0.05em] text-paper-ink uppercase transition-opacity hover:opacity-70 disabled:opacity-35"
+                >
+                  <WandSparkles aria-hidden className="h-4 w-4" />
+                  {enhancing ? t("create.enhance.loading") : t("create.enhance")}
+                </button>
+                <button
+                  type="button"
+                  onClick={onMagic}
+                  className="inline-flex h-9 items-center gap-1.5 rounded-full px-1 font-sans cond text-[0.8125rem] font-bold tracking-[0.05em] text-paper-ink uppercase transition-opacity hover:opacity-70"
+                >
+                  <Dices aria-hidden className="h-4 w-4" />
+                  {t("create.magic")}
+                </button>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2.5">
+              <SlipLabel>{t("create.style.label")}</SlipLabel>
+              <div className="flex flex-wrap gap-2">
+                {selected.map((s) => (
+                  <Chip
+                    key={s.slug}
+                    tone="paper"
+                    selected
+                    onClick={() => toggle(s.slug)}
+                    aria-label={`${s.name} ✕`}
+                  >
+                    {s.name}
+                    <X aria-hidden className="h-3.5 w-3.5" />
                   </Chip>
-                ))
+                ))}
+                <Chip tone="paper" onClick={() => setSheetOpen(true)}>
+                  <Plus aria-hidden className="h-3.5 w-3.5" />
+                  {t("create.style.pick")}
+                </Chip>
+              </div>
+              {selected.length === 0 && (
+                <p className="typewriter text-[0.8125rem] text-paper-mute">
+                  {t("create.style.empty")}
+                </p>
               )}
             </div>
-          </div>
 
-          <div className="grid grid-cols-1 gap-3 border-t border-white/5 pt-4 sm:grid-cols-2">
-            <div>
-              <p className="mb-1.5 text-xs tracking-wide text-white/35 uppercase">
-                {t("create.detail.label")}
-              </p>
-              <Segmented
-                value={complexity}
-                onChange={setComplexity}
-                options={[
-                  { v: "simple", label: t("create.detail.minimal") },
-                  { v: "medium", label: t("create.detail.balanced") },
-                  { v: "detailed", label: t("create.detail.detailed") },
-                ]}
-              />
+            <div className="grid gap-4 border-t-[1.5px] border-dashed border-paper-line pt-5 sm:grid-cols-2">
+              <div className="flex flex-col gap-2">
+                <SlipLabel>{t("create.detail.label")}</SlipLabel>
+                <Segmented
+                  label={t("create.detail.label")}
+                  value={complexity}
+                  onChange={setComplexity}
+                  options={[
+                    { v: "simple", label: t("create.detail.minimal") },
+                    { v: "medium", label: t("create.detail.balanced") },
+                    { v: "detailed", label: t("create.detail.detailed") },
+                  ]}
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <SlipLabel>{t("create.lines.label")}</SlipLabel>
+                {/* needle groupings — how a tattooer names line weight */}
+                <Segmented
+                  label={t("create.lines.label")}
+                  value={lineWeight}
+                  onChange={setLineWeight}
+                  options={[
+                    { v: "thin", label: t("create.lines.fine"), sub: "3RL" },
+                    { v: "medium", label: t("create.lines.medium"), sub: "7RL" },
+                    { v: "bold", label: t("create.lines.bold"), sub: "11RL" },
+                  ]}
+                />
+              </div>
+              <div className="flex flex-col gap-2 sm:col-span-2">
+                <SlipLabel>{t("create.ink.label")}</SlipLabel>
+                <Segmented
+                  label={t("create.ink.label")}
+                  value={color ? "color" : "bng"}
+                  onChange={(v) => setColor(v === "color")}
+                  options={[
+                    { v: "bng", label: t("create.color.off") },
+                    { v: "color", label: t("create.color.on") },
+                  ]}
+                />
+              </div>
             </div>
-            <div>
-              <p className="mb-1.5 text-xs tracking-wide text-white/35 uppercase">
-                {t("create.lines.label")}
-              </p>
-              <Segmented
-                value={lineWeight}
-                onChange={setLineWeight}
-                options={[
-                  { v: "thin", label: t("create.lines.fine") },
-                  { v: "medium", label: t("create.lines.medium") },
-                  { v: "bold", label: t("create.lines.bold") },
-                ]}
-              />
-            </div>
-          </div>
-
-          <button
-            onClick={() => setColor((c) => !c)}
-            className="flex items-center gap-2 text-xs text-white/45"
-          >
-            <span
-              className={`h-4 w-7 rounded-full p-0.5 transition-colors ${color ? "bg-acid" : "bg-white/15"}`}
-            >
-              <span
-                className={`block h-3 w-3 rounded-full bg-ink-950 transition-transform ${color ? "translate-x-3" : ""}`}
-              />
-            </span>
-            {color ? t("create.color.on") : t("create.color.off")}
-          </button>
+          </form>
 
           <Paywall />
 
-          <Button
-            className="w-full"
-            size="lg"
-            shine={Boolean(prompt.trim())}
-            onClick={onSubmit}
-            disabled={!prompt.trim()}
-          >
-            <Zap className="h-5 w-5" />
-            {t("create.submit")}
-          </Button>
-          <div className="-mt-2 text-center">
-            <QuotaMeter />
+          <div className="flex flex-col items-center gap-3">
+            <Button size="lg" className="w-full" onClick={onSubmit} disabled={!ready}>
+              <Zap aria-hidden className="h-5 w-5" />
+              {t("create.submit")}
+            </Button>
+            <QuotaMeter className="text-center" />
           </div>
 
           {gen.state === "error" && (
-            <p className="rounded-2xl border border-magenta/40 bg-magenta/10 p-3 text-sm text-magenta">
+            <p
+              role="alert"
+              className="rounded-[var(--radius-panel)] bg-surface p-4 text-[0.9375rem] text-text shadow-[inset_0_0_0_1.5px_var(--color-neon)]"
+            >
               {gen.error}{" "}
-              <button onClick={gen.reset} className="underline">
+              <button
+                type="button"
+                onClick={gen.reset}
+                className="font-bold text-neon-hi underline underline-offset-4"
+              >
                 {t("common.retry")}
               </button>
             </p>
           )}
         </div>
 
-        {/* Curated gallery (desktop) */}
-        <section className="mt-20 hidden md:block">
-          <Eyebrow className="mx-auto mb-8 max-w-md">{t("create.gallery.label")}</Eyebrow>
-          <FlashGallery />
-        </section>
+        {/* ── Desktop: the house flash wall ── */}
+        <div className="hidden self-start md:sticky md:top-28 md:block md:pt-6">
+          <HeroWall />
+        </div>
       </div>
 
-      <StyleSheet
-        open={sheetOpen}
-        onClose={() => setSheetOpen(false)}
-        styles={styles}
-        selected={slugs}
-        onToggle={toggle}
-      />
+      <HowItWorks className="mt-24 md:mt-32" />
+
+      <section className="mt-24 md:mt-32" aria-labelledby="fresh-title">
+        <div className="mb-8 flex items-end justify-between gap-4">
+          <div className="flex flex-col gap-3">
+            <Label dot="neon">{t("explore.eyebrow")}</Label>
+            <h2 id="fresh-title" className="heading text-[2rem] text-text md:text-5xl">
+              {t("create.gallery.label")}
+            </h2>
+          </div>
+          <Link
+            to={lp("/explore")}
+            className={cn(
+              "hidden shrink-0 items-center gap-2 font-sans cond text-[0.875rem] font-bold tracking-[0.06em] text-text-2 uppercase transition-colors hover:text-text sm:inline-flex",
+            )}
+          >
+            {t("create.fresh.all")} <ArrowRight aria-hidden className="h-4 w-4" />
+          </Link>
+        </div>
+        <FreshWall />
+        <Link
+          to={lp("/explore")}
+          className="mt-8 flex items-center justify-center gap-2 font-sans cond text-[0.875rem] font-bold tracking-[0.06em] text-text-2 uppercase sm:hidden"
+        >
+          {t("create.fresh.all")} <ArrowRight aria-hidden className="h-4 w-4" />
+        </Link>
+      </section>
+
+      {styleSheet}
     </>
   );
 }

@@ -119,6 +119,9 @@ function serveStatic(req: Request, path: string, file: StaticFile): Response {
   } else if (NO_CACHE.has(path) || file.type.startsWith("text/html")) {
     // Never pin an old service worker / shell, or deploys don't propagate.
     headers.set("Cache-Control", "no-cache");
+  } else if (path.startsWith("/fonts/")) {
+    // Self-hosted fonts (stable names, shared by the app and the SEO pages).
+    headers.set("Cache-Control", "public, max-age=604800, stale-while-revalidate=86400");
   } else {
     headers.set("Cache-Control", "public, max-age=0, must-revalidate");
   }
