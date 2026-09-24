@@ -4,14 +4,14 @@
 
 > **The one rule:** the **clean design is canonical**. It's generated once and is exactly what the tattoo artist receives — it is *never* round-tripped through the body composite. The on-skin preview is a separate, AI-derived visualization layer.
 
-Mobile-first PWA · GenZ "Acid Ink" aesthetic · 43-style catalog · powered by OpenAI **gpt-image-2**.
+Mobile-first PWA · GenZ "Acid Ink" aesthetic · 43-style catalog · powered by OpenAI **GPT Image 2.5** (flare for designs, sunburst for the on-skin edit).
 
 ---
 
 ## The loop
 
-1. **Conjure** — prompt + style(s) → `gpt-image-2` generates a clean black-on-white design (the canonical artist file). `✨ Enhance` and `🎲 I'm feeling magic` help. Re-roll variants.
-2. **On Skin** — upload a body photo, tap where + pick a size (S/M/L/Sleeve) → `gpt-image-2` composites the design realistically onto the skin.
+1. **Conjure** — prompt + style(s) → `gpt-image-2.5-flare` generates a clean black-on-white design (the canonical artist file). `✨ Enhance` and `🎲 I'm feeling magic` help. Re-roll variants.
+2. **On Skin** — upload a body photo, tap where + pick a size (S/M/L/Sleeve) → `gpt-image-2.5-sunburst` composites the design realistically onto the skin.
 3. **Send** — export the hi-res clean design + the body mockup, share to the studio.
 
 ## Architecture
@@ -21,7 +21,7 @@ Runs entirely on **Cloudflare** — one Worker (`worker/`) at `ink-preview.com`:
 ```
 React + Vite + TS (PWA, mobile-first) — bundled into the Worker
         │ same origin
-Cloudflare Worker (TypeScript, Hono) ── /api/* ── Queue ──► job consumer ──► OpenAI (gpt-image-2)
+Cloudflare Worker (TypeScript, Hono) ── /api/* ── Queue ──► job consumer ──► OpenAI (GPT Image 2.5)
         │                                                      │
   Database Durable Object (SQLite, EU)          R2 "inkpreview-media" (EU) ── /media/*
 ```
@@ -30,7 +30,7 @@ Cloudflare Worker (TypeScript, Hono) ── /api/* ── Queue ──► job co
   Image jobs run through a **Queue**; an hourly **cron** deletes expired body photos.
 - **Data:** one SQLite-backed **Durable Object** (EU jurisdiction). **Media:** R2 (EU).
 - **ImageEngine** is swappable: `MockImageEngine` (deterministic, keyless — dev + tests) and
-  `OpenAIImageEngine` (gpt-image-2 generate + multi-image edit composite + gpt-4o-mini prompt-enhance).
+  `OpenAIImageEngine` (gpt-image-2.5-flare generate + gpt-image-2.5-sunburst multi-image edit composite + gpt-4o-mini prompt-enhance). Models are config (`worker/wrangler.jsonc` vars).
 - **Image processing** (thumbnails, placement guide, watermark, stencil, EXIF strip) is pure
   TypeScript — no native deps.
 - **Frontend:** React + Tailwind v4 + Framer Motion + TanStack Query + zustand. Installable PWA,
@@ -83,7 +83,7 @@ See **[docs/DEPLOY.md](docs/DEPLOY.md)** (secrets, costs, operations) and
 
 ## Status (v0.1 — core loop)
 
-✅ Generate · ✅ try-on (AI placement) · ✅ export · ✅ real gpt-image-2 · ✅ PWA · ✅ ephemeral privacy.
+✅ Generate · ✅ try-on (AI placement) · ✅ export · ✅ real GPT Image 2.5 · ✅ PWA · ✅ ephemeral privacy.
 
 Deferred to later sessions: Stripe credits/payments · full content moderation · GDPR self-serve export/delete · B2B studio white-label · live-camera AR.
 

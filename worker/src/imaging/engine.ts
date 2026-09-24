@@ -1,7 +1,7 @@
 /**
  * The image-engine contract. The pipeline talks to this interface, never to a
  * concrete provider: ``MockImageEngine`` (deterministic stand-in art, no key, no
- * spend — dev + tests) and ``OpenAIImageEngine`` (gpt-image-2).
+ * spend — dev + tests) and ``OpenAIImageEngine`` (GPT Image 2.5 flare/sunburst).
  *
  * The clean design produced by ``generateDesign`` is CANONICAL: it is what the
  * tattoo artist receives and is never round-tripped through ``compositeOnBody``.

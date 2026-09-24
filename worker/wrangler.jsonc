@@ -52,8 +52,12 @@
     "APP_ENV": "prod",
     "DB_JURISDICTION": "eu",
     "IMAGE_ENGINE": "openai",
-    "OPENAI_IMAGE_MODEL": "gpt-image-2",
-    "OPENAI_COMPOSITE_MODEL": "gpt-image-2",
+    // GPT Image 2.5 (Sept 2026): same token prices as gpt-image-2 but ~4x fewer output
+    // tokens per image and 2-3x faster. Measured at medium: design 1.4 ct / ~12 s
+    // (was 5.4 ct / ~37 s), skin preview 5.1 ct / ~17 s (was 8.1 ct / ~31 s).
+    // flare = fastest; sunburst = most faithful edits (keeps placement + size).
+    "OPENAI_IMAGE_MODEL": "gpt-image-2.5-flare",
+    "OPENAI_COMPOSITE_MODEL": "gpt-image-2.5-sunburst",
     "OPENAI_IMAGE_SIZE": "1024x1024",
     "OPENAI_IMAGE_QUALITY": "medium",
     "OPENAI_COMPOSITE_QUALITY": "medium",

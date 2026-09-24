@@ -241,7 +241,7 @@ describe("OpenAI engine (fake fetch)", () => {
     expect(Array.from(out[0].png.subarray(0, 4))).toEqual([0x89, 0x50, 0x4e, 0x47]);
     const body = JSON.parse(String(calls[0].init.body));
     expect(calls[0].url).toBe("https://api.openai.com/v1/images/generations");
-    expect(body.model).toBe("gpt-image-2");
+    expect(body.model).toBe("gpt-image-2.5-flare");
     expect(body).not.toHaveProperty("background");
     expect(body.prompt).toContain("white background");
     expect(body.prompt).toContain("wolf");
@@ -255,7 +255,7 @@ describe("OpenAI engine (fake fetch)", () => {
     const form = calls[0].init.body as FormData;
     const images = form.getAll("image[]") as File[];
     expect(images.map((f) => f.name)).toEqual(["placement.png", "design.png", "original.png"]);
-    expect(form.get("model")).toBe("gpt-image-2");
+    expect(form.get("model")).toBe("gpt-image-2.5-sunburst");
     const prompt = String(form.get("prompt"));
     expect(prompt).toContain("rotation");
     expect(prompt).toContain("straighten");

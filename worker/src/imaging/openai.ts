@@ -1,5 +1,5 @@
 /**
- * Real image engine backed by OpenAI's Images API (gpt-image-2), called with
+ * Real image engine backed by OpenAI's Images API (GPT Image 2.5), called with
  * plain fetch (no SDK):
  * - generateDesign: images/generations on a clean solid-white background → the
  *   canonical artist file (black-on-white flash/stencil convention).
@@ -21,7 +21,7 @@ import { overlayDesignGuide } from "./processing";
 import { buildCompositePrompt, buildGenerationPrompt } from "./prompts";
 
 const API = "https://api.openai.com/v1";
-/** gpt-image-2 can take well over a minute for a composite; never hang forever. */
+/** Image calls usually take 10-40 s; never hang forever. */
 const IMAGE_TIMEOUT_MS = 5 * 60 * 1000;
 
 const ENHANCE_SYSTEM =
