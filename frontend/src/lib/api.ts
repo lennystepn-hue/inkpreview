@@ -210,9 +210,49 @@ export type CreatePreviewBody = {
   rotation: number;
 };
 
+/** Longest edge sent for body photos — the composite renders at 1024 px anyway. */
+const UPLOAD_MAX_PX = 2048;
+
+/**
+ * Shrink big camera photos in the browser before uploading (faster on mobile
+ * data, and keeps server-side image decoding small). The browser applies the
+ * EXIF orientation when decoding, so the JPEG we send is already upright.
+ * Anything that can't be decoded here is sent as-is for the server to judge.
+ */
+async function prepareUpload(file: File): Promise<Blob> {
+  try {
+    const bitmap = await createImageBitmap(file);
+    const longest = Math.max(bitmap.width, bitmap.height);
+    const convertible = file.type === "image/jpeg" || file.type === "image/png";
+    if (longest <= UPLOAD_MAX_PX && convertible) {
+      bitmap.close();
+      return file;
+    }
+    const scale = Math.min(1, UPLOAD_MAX_PX / longest);
+    const w = Math.max(1, Math.round(bitmap.width * scale));
+    const h = Math.max(1, Math.round(bitmap.height * scale));
+    const canvas = document.createElement("canvas");
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return file;
+    ctx.drawImage(bitmap, 0, 0, w, h);
+    bitmap.close();
+    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.9));
+    return blob ?? file;
+  } catch {
+    return file;
+  }
+}
+
+async function appendPhoto(fd: FormData, file: File): Promise<void> {
+  const blob = await prepareUpload(file);
+  fd.append("file", blob, blob === file ? file.name : "photo.jpg");
+}
+
 export async function uploadBodyPhoto(file: File): Promise<BodyPhoto> {
   const fd = new FormData();
-  fd.append("file", file);
+  await appendPhoto(fd, file);
   return api.post<BodyPhoto>("/body-photos", fd);
 }
 
@@ -242,7 +282,7 @@ export async function uploadCapturePhoto(
   placement?: Placement4,
 ): Promise<void> {
   const fd = new FormData();
-  fd.append("file", file);
+  await appendPhoto(fd, file);
   if (placement) {
     fd.append("x_pct", String(placement.x_pct));
     fd.append("y_pct", String(placement.y_pct));

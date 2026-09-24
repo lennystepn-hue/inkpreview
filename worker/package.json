@@ -1,0 +1,26 @@
+{
+  "name": "inkpreview-worker",
+  "private": true,
+  "version": "0.2.0",
+  "type": "module",
+  "scripts": {
+    "build:frontend": "npm --prefix ../frontend ci && npm --prefix ../frontend run build",
+    "embed": "node scripts/embed-static.mjs",
+    "build": "npm run build:frontend && npm run embed",
+    "dev": "npm run embed && wrangler dev",
+    "deploy": "npm run build && wrangler deploy",
+    "typecheck": "npm run embed && tsc --noEmit",
+    "test": "npm run embed && vitest run",
+    "types": "wrangler types --strict-vars=false"
+  },
+  "dependencies": {
+    "hono": "^4.13.9",
+    "jpeg-js": "^0.4.4"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.22.0",
+    "typescript": "~5.9.3",
+    "vitest": "^4.1.11",
+    "wrangler": "^4.138.0"
+  }
+}

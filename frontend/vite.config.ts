@@ -5,9 +5,10 @@ import react from "@vitejs/plugin-react-swc";
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 
-// Backend target for the dev proxy. Defaults to the conventional 8000; override
-// with VITE_BACKEND_URL (e.g. if 8000 is occupied locally).
-const BACKEND = process.env.VITE_BACKEND_URL || "http://localhost:8000";
+// Backend target for the dev proxy: the Cloudflare Worker under `wrangler dev`
+// (worker/, port 8787). Override with VITE_BACKEND_URL (e.g. the legacy FastAPI
+// backend on :8000).
+const BACKEND = process.env.VITE_BACKEND_URL || "http://localhost:8787";
 
 export default defineConfig({
   plugins: [

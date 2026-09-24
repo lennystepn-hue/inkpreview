@@ -16,67 +16,70 @@ Mobile-first PWA · GenZ "Acid Ink" aesthetic · 43-style catalog · powered by 
 
 ## Architecture
 
+Runs entirely on **Cloudflare** — one Worker (`worker/`) at `ink-preview.com`:
+
 ```
-React + Vite + TS (PWA, mobile-first)  ──REST──►  FastAPI
-        Acid Ink design system                       │ enqueue
-                                              Redis ──► Arq worker
-                                                          │
-   Postgres ◄── data    S3/MinIO or FS ◄── media     ImageEngine
-                                                     /          \
-                                          OpenAIImageEngine   MockImageEngine
+React + Vite + TS (PWA, mobile-first) — bundled into the Worker
+        │ same origin
+Cloudflare Worker (TypeScript, Hono) ── /api/* ── Queue ──► job consumer ──► OpenAI (gpt-image-2)
+        │                                                      │
+  Database Durable Object (SQLite, EU)          R2 "inkpreview-media" (EU) ── /media/*
 ```
 
-- **Backend:** FastAPI · SQLAlchemy 2 (async) · Redis/Arq jobs · Pillow · `openai`.
-- **ImageEngine** is swappable: `MockImageEngine` (deterministic, keyless — used for dev + tests) and `OpenAIImageEngine` (gpt-image-2 generate + multi-image edit composite + gpt-4o-mini prompt-enhance).
-- **Pluggable backends** by env: DB `sqlite ↔ postgres`, jobs `inline ↔ background ↔ arq`, storage `fs ↔ s3`. Local dev runs with **zero infrastructure**.
-- **Frontend:** React + Tailwind v4 + Framer Motion + React Three Fiber (3D ink-drop) + TanStack Query + zustand. Installable PWA, anonymous session.
-- **Privacy:** body photos & previews are **ephemeral** (TTL + sweeper, EXIF stripped on upload).
+- **Worker:** TypeScript port of the former FastAPI backend — same API, same responses.
+  Image jobs run through a **Queue**; an hourly **cron** deletes expired body photos.
+- **Data:** one SQLite-backed **Durable Object** (EU jurisdiction). **Media:** R2 (EU).
+- **ImageEngine** is swappable: `MockImageEngine` (deterministic, keyless — dev + tests) and
+  `OpenAIImageEngine` (gpt-image-2 generate + multi-image edit composite + gpt-4o-mini prompt-enhance).
+- **Image processing** (thumbnails, placement guide, watermark, stencil, EXIF strip) is pure
+  TypeScript — no native deps.
+- **Frontend:** React + Tailwind v4 + Framer Motion + TanStack Query + zustand. Installable PWA,
+  anonymous session.
+- **Privacy:** body photos & previews are **ephemeral** (24h TTL + sweeper, EXIF stripped on upload),
+  all data stored in the EU.
 
-## Local development (no Docker needed)
+`backend/` (Python/FastAPI) is the previous implementation, kept as reference; it is no longer deployed.
 
-Requires [uv](https://docs.astral.sh/uv/) and Node 20+.
+## Local development
+
+Requires Node 22+. Everything runs locally (Durable Object, R2 and Queue are simulated).
 
 ```bash
-# Backend (SQLite + in-process jobs + filesystem storage + MOCK engine by default)
-cd backend
-uv sync
-uv run uvicorn app.main:app --reload --port 8000
+# Worker: API + jobs + SEO pages on http://localhost:8787 (mock image engine)
+cd worker
+cp .dev.vars.example .dev.vars
+npm ci
+npm run dev
 
-# Frontend (in another terminal)
+# Frontend with hot reload (in another terminal) — proxies /api + /media to :8787
 cd frontend
-npm install
-npm run dev          # http://localhost:5173 (proxies /api + /media to :8000)
+npm ci
+npm run dev          # http://localhost:5173
 ```
 
-That's it — the **mock engine** produces real placeholder PNGs so the whole loop works with **no API key and no spend**.
-
-### Turn on the real AI
-Create `backend/.env` (git-ignored):
-
-```env
-IMAGE_ENGINE=openai
-OPENAI_API_KEY=sk-...
-JOB_MODE=background          # real calls take ~20-35s; don't block HTTP
-```
-
-Designs are generated on a clean white background (the standard flash/stencil convention) and the composite inks just the motif. See [`.env.example`](.env.example) for the full contract.
-
-> If port 8000 is busy, run the backend on another port and set `VITE_BACKEND_URL` for the dev proxy (see `.claude/launch.json`).
+The **mock engine** produces real placeholder PNGs, so the whole loop works with **no API key
+and no spend**. For real generation set `IMAGE_ENGINE=openai` and `OPENAI_API_KEY` in
+`worker/.dev.vars`.
 
 ## Tests
 
 ```bash
-cd backend && uv run pytest -q        # 53 backend tests
+cd worker && npm test                 # 112 tests inside the Workers runtime (API, jobs, images, quota, billing, SEO)
 cd frontend && npx tsc -b --noEmit    # typecheck
 ```
 
 ## Styles
 
-A data-driven catalog of **43 hand/AI-authored prompt recipes** (`backend/app/styles/recipes.json`) — Fine-Line, Blackwork, American Traditional, Japanese/Irezumi, Realism, Dotwork, Geometric, Watercolor, Lettering, Cyber-Sigilism, and more. Each recipe is a tuned prompt (positive/negative cues + qualifiers) so a style actually *looks* like that style. The public API exposes only display fields — the prompt cues stay server-side.
+A data-driven catalog of **43 hand/AI-authored prompt recipes** (`worker/src/styles/recipes.json`) — Fine-Line, Blackwork, American Traditional, Japanese/Irezumi, Realism, Dotwork, Geometric, Watercolor, Lettering, Cyber-Sigilism, and more. Each recipe is a tuned prompt (positive/negative cues + qualifiers) so a style actually *looks* like that style. The public API exposes only display fields — the prompt cues stay server-side.
 
 ## Deploy
 
-See **[docs/DEPLOY.md](docs/DEPLOY.md)** — Dockerized (`docker compose up -d --build`) behind a TLS reverse proxy.
+```bash
+cd worker && npm ci && npm run deploy
+```
+
+See **[docs/DEPLOY.md](docs/DEPLOY.md)** (secrets, costs, operations) and
+[docs/DOMAIN-SETUP.md](docs/DOMAIN-SETUP.md).
 
 ## Status (v0.1 — core loop)
 

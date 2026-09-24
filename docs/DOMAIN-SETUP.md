@@ -1,43 +1,35 @@
-# ink-preview.com — domain + TLS (LIVE)
+# ink-preview.com — domain + TLS (LIVE on Cloudflare Workers)
 
-**Status: live.** `https://ink-preview.com` serves the app end-to-end with valid TLS.
+**Status: live.** `https://ink-preview.com` is served end-to-end by the Cloudflare
+Worker `inkpreview` (see [DEPLOY.md](DEPLOY.md)). The old Hetzner origin is gone.
 
-## Architecture
+## How the domain is wired
 
-- The domain is on **Cloudflare (proxied / orange cloud)**. Cloudflare terminates
-  visitor TLS at the edge (Universal SSL) and connects to the origin
-  (the origin server's public IP) over HTTPS.
-- Origin: host **nginx** vhost `/etc/nginx/sites-enabled/ink-preview`:
-  - `:80` — Let's Encrypt ACME-renewal location + redirect to https.
-  - `:443` — Let's Encrypt cert (`/etc/letsencrypt/live/ink-preview.com/`, issued via
-    webroot HTTP-01 through the Cloudflare proxy, auto-renewing) → proxies to the
-    InkPreview **Caddy overlay** at `127.0.0.1:18080` (SPA + `/api` + `/media`,
-    same-origin). `client_max_body_size 25m`, 300s timeouts.
-  - Cloudflare-aware `http → https` redirect (via `X-Forwarded-Proto`) and
-    `www → apex` redirect (matches the SEO canonical).
+- The zone `ink-preview.com` is on Cloudflare (Free plan). Visitor TLS is terminated at
+  the edge (Universal SSL).
+- Two **Worker routes** send all traffic to the Worker (declared in
+  `worker/wrangler.jsonc`, applied on every `wrangler deploy`):
+  - `ink-preview.com/*`
+  - `www.ink-preview.com/*`
+- The Worker itself answers every request — there is no origin server behind it:
+  - `http://…` → `301` to `https://…`
+  - `www.ink-preview.com` → `301` to `ink-preview.com` (matches the SEO canonical)
+- The existing proxied (orange-cloud) DNS records for `ink-preview.com` and `www` must
+  stay: a Worker route only fires for proxied hostnames. They still point at the old
+  Hetzner IP (188.40.80.251), but no request ever reaches it.
 
-## Verified
+## Optional cleanup (dashboard)
 
-- `https://ink-preview.com/` → 200 (origin-direct and via Cloudflare).
-- `http://` → 301 → https; `https://www.` → 301 → apex.
-- `/api/feed`, `/robots.txt`, `/sitemap.xml`, `/og.png` → 200 over https.
-- SEO over https: canonical, OG image, 4 JSON-LD blocks present.
-- Cert valid until 2026-09-05, certbot auto-renew scheduled.
-
-## Recommended Cloudflare hardening (dashboard, optional)
-
-- **SSL/TLS → Overview**: set encryption mode to **Full (strict)** (the origin now
-  has a valid public cert, so strict works and is the most secure).
+- **DNS**: replace the `A 188.40.80.251` records with the "originless" placeholder
+  `AAAA 100::` (proxied) for `ink-preview.com` and `www`, so no dead IP is left in DNS.
+  Keep them proxied.
 - **SSL/TLS → Edge Certificates**: enable **Always Use HTTPS** and **HSTS** (the
-  origin already redirects, but edge-level is cleaner).
+  Worker already redirects; edge-level is marginally faster).
+- The old Let's Encrypt/certbot setup and `enable-tls.sh` are obsolete.
 
 ## Post-launch SEO (optional)
 
 - Add the property in **Google Search Console** + **Bing Webmaster Tools** and submit
-  `https://ink-preview.com/sitemap.xml`.
-- Validate: Google Rich Results Test (FAQ + SoftwareApplication), Facebook Sharing
+  `https://ink-preview.com/sitemap.xml` (generated dynamically by the Worker).
+- Validate: Google Rich Results Test (FAQ + BreadcrumbList), Facebook Sharing
   Debugger / X Card Validator (OG image).
-- Consider prerendering/SSR of `/` and `/gallery` for non-JS crawlers.
-
-> Note: `/opt/inkpreview/enable-tls.sh` (a `certbot --nginx` helper) is now obsolete —
-> TLS was issued via webroot because the domain is Cloudflare-proxied.

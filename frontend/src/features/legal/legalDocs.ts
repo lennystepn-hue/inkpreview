@@ -103,7 +103,7 @@ export const legalDocs: Record<LegalDocKey, Record<Lang, LegalDoc>> = {
   datenschutz: {
     de: {
       title: "Datenschutzerklärung",
-      updated: "Stand: Juni 2026",
+      updated: "Stand: September 2026",
       sections: [
         {
           h: "1. Verantwortlicher",
@@ -132,8 +132,7 @@ export const legalDocs: Record<LegalDocKey, Record<Lang, LegalDoc>> = {
           h: "4. Eingesetzte Dienstleister (Auftragsverarbeiter)",
           p: [
             "Wir setzen sorgfältig ausgewählte Dienstleister ein, mit denen Auftragsverarbeitungsverträge (Art. 28 DSGVO) bestehen:",
-            "• Hetzner Online GmbH (Deutschland) – Hosting & Datenbank.",
-            "• Cloudflare, Inc. (USA) – Auslieferung, Sicherheit, TLS-Verschlüsselung, Geo-Erkennung.",
+            "• Cloudflare, Inc. (USA) – Hosting, Datenbank und Dateispeicher (Speicherort EU), Auslieferung, Sicherheit, TLS-Verschlüsselung, Geo-Erkennung.",
             "• OpenAI, L.L.C. (USA) – KI-Bildgenerierung und realistische Platzierung auf dem Körperfoto. Hierbei werden dein Prompt, das generierte Design und – für die Vorschau – dein Körperfoto an OpenAI übermittelt.",
             "• Google Ireland Ltd. (Irland/USA) – „Mit Google anmelden\" (OAuth) sowie Google Analytics 4 (nur mit Einwilligung).",
             "• Stripe Payments Europe, Ltd. (Irland/USA) – Zahlungsabwicklung für kostenpflichtige Pläne (sobald aktiv).",
@@ -175,7 +174,7 @@ export const legalDocs: Record<LegalDocKey, Record<Lang, LegalDoc>> = {
     },
     en: {
       title: "Privacy Policy",
-      updated: "Last updated: June 2026",
+      updated: "Last updated: September 2026",
       sections: [
         {
           h: "1. Controller",
@@ -204,8 +203,7 @@ export const legalDocs: Record<LegalDocKey, Record<Lang, LegalDoc>> = {
           h: "4. Processors we use",
           p: [
             "We use carefully selected processors under data processing agreements (Art. 28 GDPR):",
-            "• Hetzner Online GmbH (Germany) – hosting & database.",
-            "• Cloudflare, Inc. (USA) – delivery, security, TLS, geo detection.",
+            "• Cloudflare, Inc. (USA) – hosting, database and file storage (stored in the EU), delivery, security, TLS, geo detection.",
             "• OpenAI, L.L.C. (USA) – AI image generation and realistic placement on the body photo. Your prompt, the generated design and – for the preview – your body photo are transmitted to OpenAI.",
             "• Google Ireland Ltd. (Ireland/USA) – Sign in with Google (OAuth) and Google Analytics 4 (only with consent).",
             "• Stripe Payments Europe, Ltd. (Ireland/USA) – payment processing for paid plans (once active).",

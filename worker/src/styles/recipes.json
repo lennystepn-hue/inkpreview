@@ -1,0 +1,955 @@
+{
+  "recipes": [
+    {
+      "slug": "fine-line",
+      "name": "Fine-Line",
+      "category": "linework",
+      "description": "Whisper-thin, elegant lines that look hand-drawn with a fine pen. Delicate, airy, effortlessly chic.",
+      "positive_cues": "uniform hairline-thin black contours, consistent delicate single-pass strokes, graceful flowing curves, subtle stippled or dotwork shading for soft depth, generous negative space, refined botanical and figurative motifs, gentle tapering line ends, restrained tonal range, crisp vector-clean edges, understated elegance",
+      "negative_cues": "thick bold outlines, heavy black fill, harsh contrast, woodcut hatching, color, photographic, on skin, 3d render, watercolor bleed, sketchy double lines, muddy shading, gradients",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": false,
+        "line_weight": "thin",
+        "complexity": "medium"
+      },
+      "tags": [
+        "fine-line",
+        "delicate",
+        "elegant",
+        "botanical",
+        "feminine",
+        "minimalist"
+      ]
+    },
+    {
+      "slug": "single-needle",
+      "name": "Single-Needle",
+      "category": "linework",
+      "description": "The finest of fine. One-needle precision with soft pencil-like shading and tiny realistic detail.",
+      "positive_cues": "ultra-fine micro-thin lines as if drawn with a single point, soft graphite-like greywash gradients, smooth subtle shading transitions, photoreal micro-detail, delicate portrait and floral subjects, faint tonal washes, pinpoint precision, near-transparent light grey passages, sketch-realism finesse, intricate small-scale rendering",
+      "negative_cues": "bold outlines, solid black fill, high contrast, color, chunky lines, traditional thick borders, heavy blackwork, on skin, photographic mockup, 3d render, harsh edges, oversaturated",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": false,
+        "line_weight": "thin",
+        "complexity": "detailed"
+      },
+      "tags": [
+        "single-needle",
+        "greywash",
+        "micro-realism",
+        "soft-shading",
+        "precision",
+        "portrait"
+      ]
+    },
+    {
+      "slug": "micro-tiny",
+      "name": "Micro / Tiny",
+      "category": "linework",
+      "description": "Itty-bitty designs the size of a coin. Tiny, cute, and packed into the smallest footprint.",
+      "positive_cues": "extremely small-scale iconography, simplified compact forms, thin clean outlines optimized for tiny size, minimal internal detail, single isolated motif, charming miniature symbols, tight legible shapes, generous whitespace around a small centered subject, doodle-cute simplicity, coin-sized proportions",
+      "negative_cues": "large sprawling composition, dense detail that wouldn't survive at small scale, heavy shading, color, busy backgrounds, on skin, photographic, 3d render, intricate filigree, full-sleeve complexity",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": false,
+        "line_weight": "thin",
+        "complexity": "simple"
+      },
+      "tags": [
+        "micro",
+        "tiny",
+        "small",
+        "cute",
+        "icon",
+        "minimal"
+      ]
+    },
+    {
+      "slug": "minimalist",
+      "name": "Minimalist",
+      "category": "linework",
+      "description": "Less is everything. One clean shape, maximum meaning, zero clutter. Calm and modern.",
+      "positive_cues": "single continuous line or one essential shape, extreme economy of marks, abstract or symbolic reduction, perfect balance and negative space, calm modern composition, intentional emptiness, geometric or organic simplicity reduced to its essence, confident uninterrupted stroke, no superfluous detail, gallery-clean aesthetic",
+      "negative_cues": "ornate detail, shading, texture, color fills, busy composition, multiple competing elements, realism, on skin, photographic, 3d render, decorative flourishes, cross-hatching",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": false,
+        "line_weight": "medium",
+        "complexity": "simple"
+      },
+      "tags": [
+        "minimalist",
+        "single-line",
+        "abstract",
+        "modern",
+        "negative-space",
+        "symbolic"
+      ]
+    },
+    {
+      "slug": "linework",
+      "name": "Linework",
+      "category": "linework",
+      "description": "All about the line. Confident even-weight outlines with zero shading, built purely from contours.",
+      "positive_cues": "pure contour drawing with even consistent line weight, no shading or fill, structure built entirely from clean confident outlines, balanced internal line detail, graphic illustrative clarity, deliberate open spaces between strokes, architectural precision, flat two-dimensional design, decisive unbroken lines, uniform medium-weight black ink",
+      "negative_cues": "shading, gradients, solid black fill, dotwork stippling, color, photographic, on skin, 3d render, soft greywash, tonal rendering, sketchy overlapping strokes",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": false,
+        "line_weight": "medium",
+        "complexity": "medium"
+      },
+      "tags": [
+        "linework",
+        "outline",
+        "contour",
+        "graphic",
+        "illustrative",
+        "no-shading"
+      ]
+    },
+    {
+      "slug": "blackwork",
+      "name": "Blackwork",
+      "category": "blackwork",
+      "description": "Bold, unapologetic solid black. High-contrast graphic shapes that hit hard from across the room.",
+      "positive_cues": "massive areas of opaque solid black ink, stark high-contrast silhouettes, negative-space carved out in crisp white, bold confident outlines of varying weight, graphic woodcut and linocut influence, dense saturated black fills with razor-sharp edges, dramatic light-vs-dark composition, decorative blackout patterning, strong positive/negative interplay, etching-style parallel hatching reserved for accents, monolithic flat black shapes, stylized illustrative forms",
+      "negative_cues": "color, watercolor, soft gradients, gray wash shading, faded ink, photographic, realism, on skin, 3d render, fine delicate single-weight lines, muddy patchy fills, pastel tones, dotwork stippling",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": false,
+        "line_weight": "bold",
+        "complexity": "medium"
+      },
+      "tags": [
+        "blackwork",
+        "high-contrast",
+        "negative-space",
+        "graphic",
+        "solid-black",
+        "woodcut"
+      ]
+    },
+    {
+      "slug": "dotwork-stippling",
+      "name": "Dotwork / Stippling",
+      "category": "geometric",
+      "description": "Built entirely from tiny dots. Smooth stippled gradients that fade like mist, zero hard lines.",
+      "positive_cues": "shading rendered entirely from countless tiny ink dots, smooth stippled gradients fading from dense black to airy sparse points, pointillist tonal transitions, no solid fills only clustered dots, varying dot density to sculpt form and shadow, meditative sacred-geometry and mandala motifs, crisp dotted contours, delicate pinprick texture, controlled dot spacing for soft volume, monochrome stipple grayscale built from black dots, ethereal grainy shading, fine pointillism",
+      "negative_cues": "solid black fills, bold brush strokes, smooth airbrushed gradients, color, watercolor, photographic, on skin, 3d render, hard continuous outlines as shading, hatching lines, muddy smudged tone",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": false,
+        "line_weight": "thin",
+        "complexity": "detailed"
+      },
+      "tags": [
+        "dotwork",
+        "stippling",
+        "pointillism",
+        "sacred-geometry",
+        "mandala",
+        "grayscale"
+      ]
+    },
+    {
+      "slug": "tribal",
+      "name": "Tribal",
+      "category": "cultural",
+      "description": "Pure black, sweeping, symmetrical. Bold curved blades and spikes flowing into one another.",
+      "positive_cues": "solid jet-black abstract shapes, bold sweeping curves tapering to sharp pointed tips, mirrored symmetry along a central axis, interlocking flame-like and blade-like forms, thick-to-thin tapering negative-space slivers, Polynesian and Maori inspired flowing motifs, smooth flowing curvilinear bands, strong rhythmic spikes and hooks, clean crisp solid black silhouette, bold graphic abstraction, dynamic spear-tip terminals, fluid wraparound composition",
+      "negative_cues": "color, shading, gradients, gray wash, fine detail, realism, photographic, on skin, 3d render, dotwork, floral filigree, text, soft edges, broken lines",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": false,
+        "line_weight": "bold",
+        "complexity": "medium"
+      },
+      "tags": [
+        "tribal",
+        "polynesian",
+        "maori",
+        "symmetry",
+        "solid-black",
+        "abstract"
+      ]
+    },
+    {
+      "slug": "ornamental-filigree",
+      "name": "Ornamental / Filigree",
+      "category": "ornamental",
+      "description": "Lace-like symmetry dripping with detail. Baroque scrollwork, jewels and pendants made of ink.",
+      "positive_cues": "intricate symmetrical filigree scrollwork, ornate baroque flourishes and acanthus curls, lace-like decorative latticework, delicate fine-line tracery with bold accent fills, mandala-inspired radial symmetry, jeweled gemstone and pearl motifs, hanging pendant and chain drapery, paisley and damask ornamentation, mehndi-style flowing curls, crisp consistent fine lines accented with solid black petals, mirrored kaleidoscopic balance, decorative beadwork dotting",
+      "negative_cues": "asymmetry, color, watercolor, photographic, on skin, 3d render, crude bold tribal shapes, sloppy uneven lines, blackout fills, realism, muddy shading, cartoonish",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": false,
+        "line_weight": "thin",
+        "complexity": "detailed"
+      },
+      "tags": [
+        "ornamental",
+        "filigree",
+        "baroque",
+        "lace",
+        "symmetry",
+        "jewelry"
+      ]
+    },
+    {
+      "slug": "ignorant-style",
+      "name": "Ignorant Style",
+      "category": "linework",
+      "description": "Deliberately naive and scrappy. Wobbly hand-drawn lines like a doodle that wandered off a napkin.",
+      "positive_cues": "deliberately crude childlike linework, wobbly uneven hand-drawn single-weight outlines, naive doodle aesthetic, intentionally imperfect scratchy lines, minimal flat composition with lots of empty space, irreverent playful stick-figure simplicity, raw sketchbook felt-tip pen look, no shading just bare contours, off-kilter wonky proportions, spontaneous one-line gesture quality, punk DIY flash-art attitude, sparse unfussy marks",
+      "negative_cues": "color, shading, gradients, smooth precise polished lines, realism, fine detail, photographic, on skin, 3d render, ornamental flourishes, symmetry, technical perfection, dense composition",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": false,
+        "line_weight": "medium",
+        "complexity": "simple"
+      },
+      "tags": [
+        "ignorant-style",
+        "naive",
+        "doodle",
+        "scratchy",
+        "minimal",
+        "punk"
+      ]
+    },
+    {
+      "slug": "american-traditional",
+      "name": "American Traditional",
+      "category": "traditional",
+      "description": "OG sailor-style flash. Bold black outlines, primary colors, zero fuss, reads from across the room.",
+      "positive_cues": "thick uniform jet-black bold outlines of consistent weight, limited classic palette of red yellow green and blue with solid flat color fills, minimal smooth black-to-light whip shading inside shapes, clean negative space and high contrast, iconic Sailor motifs (swallow, anchor, rose, dagger, panther head, heart with banner), bold simplified iconic shapes, banner ribbons with serif lettering, symmetrical balanced composition, slightly retro vintage flash-sheet feel, confident graphic illustration",
+      "negative_cues": "photographic, on skin, 3d render, fine delicate hairlines, soft watercolor washes, gradient airbrush, pastel colors, realism, muddy blended shading, thin sketchy lines, excessive tiny detail, neon colors, cartoon exaggeration",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": true,
+        "line_weight": "bold",
+        "complexity": "medium"
+      },
+      "tags": [
+        "traditional",
+        "old-school",
+        "sailor-jerry-adjacent",
+        "bold-lines",
+        "flash"
+      ]
+    },
+    {
+      "slug": "neo-traditional",
+      "name": "Neo-Traditional",
+      "category": "traditional",
+      "description": "Traditional's glow-up. Bold roots, lush detail, painterly depth and a richer modern color range.",
+      "positive_cues": "varied dynamic line weight from bold confident outlines to finer interior detail lines, expanded rich saturated palette with jewel tones teals purples burnt orange and gold, smooth dimensional color blending and rendered volumetric shading, decorative ornate detail (florals, jewelry, gemstones, filigree, drapery), naturalistic depth and form within a stylized illustrative frame, elegant subjects like animal portraits women's faces moths and roses, refined contour with painterly gradients, polished modern flash illustration",
+      "negative_cues": "photographic, on skin, 3d render, flat single-tone fills, crude limited primary-only palette, harsh unblended color, photorealism, sketchy unfinished lines, muddy shading, hyper-minimalist, cartoon flatness",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": true,
+        "line_weight": "medium",
+        "complexity": "detailed"
+      },
+      "tags": [
+        "neo-traditional",
+        "illustrative",
+        "color",
+        "decorative",
+        "painterly-shading"
+      ]
+    },
+    {
+      "slug": "sailor-jerry",
+      "name": "Sailor Jerry",
+      "category": "traditional",
+      "description": "The blueprint of American tattooing. Nautical icons, vintage flash, gritty old-school swagger.",
+      "positive_cues": "bold black outlines with classic vintage flash linework, restrained traditional palette of red green yellow and muted blue on aged off-white paper tone, simple whip-shaded black gradients, iconic nautical and military motifs (pin-up girls, clipper ships, anchors, eagles, daggers, hula girls, hearts), banners with bold hand-drawn serif lettering and naval slogans, 1940s flash-sheet aesthetic, slightly weathered hand-painted look, punchy high-contrast graphic icons, masculine vintage Americana charm",
+      "negative_cues": "photographic, on skin, 3d render, modern neon palette, soft airbrush gradients, fine-line delicacy, photorealism, ornate filigree detail, pastel colors, blended volumetric rendering, contemporary minimalism",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": true,
+        "line_weight": "bold",
+        "complexity": "medium"
+      },
+      "tags": [
+        "sailor-jerry",
+        "nautical",
+        "vintage",
+        "americana",
+        "old-school"
+      ]
+    },
+    {
+      "slug": "new-school",
+      "name": "New School",
+      "category": "traditional",
+      "description": "Cartoon chaos cranked to 11. Wild exaggeration, candy colors, graffiti energy, pure fun.",
+      "positive_cues": "exaggerated cartoon proportions with bouncy bold tapering outlines, hyper-saturated candy and neon color palette, dramatic forced perspective and bubbly inflated shapes, glossy highlights and bold drop shadows for cartoon dimensionality, playful 90s graffiti and comic-book influence, wacky characters and animated objects with attitude, dynamic warped exaggerated forms, vivid color blends and bright fills, energetic over-the-top illustrative fun",
+      "negative_cues": "photographic, on skin, 3d render, realism, muted desaturated palette, fine-line minimalism, subtle shading, vintage flash restraint, flat single-color fills, somber tone, photorealistic detail",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": true,
+        "line_weight": "bold",
+        "complexity": "detailed"
+      },
+      "tags": [
+        "new-school",
+        "cartoon",
+        "vibrant",
+        "graffiti",
+        "exaggerated"
+      ]
+    },
+    {
+      "slug": "chicano-fineline-bng",
+      "name": "Chicano / Fineline B&G",
+      "category": "realism",
+      "description": "Single-needle soul. Soft grey washes, smooth gradients, lowrider culture and faith in black and grey.",
+      "positive_cues": "fine single-needle linework with delicate tapered lines, smooth seamless black-and-grey gradients and soft diluted grey wash shading, no black outlines relying on subtle tonal contour, high tonal range from crisp blacks to misty soft greys with clean white highlights, Chicano cultural motifs (clowns smile-now-cry-later masks, praying hands, rosaries, lowriders, script lettering, roses, Virgin Mary, calaveras), photoreal soft rendering and gentle dimensional depth, elegant fine cursive script with long flourishes, refined monochrome detail and smoky atmosphere",
+      "negative_cues": "color, bold heavy outlines, photographic, on skin, 3d render, harsh high-contrast cartooning, flat solid black fills, primary colors, blocky graphic shapes, sketchy rough lines, muddy uneven shading, vintage flash look",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": false,
+        "line_weight": "thin",
+        "complexity": "detailed"
+      },
+      "tags": [
+        "chicano",
+        "fineline",
+        "black-and-grey",
+        "single-needle",
+        "script"
+      ]
+    },
+    {
+      "slug": "realism",
+      "name": "Realism",
+      "category": "realism",
+      "description": "Lifelike, photo-accurate ink that looks like it could blink back at you.",
+      "positive_cues": "photorealistic rendering with full tonal range, soft smooth gradients with no visible outlines, naturalistic light and shadow, accurate anatomy and proportion, rich color saturation in true-to-life hues, subtle skin texture and surface detail, depth through atmospheric perspective, crisp focal sharpness fading to soft edges, painterly blending of midtones",
+      "negative_cues": "hard black outlines, cartoonish, flat color fill, traditional bold lines, on skin, photographic mockup, 3d render, harsh banding, muddy gradients, geometric, lettering",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": true,
+        "line_weight": "thin",
+        "complexity": "detailed"
+      },
+      "tags": [
+        "realism",
+        "lifelike",
+        "color",
+        "gradient",
+        "naturalistic"
+      ]
+    },
+    {
+      "slug": "black-and-grey-realism",
+      "name": "Black & Grey Realism",
+      "category": "realism",
+      "description": "Moody monochrome shading that turns ink into living smoke and stone.",
+      "positive_cues": "monochrome black and grey wash, smooth greyscale gradients built from diluted black, deep velvety blacks fading to soft misty greys, high contrast chiaroscuro lighting, sculpted form through smoky shading, no color whatsoever, subtle stippled and blended midtones, dramatic single light source, soft feathered transitions, fine detail in darks",
+      "negative_cues": "any color, bold outlines, flat fills, harsh banding, cartoonish, on skin, photographic mockup, 3d render, watercolor splatter, neon, lettering",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": false,
+        "line_weight": "thin",
+        "complexity": "detailed"
+      },
+      "tags": [
+        "black-and-grey",
+        "realism",
+        "greyscale",
+        "chiaroscuro",
+        "smoky"
+      ]
+    },
+    {
+      "slug": "portrait",
+      "name": "Portrait",
+      "category": "realism",
+      "description": "Hyper-faithful faces that capture a person's soul, every pore and gaze.",
+      "positive_cues": "lifelike human portrait, precise facial likeness and expression, soft realistic skin shading with subtle pore and texture detail, accurate bone structure and feature proportion, catchlight in the eyes, gentle gradient transitions across cheeks and brow, fine individual hair strands, emotive natural gaze, balanced studio-style lighting, refined rendering of lips and eyes",
+      "negative_cues": "distorted features, asymmetrical eyes, cartoonish, hard outlines, flat color, caricature, on skin, photographic mockup, 3d render, extra fingers, melted details, lettering",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": false,
+        "line_weight": "thin",
+        "complexity": "detailed"
+      },
+      "tags": [
+        "portrait",
+        "face",
+        "likeness",
+        "realism",
+        "skin-texture"
+      ]
+    },
+    {
+      "slug": "3d-realism",
+      "name": "3D Realism",
+      "category": "realism",
+      "description": "Mind-bending illusions that look like they're lifting right off the design.",
+      "positive_cues": "hyper-dimensional trompe-l'oeil illusion, dramatic cast shadows creating illusion of depth and lift, elements appearing to rise above or sink below the surface, exaggerated volumetric shading, torn-skin and raised-relief effects, sharp specular highlights, strong directional light defining 3d form, deep recessed darks and bright peaks, sculptural roundness, optical depth tricks",
+      "negative_cues": "flat shading, no shadow, cartoonish, hard traditional outlines, low contrast, on skin, photographic mockup, generic 3d game render, watercolor, lettering, muddy gradients",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": false,
+        "line_weight": "medium",
+        "complexity": "detailed"
+      },
+      "tags": [
+        "3d",
+        "realism",
+        "trompe-loeil",
+        "depth",
+        "illusion"
+      ]
+    },
+    {
+      "slug": "biomechanical",
+      "name": "Biomechanical",
+      "category": "realism",
+      "description": "Cyborg anatomy where machine meets muscle, ripping through the surface.",
+      "positive_cues": "fusion of organic flesh and mechanical machinery, exposed pistons gears cables and hydraulic parts beneath torn sinew, H.R. Giger inspired biomechanical structures, metallic specular highlights on chrome and steel, deep recessed shadows inside mechanical cavities, sculpted muscle fibers blending into wiring, brushed metal and bone textures, dramatic interior lighting, intricate interlocking components, alien organic-industrial flow",
+      "negative_cues": "flat color, cartoonish, simple linework, traditional bold outlines, cute, on skin, photographic mockup, generic robot toy, low detail, watercolor, lettering",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": false,
+        "line_weight": "medium",
+        "complexity": "detailed"
+      },
+      "tags": [
+        "biomechanical",
+        "cyborg",
+        "giger",
+        "mechanical",
+        "organic"
+      ]
+    },
+    {
+      "slug": "japanese-irezumi",
+      "name": "Japanese / Irezumi",
+      "category": "cultural",
+      "description": "Big, bold, and legendary — koi, dragons, and waves flowing in true Japanese tradition.",
+      "positive_cues": "traditional Japanese irezumi flash, bold confident outlines of even medium-bold weight, iconic motifs (koi carp, dragon, tiger, phoenix, hannya mask, peony, chrysanthemum, cherry blossoms), stylized nagashi waves with curling foam tendrils and fingers of spray, wind bars and swirling cloud patterns as background filler, smooth graded sumi-black shading from solid to soft gradient, controlled flat color fields of vermilion red, indigo, jade green and ochre, dynamic diagonal composition that flows like body movement, scale and feather texture rendered with rhythmic repeating lines, strong figure-to-background separation, ukiyo-e woodblock influence",
+      "negative_cues": "fine-line, single-needle, thin wispy lines, watercolor splatter, realism, photographic, on skin, 3d render, western traditional, tribal blackwork, pastel palette, muddy gradients, geometric grids, cluttered composition",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": true,
+        "line_weight": "bold",
+        "complexity": "detailed"
+      },
+      "tags": [
+        "japanese",
+        "irezumi",
+        "oriental",
+        "koi",
+        "dragon",
+        "waves",
+        "ukiyo-e",
+        "traditional"
+      ]
+    },
+    {
+      "slug": "polynesian",
+      "name": "Polynesian",
+      "category": "cultural",
+      "description": "Solid black armor of the islands — ancestral patterns packed with meaning and pure flow.",
+      "positive_cues": "authentic Polynesian (Samoan/Tahitian) tatau flash, dense solid-black fills with crisp negative-space patterning, repeating symbolic motifs (enata figures, shark teeth niho mano rows, spearheads, ocean waves, sun rays, turtle shell honu, tiki masks), banded panels that wrap and taper to follow anatomy, rhythmic geometric tessellation, razor-sharp clean edges between black and skin-tone negative space, no shading or gradient — flat opaque black only, strong directional flow lines, balanced symmetry within curved bands, bold tribal silhouette",
+      "negative_cues": "color, gradients, soft shading, fine-line detail, realism, photographic, on skin, 3d render, watercolor, Japanese motifs, dotwork stippling, Maori spiral koru (keep distinct), thin delicate lines, sketchy edges",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": false,
+        "line_weight": "bold",
+        "complexity": "detailed"
+      },
+      "tags": [
+        "polynesian",
+        "samoan",
+        "tahitian",
+        "tribal",
+        "tatau",
+        "blackwork",
+        "cultural",
+        "pacific"
+      ]
+    },
+    {
+      "slug": "maori-ta-moko",
+      "name": "Maori / Ta Moko",
+      "category": "cultural",
+      "description": "The sacred spirals of Aotearoa — flowing koru curls carved in bold black ink.",
+      "positive_cues": "traditional Maori Ta Moko flash, flowing curvilinear spirals (koru) unfurling like fern fronds, signature double-spiral and bulbous swelling-and-tapering strokes, koru, pikorua infinity twists, manaia and unaunahi fish-scale fill, smooth organic curved bands following spiral logic rather than straight geometry, bold solid-black linework with sweeping negative-space channels carved between forms, chisel-carved uhi texture, balanced asymmetry with strong central spiral focal point, no color, no gradient — flat opaque black against crisp negative space, graceful continuous flow",
+      "negative_cues": "color, gradients, soft shading, straight-edged geometry, Polynesian shark-teeth rows (keep distinct), Japanese motifs, fine-line, realism, photographic, on skin, 3d render, watercolor, dotwork, rigid symmetry, thin scratchy lines",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": false,
+        "line_weight": "bold",
+        "complexity": "detailed"
+      },
+      "tags": [
+        "maori",
+        "ta-moko",
+        "koru",
+        "spiral",
+        "blackwork",
+        "tribal",
+        "new-zealand",
+        "cultural"
+      ]
+    },
+    {
+      "slug": "geometric",
+      "name": "Geometric",
+      "category": "geometric",
+      "description": "Clean lines, perfect symmetry, sacred geometry — precision tattooing at its sharpest.",
+      "positive_cues": "precise geometric tattoo flash, mathematically exact straight lines and perfect circles drawn with compass-and-ruler accuracy, sacred geometry forms (Metatron's cube, Flower of Life, Platonic solids, hexagonal lattices, nested triangles, Penrose tessellation), crisp uniform thin-to-medium linework of consistent weight, fine dotwork stippling used for graded shading and subtle volume, bilateral and radial symmetry, sharp clean intersections and tangent points, optional sparse solid-black accent shapes for contrast, minimal monochrome ink-black on transparent, architectural balance and negative-space rhythm, no organic wobble",
+      "negative_cues": "wobbly hand-drawn lines, color, watercolor, organic curves without structure, realism, photographic, on skin, 3d render, heavy tribal black fills, cultural tribal motifs, muddy shading, asymmetry, sketchy edges, painterly texture",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": false,
+        "line_weight": "thin",
+        "complexity": "medium"
+      },
+      "tags": [
+        "geometric",
+        "sacred-geometry",
+        "linework",
+        "dotwork",
+        "symmetry",
+        "minimal",
+        "blackwork"
+      ]
+    },
+    {
+      "slug": "mandala",
+      "name": "Mandala",
+      "category": "geometric",
+      "description": "Hypnotic radial symmetry — endless petals and dots spiraling out from one center.",
+      "positive_cues": "ornate mandala tattoo flash, perfect radial symmetry blooming from a single central point, concentric rings of repeating lotus petals, teardrops, arcs and filigree, dense fine dotwork stippling creating soft graded mandala shading and depth, lacework negative-space lattice between elements, layered scalloped borders and pointed petal tips, hypnotic rotational repetition, delicate thin-to-medium uniform linework, ornamental henna-inspired detailing, balanced solid-black accents at the core fading outward, intricate symmetrical filigree, monochrome ink on transparent",
+      "negative_cues": "asymmetry, broken radial pattern, color, watercolor, realism, photographic, on skin, 3d render, heavy tribal fills, cultural tribal silhouettes, wobbly lines, muddy shading, off-center composition, sketchy edges, figurative imagery",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": false,
+        "line_weight": "thin",
+        "complexity": "detailed"
+      },
+      "tags": [
+        "mandala",
+        "dotwork",
+        "radial-symmetry",
+        "ornamental",
+        "geometric",
+        "lotus",
+        "henna-inspired",
+        "blackwork"
+      ]
+    },
+    {
+      "slug": "watercolor",
+      "name": "Watercolor",
+      "category": "painterly",
+      "description": "Loose paint splashes, dreamy color bleeds, zero hard outlines — like a brush exploded on purpose.",
+      "positive_cues": "soft wet-on-wet pigment bleeds, translucent layered washes, vibrant color blooms melting into one another, feathered diffused edges with no hard outline, drips runs and spatter flicks, paper-grain bloom and backruns, gradient transitions from saturated cores to pale halos, airy negative space, spontaneous brush-loaded strokes, luminous turquoise magenta amber blends, painterly granulation texture",
+      "negative_cues": "hard black outlines, bold contour lines, flat solid fill, dotwork, geometric precision, on skin, photographic, 3d render, muddy brown wash, ink mockup, rigid symmetry",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": true,
+        "line_weight": "thin",
+        "complexity": "medium"
+      },
+      "tags": [
+        "watercolor",
+        "painterly",
+        "color-splash",
+        "soft",
+        "abstract-color",
+        "brushwork"
+      ]
+    },
+    {
+      "slug": "trash-polka",
+      "name": "Trash Polka",
+      "category": "abstract",
+      "description": "Red and black chaos with collage energy — realism smashed against brushstrokes, smears, and typography.",
+      "positive_cues": "strict two-tone palette of pure black and blood red only, photorealistic motifs collaged against raw abstract slashes, aggressive brush smears splatter and ink spray, torn-paper and stamp-like fragments, sharp diagonal slashes and barcode strips, bold sans-serif typography fragments, high-contrast surreal collage composition, dripping red accents over dense black realism, chaotic layered montage, brutal graphic energy",
+      "negative_cues": "full color spectrum, blue green yellow hues, soft pastel, fine-line delicacy, watercolor bleed, symmetrical mandala, on skin, photographic mockup, 3d render, gentle shading",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": false,
+        "line_weight": "bold",
+        "complexity": "detailed"
+      },
+      "tags": [
+        "trash-polka",
+        "red-and-black",
+        "collage",
+        "realism-abstract",
+        "graphic",
+        "bold"
+      ]
+    },
+    {
+      "slug": "sketch-scribble",
+      "name": "Sketch / Scribble",
+      "category": "linework",
+      "description": "Looks ripped straight from a sketchbook — loose pencil chaos, doubled lines, raw and unfinished on purpose.",
+      "positive_cues": "loose gestural pencil and pen sketch lines, doubled and overlapping construction lines, energetic crosshatching and scribbled shading, intentionally unfinished raw edges, sketchy searching contours with visible redrawn marks, varying line pressure from faint to dark, graphite-like hatched tonal patches, spontaneous hand-drawn imperfection, ballpoint scribble fills, draft-book aesthetic with rough loose energy",
+      "negative_cues": "clean vector outline, smooth flawless lines, flat solid fill, watercolor, polished realism, perfect symmetry, on skin, photographic, 3d render, bold uniform stroke",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": false,
+        "line_weight": "thin",
+        "complexity": "medium"
+      },
+      "tags": [
+        "sketch",
+        "scribble",
+        "pencil",
+        "raw",
+        "gestural",
+        "sketchbook"
+      ]
+    },
+    {
+      "slug": "illustrative",
+      "name": "Illustrative",
+      "category": "linework",
+      "description": "Storybook-meets-tattoo — confident outlines, clever shading, full of character like a page from a graphic novel.",
+      "positive_cues": "confident clean varied-weight outlines, expressive storybook character design, balanced whip-shaded gradients and stippled tonal areas, decorative flowing detail, graphic-novel and engraving influence, intentional line tapering for depth, dynamic composition with clear focal hierarchy, hand-drawn narrative charm, crisp contour with rich interior detail, polished illustrative ink rendering",
+      "negative_cues": "loose unfinished scribble, photorealism, watercolor bleed, flat color blocks with no line, muddy shading, on skin, photographic, 3d render, chaotic collage",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": false,
+        "line_weight": "medium",
+        "complexity": "detailed"
+      },
+      "tags": [
+        "illustrative",
+        "storybook",
+        "graphic-novel",
+        "character",
+        "linework",
+        "ink"
+      ]
+    },
+    {
+      "slug": "abstract",
+      "name": "Abstract",
+      "category": "abstract",
+      "description": "Pure shape, motion, and feeling — no recognizable subject, just bold marks that hit different.",
+      "positive_cues": "non-representational bold shapes and gestural marks, dynamic interplay of solid black masses and open negative space, expressive sweeping brush strokes and ink flicks, fragmented geometric and organic forms colliding, rhythmic asymmetric composition, raw spontaneous mark-making, contrast of dense fills against empty void, fluid splatter and decisive slash, conceptual modern-art energy, balanced tension between chaos and structure",
+      "negative_cues": "recognizable subject, literal figure or animal, fine portrait realism, decorative floral filler, on skin, photographic, 3d render, rigid symmetric mandala, cluttered busy detail",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": false,
+        "line_weight": "bold",
+        "complexity": "medium"
+      },
+      "tags": [
+        "abstract",
+        "non-representational",
+        "gestural",
+        "modern-art",
+        "shapes",
+        "expressive"
+      ]
+    },
+    {
+      "slug": "script-lettering",
+      "name": "Script / Lettering",
+      "category": "lettering",
+      "description": "Flowing handwritten script with swoopy tails and that effortless cursive flex.",
+      "positive_cues": "flowing cursive script, connected handwritten letterforms with elegant joins, dramatic thick-to-thin stroke contrast from brush or pointed-pen modulation, long graceful entry and exit swashes, ascenders and descenders looping into delicate flourishes, smooth single-weight baseline rhythm, slight rightward slant, crisp solid black ink with clean tapered terminals, balanced negative space between glyphs, signature-style fluidity",
+      "negative_cues": "blocky letters, blackletter, gothic spikes, graffiti bubble forms, jagged edges, broken strokes, uneven shaky lines, color fills, drop shadows, photographic, on skin, 3d render, glow effects, muddy ink, illegible scribble",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": false,
+        "line_weight": "medium",
+        "complexity": "medium"
+      },
+      "tags": [
+        "script",
+        "cursive",
+        "lettering",
+        "fine-line",
+        "handwriting",
+        "flourish"
+      ]
+    },
+    {
+      "slug": "gothic-blackletter",
+      "name": "Gothic / Blackletter",
+      "category": "lettering",
+      "description": "Medieval blackletter with razor angles and heavy condensed strokes that scream old-world drama.",
+      "positive_cues": "dense blackletter textura, tall condensed angular letterforms packed tight, heavy vertical broad-nib strokes with sharp diamond-tipped serifs, fractured pointed terminals, dramatic hairline diagonal connectors, ornate spiky flourishes and barbs on stems, strong rhythmic vertical compression, deep solid black ink with crisp geometric breaks, medieval manuscript gravitas, high contrast between thick uprights and thin hairlines",
+      "negative_cues": "rounded letters, flowing cursive script, graffiti, soft curves, thin uniform strokes, color, gradients, photographic, on skin, 3d render, glow, blurry edges, casual handwriting, sans-serif modern type",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": false,
+        "line_weight": "bold",
+        "complexity": "detailed"
+      },
+      "tags": [
+        "gothic",
+        "blackletter",
+        "textura",
+        "medieval",
+        "lettering",
+        "old-english"
+      ]
+    },
+    {
+      "slug": "graffiti",
+      "name": "Graffiti",
+      "category": "lettering",
+      "description": "Street-style wildstyle letters with bubble pops, arrows, and that spray-can swagger.",
+      "positive_cues": "bold graffiti wildstyle lettering, interlocking chunky bubble and block letterforms, dynamic arrows and connectors weaving between glyphs, thick clean outline with secondary keyline, sharp directional points and overlapping 3d block extensions, energetic diagonal flow, drop-shadow depth, star and bubble accents, vibrant spray-paint color blocking with crisp edges, urban street-art attitude, exaggerated tension and movement",
+      "negative_cues": "elegant cursive, blackletter, calligraphy, thin delicate lines, formal serif type, muted palette, photographic wall mural, on skin, dripping mess, blurry overspray, 3d photoreal render, muddy color blend",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": true,
+        "line_weight": "bold",
+        "complexity": "detailed"
+      },
+      "tags": [
+        "graffiti",
+        "wildstyle",
+        "street-art",
+        "lettering",
+        "bubble-letters",
+        "urban"
+      ]
+    },
+    {
+      "slug": "calligraphy",
+      "name": "Calligraphy",
+      "category": "lettering",
+      "description": "Refined broad-pen calligraphy with crisp contrast and museum-grade elegance.",
+      "positive_cues": "formal broad-edge pen calligraphy, precise modulated strokes with pronounced thick downstrokes and hairline upstrokes, consistent pen-angle contrast, refined serifs and clean ductus, controlled rhythmic letter spacing, graceful restrained flourishes and elegant ascenders, copperplate and italic hand influence, immaculate even baseline, pure solid black ink, disciplined classical penmanship with sharp clean terminals",
+      "negative_cues": "casual loose handwriting, graffiti, blackletter spikes, blocky letters, shaky uneven strokes, color, drop shadow, gradient, photographic, on skin, 3d render, glow, smudged ink, illegible",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": false,
+        "line_weight": "medium",
+        "complexity": "medium"
+      },
+      "tags": [
+        "calligraphy",
+        "copperplate",
+        "italic",
+        "lettering",
+        "penmanship",
+        "elegant"
+      ]
+    },
+    {
+      "slug": "roman-numerals",
+      "name": "Roman Numerals",
+      "category": "lettering",
+      "description": "Crisp classical Roman numerals carved like a stone monument — clean, bold, timeless.",
+      "positive_cues": "classical Roman numeral characters in carved capital serif forms, monumental Trajan-inspired proportions, precise chiseled serifs and clean stem-to-serif transitions, subtle stroke modulation echoing engraved stone, perfectly aligned even baseline, generous balanced letterspacing, sharp geometric uprights with crisp V and I and X glyphs, solid black ink with razor-clean edges, dignified architectural minimalism",
+      "negative_cues": "cursive script, blackletter, graffiti, decorative flourishes, rounded sans-serif, shaky lines, color, gradients, drop shadow, photographic, on skin, 3d render, glow, ornate swashes, arabic numerals",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": false,
+        "line_weight": "medium",
+        "complexity": "simple"
+      },
+      "tags": [
+        "roman-numerals",
+        "numerals",
+        "trajan",
+        "serif",
+        "lettering",
+        "classical"
+      ]
+    },
+    {
+      "slug": "surrealism",
+      "name": "Surrealism",
+      "category": "painterly",
+      "description": "Dreamlike, melting, impossible imagery that bends reality — your subconscious as a tattoo.",
+      "positive_cues": "dreamlike impossible composition, melting and morphing forms, soft graded shading with smooth airbrush-like tonal transitions, Dali-inspired symbolism, floating disconnected objects, optical illusion and double-imagery, surreal scale shifts, eyes clouds keys and clocks as motifs, rich black-and-grey value range with delicate stipple gradients, seamless object metamorphosis, uncanny negative-space play, fine realistic detail blended into abstract dream logic",
+      "negative_cues": "flat literal illustration, bold tribal outlines, harsh cartoon lines, on skin, photographic, 3d render, mockup, cluttered random clip-art, muddy gray smear, clashing neon palette, geometric grid",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": false,
+        "line_weight": "thin",
+        "complexity": "detailed"
+      },
+      "tags": [
+        "surreal",
+        "dreamlike",
+        "black-and-grey",
+        "symbolic",
+        "melting",
+        "fine-detail"
+      ]
+    },
+    {
+      "slug": "cyber-sigilism",
+      "name": "Cyber-Sigilism",
+      "category": "linework",
+      "description": "Spiky tribal-meets-tech sigils — sharp, occult, futuristic glyphs that look downloaded from the future.",
+      "positive_cues": "razor-sharp tapering needle-fine lines, spiky barbed tendrils, occult sigil and rune motifs fused with circuit-board geometry, flowing whiplash curves with hairline thorns, neo-tribal silhouettes reimagined as digital glyphs, asymmetrical winged ornamentation, dense fine-line filigree radiating from a central glyph, crisp solid black with sparse strategic negative space, ethereal arcane-tech aesthetic, pointed claw-like terminals, mystical futuristic talisman",
+      "negative_cues": "soft rounded edges, watercolor wash, pastel color, realism shading, photographic, on skin, 3d render, blocky pixel art, chunky old-school tribal fill, cute cartoon",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": false,
+        "line_weight": "thin",
+        "complexity": "detailed"
+      },
+      "tags": [
+        "cyber",
+        "sigil",
+        "neo-tribal",
+        "occult",
+        "fine-line",
+        "spiky",
+        "futuristic"
+      ]
+    },
+    {
+      "slug": "glitch",
+      "name": "Glitch",
+      "category": "geometric",
+      "description": "Datamosh chaos — corrupted, shifted, RGB-split visuals like a tattoo that's buffering.",
+      "positive_cues": "RGB channel split with offset cyan-magenta fringing, horizontal datamosh scanline displacement, pixel-sorting smears, fragmented and shattered subject shifted in stuttering slices, corrupted-signal blocky artifacts, sharp clean vector edges broken by digital noise bands, layered duplication ghosting, high-contrast crisp linework interrupted by static, VHS distortion and tracking errors, deliberate broken-image aesthetic",
+      "negative_cues": "smooth organic shading, soft natural gradients, hand-drawn wobble, photographic, on skin, 3d render, mockup, watercolor, ornate filigree, muddy blend",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": true,
+        "line_weight": "medium",
+        "complexity": "medium"
+      },
+      "tags": [
+        "glitch",
+        "rgb-split",
+        "datamosh",
+        "digital",
+        "pixel-sort",
+        "distortion"
+      ]
+    },
+    {
+      "slug": "engraving-woodcut",
+      "name": "Engraving / Woodcut",
+      "category": "linework",
+      "description": "Old-world etched line shading — classic engraved hatching like a vintage banknote or woodblock print.",
+      "positive_cues": "fine parallel hatching and cross-hatching for tonal shading, swelling-and-tapering engraved line weight, dot-and-flick stipple in shadow zones, contour lines wrapping form like a vintage banknote engraving, woodcut chisel-carved texture with bold black gouges, antique etching aesthetic, dense disciplined linework building gradient value, no solid flat fills only built-up lines, classical illustrative subject, crisp high-contrast monochrome",
+      "negative_cues": "smooth airbrush gradient, watercolor, soft blur, color wash, photographic, on skin, 3d render, neon, glitch artifacts, sloppy uneven scribble",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": false,
+        "line_weight": "medium",
+        "complexity": "detailed"
+      },
+      "tags": [
+        "engraving",
+        "woodcut",
+        "etching",
+        "hatching",
+        "vintage",
+        "linework",
+        "monochrome"
+      ]
+    },
+    {
+      "slug": "floral-botanical",
+      "name": "Floral / Botanical",
+      "category": "linework",
+      "description": "Elegant botanical study vibes — delicate blooms, stems and leaves drawn like a vintage plant guide.",
+      "positive_cues": "delicate fine-line botanical illustration, accurate species detail of petals stems and leaves, graceful flowing composition, light single-needle outlines with subtle whip-shaded depth, vintage herbarium plate aesthetic, dotwork shading nestled in petal folds, balanced negative space around organic forms, sprigs blossoms and trailing vines, refined naturalistic linework, airy elegant arrangement",
+      "negative_cues": "heavy black blackwork fill, harsh tribal outlines, cartoon style, glitch artifacts, photographic, on skin, 3d render, neon palette, cluttered messy overlap, muddy shading",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": false,
+        "line_weight": "thin",
+        "complexity": "medium"
+      },
+      "tags": [
+        "floral",
+        "botanical",
+        "fine-line",
+        "herbarium",
+        "delicate",
+        "nature",
+        "dotwork"
+      ]
+    },
+    {
+      "slug": "celestial-astro",
+      "name": "Celestial / Astro",
+      "category": "linework",
+      "description": "Moons, stars and constellations — cosmic, mystical, glowy night-sky energy.",
+      "positive_cues": "crescent moons and full moon phases, constellation dot-and-line star maps, radiant sun and starburst motifs, fine dotwork stippling for cosmic gradients and glow, sparkle accents and twinkling stars, ornamental celestial frames and arcs, delicate hairline rays, mystical night-sky symbolism, balanced symmetrical mandala-like layout, soft graded dotwork fading into negative space, ethereal astral elegance",
+      "negative_cues": "harsh tribal fill, glitch artifacts, gritty grunge, photographic, on skin, 3d render, realistic planet texture photo, chaotic clutter, muddy smear, cartoon mascot",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": false,
+        "line_weight": "thin",
+        "complexity": "medium"
+      },
+      "tags": [
+        "celestial",
+        "astro",
+        "moon",
+        "stars",
+        "constellation",
+        "dotwork",
+        "mystical"
+      ]
+    },
+    {
+      "slug": "anime-manga",
+      "name": "Anime / Manga",
+      "category": "linework",
+      "description": "Big-eyed expressive characters straight out of your favorite anime — clean cel-shaded panels.",
+      "positive_cues": "clean confident anime ink outlines with varied line weight, large expressive sparkling eyes, cel-shaded flat color blocks with crisp shadow shapes, dynamic manga action posing, screentone halftone dot shading for monochrome, speed lines and motion emphasis, stylized spiky flowing hair, kawaii expressive faces, sharp graphic highlights, polished Japanese animation aesthetic, bold readable silhouette",
+      "negative_cues": "western cartoon proportions, photorealism, gritty realism shading, muddy blend, on skin, photographic, 3d render, mockup, sloppy linework, glitch artifacts",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": true,
+        "line_weight": "medium",
+        "complexity": "medium"
+      },
+      "tags": [
+        "anime",
+        "manga",
+        "cel-shaded",
+        "screentone",
+        "kawaii",
+        "character",
+        "japanese"
+      ]
+    },
+    {
+      "slug": "stick-and-poke",
+      "name": "Stick-and-Poke",
+      "category": "linework",
+      "description": "Handmade DIY charm — wobbly hand-poked dots and lines with raw lo-fi character.",
+      "positive_cues": "hand-poked dotwork built from individual visible dots, charmingly imperfect wobbly single-needle lines, sparse minimal naive imagery, uneven slightly broken outlines, lo-fi DIY homemade aesthetic, small simple iconic subject, organic irregular dot density for shading, intentionally raw and unpolished, friendly hand-drawn folk-art feel, lots of breathing negative space",
+      "negative_cues": "machine-perfect smooth lines, dense saturated fill, hyper-detailed realism, gradient airbrush, photographic, on skin, 3d render, slick vector polish, glitch artifacts, ornate complexity",
+      "base_qualifiers": "isolated, centered, entire design within frame, crisp clean edges, high contrast, stencil-ready linework, no skin, no body part, no mockup, no photographic background, no watermark, ultra high resolution",
+      "default_modifiers": {
+        "color": false,
+        "line_weight": "thin",
+        "complexity": "simple"
+      },
+      "tags": [
+        "stick-and-poke",
+        "handpoke",
+        "dotwork",
+        "diy",
+        "minimal",
+        "lo-fi",
+        "naive"
+      ]
+    }
+  ]
+}

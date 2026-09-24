@@ -19,6 +19,9 @@ dist/
 .env
 .env.*
 !.env.example
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
 
 # OS / editor
 .DS_Store
@@ -45,3 +48,8 @@ data/
 backend/data/
 backups/
 dist/
+
+# Cloudflare Worker (local state + generated frontend bundle)
+.wrangler/
+worker/.static/
+worker/*.tmp.jsonc

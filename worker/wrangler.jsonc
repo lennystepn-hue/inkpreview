@@ -1,0 +1,76 @@
+// InkPreview on Cloudflare — one Worker serves everything:
+//   • the React/Vite PWA (../frontend/dist, bundled in by scripts/embed-static.mjs)
+//   • the JSON API (/api/*) — TypeScript port of the former FastAPI backend
+//   • generated images (/media/* → R2)
+//   • server-rendered SEO pages (/d/*, /style/*, /tattoo/*, /de/style/*, /de/tattoo/*, /sitemap.xml)
+// Data lives in a SQLite-backed Durable Object (EU jurisdiction), image jobs run
+// through a Queue, and an hourly cron sweeps expired body photos/previews.
+//
+// Secrets (set once with `npx wrangler secret put <NAME>` or in the dashboard):
+//   SESSION_SECRET (required) · OPENAI_API_KEY (required for real generation)
+//   GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET (Google login, optional)
+//   STRIPE_SECRET_KEY / STRIPE_PUBLISHABLE_KEY / STRIPE_WEBHOOK_SECRET / STRIPE_PRICE_ID (billing, optional)
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "inkpreview",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-20",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "preview_urls": false,
+  "routes": [
+    { "pattern": "ink-preview.com/*", "zone_name": "ink-preview.com" },
+    { "pattern": "www.ink-preview.com/*", "zone_name": "ink-preview.com" }
+  ],
+  "durable_objects": {
+    "bindings": [{ "name": "DB", "class_name": "Database" }]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Database"] }],
+  "r2_buckets": [
+    { "binding": "MEDIA", "bucket_name": "inkpreview-media", "jurisdiction": "eu" }
+  ],
+  "queues": {
+    "producers": [{ "binding": "JOBS", "queue": "inkpreview-jobs" }],
+    "consumers": [
+      {
+        "queue": "inkpreview-jobs",
+        // One job per invocation: each OpenAI call + image processing gets its own
+        // CPU budget and 15 min of wall time.
+        "max_batch_size": 1,
+        "max_batch_timeout": 1,
+        "max_retries": 1,
+        "max_concurrency": 10
+      }
+    ]
+  },
+  "triggers": { "crons": ["17 * * * *"] },
+  // Image processing (resize/watermark/stencil) needs more than the 30 s default
+  // on big exports; the cap only matters for runaway work.
+  "limits": { "cpu_ms": 120000 },
+  "observability": { "enabled": true },
+  "vars": {
+    "APP_ENV": "prod",
+    "DB_JURISDICTION": "eu",
+    "IMAGE_ENGINE": "openai",
+    "OPENAI_IMAGE_MODEL": "gpt-image-2",
+    "OPENAI_COMPOSITE_MODEL": "gpt-image-2",
+    "OPENAI_IMAGE_SIZE": "1024x1024",
+    "OPENAI_IMAGE_QUALITY": "medium",
+    "OPENAI_COMPOSITE_QUALITY": "medium",
+    "OPENAI_TEXT_MODEL": "gpt-4o-mini",
+    "FRONTEND_BASE_URL": "https://ink-preview.com",
+    "CANONICAL_HOST": "ink-preview.com",
+    "GOOGLE_REDIRECT_URI": "https://ink-preview.com/api/auth/google/callback",
+    "CORS_ORIGINS": "https://ink-preview.com,https://www.ink-preview.com,http://localhost:5173",
+    "ANON_RATE_LIMIT": "30",
+    "RATE_LIMIT_WINDOW_S": "3600",
+    "GUEST_GENERATION_LIMIT": "2",
+    "FREE_MONTHLY_GENERATION_LIMIT": "10",
+    "PROMO_UNLIMITED": "false",
+    "BODY_PHOTO_TTL_HOURS": "24",
+    "PREVIEW_TTL_HOURS": "24",
+    "MAX_UPLOAD_MB": "12",
+    "FREE_EXPORT_MAX_PX": "1024",
+    "STRIPE_AUTOMATIC_TAX": "false"
+  }
+}

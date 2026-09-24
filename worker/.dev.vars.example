@@ -1,0 +1,11 @@
+# Local dev overrides for `wrangler dev` — copy to .dev.vars (git-ignored).
+# Runs fully local: mock image engine (no OpenAI spend), no jurisdiction.
+APP_ENV=dev
+IMAGE_ENGINE=mock
+DB_JURISDICTION=
+SESSION_SECRET=dev-only-local-secret-change-me
+FRONTEND_BASE_URL=http://localhost:8787
+GOOGLE_REDIRECT_URI=http://localhost:8787/api/auth/google/callback
+# Real generation locally (costs money):
+# IMAGE_ENGINE=openai
+# OPENAI_API_KEY=sk-...

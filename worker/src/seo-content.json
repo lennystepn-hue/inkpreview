@@ -1,0 +1,174 @@
+{
+ "bodyParts": {
+  "forearm": [
+   "Forearm",
+   "Unterarm",
+   "The forearm is one of the most popular tattoo placements: highly visible, easy to show or cover, and relatively low on pain. Long motifs, lettering, and fine-line pieces work beautifully along the inner or outer forearm.",
+   "Der Unterarm ist eine der beliebtesten Tattoo-Stellen: gut sichtbar, leicht zu zeigen oder zu verdecken und vergleichsweise schmerzarm. Längliche Motive, Lettering und Fine-Line-Designs wirken an der Innen- wie Außenseite besonders gut."
+  ],
+  "wrist": [
+   "Wrist",
+   "Handgelenk",
+   "Wrist tattoos are small, personal, and always in view. Minimal symbols, thin script, and delicate fine-line work suit the narrow canvas — sizing matters a lot here, so previewing on your own wrist first pays off.",
+   "Handgelenk-Tattoos sind klein, persönlich und immer im Blick. Minimalistische Symbole, feine Schrift und zarte Fine-Line-Motive passen perfekt auf die schmale Fläche — die Größe ist hier entscheidend, eine Vorschau am eigenen Handgelenk lohnt sich."
+  ],
+  "upper-arm": [
+   "Upper arm",
+   "Oberarm",
+   "The upper arm offers a big, forgiving canvas with low pain levels — ideal for a first tattoo. It suits bold traditional pieces, portraits, and designs that may grow into a half or full sleeve later.",
+   "Der Oberarm bietet eine große, unkomplizierte Fläche mit geringem Schmerzlevel — ideal fürs erste Tattoo. Er eignet sich für kräftige Traditional-Motive, Porträts und Designs, die später zu einem Half- oder Full-Sleeve wachsen können."
+  ],
+  "shoulder": [
+   "Shoulder",
+   "Schulter",
+   "Shoulder tattoos flow with the body's roundest contour. Mandalas, florals, and ornamental pieces drape naturally over the deltoid and can extend toward chest or back.",
+   "Schulter-Tattoos folgen der rundesten Kontur des Körpers. Mandalas, florale und ornamentale Motive legen sich natürlich über den Deltamuskel und lassen sich Richtung Brust oder Rücken erweitern."
+  ],
+  "back": [
+   "Back",
+   "Rücken",
+   "The back is the largest canvas on the body — home of full-scale art, symmetrical compositions, and pieces that need room to breathe. Even small designs benefit from testing placement between the shoulder blades or along the spine.",
+   "Der Rücken ist die größte Leinwand des Körpers — der Platz für großflächige Kunst, symmetrische Kompositionen und Motive, die Raum brauchen. Auch kleine Designs profitieren von einem Platzierungstest zwischen den Schulterblättern oder entlang der Wirbelsäule."
+  ],
+  "chest": [
+   "Chest",
+   "Brust",
+   "Chest tattoos sit close to the heart — literally. Symmetrical designs, script, and bold statement pieces work well; expect more sensitivity near the sternum and collarbone.",
+   "Brust-Tattoos sitzen nah am Herzen — im Wortsinn. Symmetrische Designs, Schriftzüge und markante Statement-Motive wirken hier stark; in Richtung Brustbein und Schlüsselbein ist die Haut empfindlicher."
+  ],
+  "calf": [
+   "Calf",
+   "Wade",
+   "The calf gives you a tall, curved canvas with moderate pain. Vertical motifs — daggers, botanicals, animals in motion — follow the muscle's shape naturally.",
+   "Die Wade bietet eine hohe, gewölbte Fläche bei moderatem Schmerz. Vertikale Motive — Dolche, Pflanzen, Tiere in Bewegung — folgen der Muskelform ganz natürlich."
+  ],
+  "ankle": [
+   "Ankle",
+   "Knöchel",
+   "Ankle tattoos are subtle and easy to conceal. Small symbols, thin bands, and delicate florals fit the spot; the skin is thin here, so crisp fine-line designs shine.",
+   "Knöchel-Tattoos sind dezent und leicht zu verdecken. Kleine Symbole, schmale Bänder und zarte Blumenmotive passen perfekt; die Haut ist dünn, daher wirken präzise Fine-Line-Designs hier besonders klar."
+  ],
+  "hand": [
+   "Hand",
+   "Hand",
+   "Hand tattoos are bold and always visible — a real commitment. Preview placement and size carefully: small ornaments, finger details, and strong linework age best here.",
+   "Hand-Tattoos sind ein Statement und immer sichtbar — ein echtes Commitment. Teste Platzierung und Größe genau: kleine Ornamente, Finger-Details und kräftige Linien altern hier am besten."
+  ],
+  "neck": [
+   "Neck",
+   "Hals",
+   "Neck tattoos make a statement you can't tuck away. Side-neck script, small symbols behind the ear, and ornamental nape pieces are popular — preview size carefully before committing.",
+   "Hals-Tattoos sind ein Statement, das sich nicht verstecken lässt. Schriftzüge seitlich, kleine Symbole hinterm Ohr und ornamentale Nacken-Motive sind beliebt — prüfe die Größe genau, bevor du dich festlegst."
+  ],
+  "ribs": [
+   "Ribs",
+   "Rippen",
+   "Rib tattoos are intimate and dramatic — and famously among the more painful spots. Flowing designs, script, and botanical pieces follow the ribcage's natural curve.",
+   "Rippen-Tattoos sind intim und dramatisch — und bekanntlich eine der schmerzhafteren Stellen. Fließende Designs, Schriftzüge und florale Motive folgen der natürlichen Krümmung des Brustkorbs."
+  ],
+  "thigh": [
+   "Thigh",
+   "Oberschenkel",
+   "The thigh offers a large, private canvas with mild pain — perfect for detailed pieces, big florals, and designs you choose to reveal. Placement high or low changes the look entirely, so preview both.",
+   "Der Oberschenkel bietet eine große, private Fläche bei mildem Schmerz — perfekt für detailreiche Motive, große Blumen und Designs, die du gezielt zeigst. Ob weiter oben oder unten platziert, ändert die Wirkung komplett — teste beides in der Vorschau."
+  ]
+ },
+ "ui": {
+  "en": {
+   "examples": "Fresh examples from the community",
+   "how": "How it works",
+   "steps": [
+    "Describe your tattoo — the AI generates a clean, artist-ready design.",
+    "Snap or upload a photo of the spot and place, resize, and rotate it live.",
+    "The AI inks it realistically into your skin — export the artist file + stencil."
+   ],
+   "faq": "Frequently asked questions",
+   "styles": "Explore tattoo styles",
+   "parts": "Popular placements",
+   "cta": "Create your own ✦",
+   "free": "Free to try · no signup"
+  },
+  "de": {
+   "examples": "Frische Beispiele aus der Community",
+   "how": "So funktioniert's",
+   "steps": [
+    "Beschreibe dein Tattoo — die KI erstellt ein sauberes, artist-ready Design.",
+    "Foto der Stelle aufnehmen oder hochladen, dann live platzieren, skalieren, drehen.",
+    "Die KI sticht es realistisch in deine Haut — Artist-Datei + Stencil exportieren."
+   ],
+   "faq": "Häufige Fragen",
+   "styles": "Tattoo-Stile entdecken",
+   "parts": "Beliebte Körperstellen",
+   "cta": "Eigenes erstellen ✦",
+   "free": "Kostenlos testen · ohne Anmeldung"
+  }
+ },
+ "styleFaq": {
+  "en": [
+   [
+    "Can AI design a \u0000NAME\u0000 tattoo?",
+    "Yes. InkPreview generates \u0000NAME\u0000 tattoo designs from your description — clean, artist-ready flash in black-and-grey or color. You control detail level and line weight, and can spin up unlimited variants."
+   ],
+   [
+    "How do I see what a \u0000NAME\u0000 tattoo looks like on me?",
+    "Upload a photo of the spot or use the live camera, tap to place the design, resize and rotate it freely — the AI renders it photorealistically into your skin with proper occlusion and 3D wrap."
+   ],
+   [
+    "Can my tattoo studio use the exported file?",
+    "Yes. The export includes a print-ready artist file (2048 px, 300 DPI PNG) plus a stencil version for thermal printers — exactly what studios work with."
+   ],
+   [
+    "How much does it cost?",
+    "Starting is free with no signup. You can generate designs and preview them on your own skin right in the browser."
+   ]
+  ],
+  "de": [
+   [
+    "Kann eine KI ein \u0000NAME\u0000-Tattoo entwerfen?",
+    "Ja. InkPreview generiert \u0000NAME\u0000-Tattoo-Designs aus deiner Beschreibung — als saubere, artist-ready Vorlage in Schwarz-Grau oder Farbe. Du kannst Detailgrad und Strichstärke einstellen und beliebig viele Varianten erstellen."
+   ],
+   [
+    "Wie sehe ich, wie ein \u0000NAME\u0000-Tattoo an mir aussieht?",
+    "Lade ein Foto der Körperstelle hoch oder nutze die Live-Kamera, platziere das Design per Fingertipp, skaliere und drehe es frei — die KI rendert es fotorealistisch in deine Haut, inklusive Verdeckung und 3D-Wölbung."
+   ],
+   [
+    "Kann mein Tattoo-Studio die Datei verwenden?",
+    "Ja. Der Export enthält eine druckfertige Artist-Datei (2048 px, 300 DPI PNG) plus eine Stencil-Version für den Thermokopierer — genau das, womit Studios arbeiten."
+   ],
+   [
+    "Was kostet das?",
+    "Der Einstieg ist kostenlos und ohne Anmeldung. Designs generieren und auf der eigenen Haut testen kannst du sofort im Browser."
+   ]
+  ]
+ },
+ "partFaq": {
+  "en": [
+   [
+    "How do I pick the right size for a \u0000name\u0000 tattoo?",
+    "With InkPreview you place your design on a photo of your own \u0000name\u0000 and scale it live — you instantly see which size and position actually works before booking an appointment."
+   ],
+   [
+    "What designs work on the \u0000name\u0000?",
+    "The AI generates any motif in any style — fine-line to traditional. Try several variants right on the spot and compare them side by side."
+   ],
+   [
+    "Do I get a file for my studio?",
+    "Yes — a print-ready artist file (2048 px, 300 DPI) plus a stencil version. Your artist sees exactly what you want, including size and placement."
+   ]
+  ],
+  "de": [
+   [
+    "Wie finde ich die richtige Größe für ein \u0000NAME\u0000-Tattoo?",
+    "Mit InkPreview platzierst du dein Design direkt auf einem Foto deines \u0000NAME\u0000s und skalierst es live — so siehst du sofort, welche Größe und Position wirklich passt, bevor du einen Termin buchst."
+   ],
+   [
+    "Welche Motive passen auf den \u0000NAME\u0000?",
+    "Die KI generiert jedes Motiv in jedem Stil — von Fine-Line bis Traditional. Probiere mehrere Varianten direkt an der Stelle aus und vergleiche sie."
+   ],
+   [
+    "Bekomme ich eine Datei für mein Studio?",
+    "Ja — eine druckfertige Artist-Datei (2048 px, 300 DPI) plus Stencil-Version. Dein Artist sieht exakt, was du willst, inklusive Größe und Platzierung."
+   ]
+  ]
+ }
+}

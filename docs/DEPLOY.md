@@ -1,115 +1,121 @@
-# Deploying InkPreview to a VPS
+# Deploying InkPreview (Cloudflare)
 
-Dockerized stack: **Postgres + Redis + backend + Arq worker + frontend**, behind a
-TLS reverse proxy. Media is stored on a shared volume and served by the backend
-(same-origin), so image display **and** downloads work without object storage.
+Production runs entirely on Cloudflare, as **one Worker** (`worker/`):
 
-## 0. Prerequisites on the VPS
+```
+                       ink-preview.com/*  (Worker route)
+                                 │
+                     Worker "inkpreview" (TypeScript)
+   ┌──────────────┬──────────────┼───────────────┬─────────────────────┐
+ PWA (bundled   /api/* JSON API  /media/* ← R2   SEO pages: /d/*, /style/*, /tattoo/*,
+ frontend/dist)  (Hono)          "inkpreview-     /de/style/*, /de/tattoo/*, /sitemap.xml
+                   │              media" (EU)
+                   ├── Database Durable Object (SQLite, EU jurisdiction) — all tables
+                   ├── Queue "inkpreview-jobs" → consumer: OpenAI generate / composite
+                   └── Cron (hourly): delete expired body photos + previews, fail stuck jobs
+```
 
-- Docker + Docker Compose plugin (`docker compose version`).
-- A domain pointed at the server (A/AAAA record), e.g. `inkpreview.example`.
-- Ports 80/443 open.
+It replaces the old Hetzner stack (nginx + Caddy + FastAPI + Postgres + Redis/Arq + media volume).
+The Python backend in `backend/` is kept as the reference implementation only — it is
+not deployed anymore.
 
-## 1. Get the code + configure
+## Costs
+
+- **Workers Paid** ($5/month, already active on the account) covers the Worker,
+  Durable Objects, Queues and Cron within its included usage. InkPreview on its own
+  stays inside the included quotas at the current scale.
+- **R2**: free up to 10 GB storage; egress is free.
+- **OpenAI**: billed per generation/composite on your OpenAI account (unchanged).
+- No containers, no external database, no other paid services.
+
+## Secrets
+
+Set once per Worker (not in git). Either in the dashboard
+(Workers & Pages → `inkpreview` → Settings → Variables and Secrets) or locally:
 
 ```bash
-git clone <your-repo> inkpreview && cd inkpreview
-cp .env.example .env
+cd worker
+npx wrangler secret put OPENAI_API_KEY        # required for real generation
+npx wrangler secret put GOOGLE_CLIENT_ID      # "Sign in with Google" (optional)
+npx wrangler secret put GOOGLE_CLIENT_SECRET
+npx wrangler secret put STRIPE_SECRET_KEY     # billing (optional, all four)
+npx wrangler secret put STRIPE_PUBLISHABLE_KEY
+npx wrangler secret put STRIPE_WEBHOOK_SECRET
+npx wrangler secret put STRIPE_PRICE_ID
 ```
 
-Edit `.env` and set at least:
+`SESSION_SECRET` is already set (random). Changing it logs every user out (their
+anonymous session tokens become invalid). Without `OPENAI_API_KEY`, generations fail
+with "OpenAI is not configured" and the quota is refunded; `/api/ready` reports
+`openai: error`.
 
-| var | value |
-|---|---|
-| `SESSION_SECRET` | long random string (`openssl rand -hex 32`) |
-| `POSTGRES_PASSWORD` | a strong password |
-| `OPENAI_API_KEY` | your key (kept only on the server) |
-| `CORS_ORIGINS` | `https://inkpreview.example` |
+The Google OAuth redirect URI (`https://ink-preview.com/api/auth/google/callback`) and
+the Stripe webhook URL (`https://ink-preview.com/api/billing/webhook`) are unchanged.
 
-Defaults already set `IMAGE_ENGINE=openai`, `JOB_MODE=arq`, `OPENAI_IMAGE_MODEL=gpt-image-2`.
-`docker-compose.yml` overrides DB/Redis/storage to the in-stack services and
-filesystem media (`MEDIA_BASE_URL=/media`) — leave those as-is.
+Non-secret settings (models, quotas, TTLs, …) are `vars` in `worker/wrangler.jsonc`.
 
-> ⚠️ The OpenAI image models may require **organization verification** on your
-> OpenAI account. If generation fails with a verification error, verify the org
-> in the OpenAI dashboard.
-
-## 2. Build + run
+## Deploy
 
 ```bash
-docker compose up -d --build
-docker compose ps          # postgres, redis, backend, worker, frontend healthy
-docker compose logs -f backend
+cd worker
+npm ci
+npm run deploy      # builds frontend/ → bundles it into the Worker → wrangler deploy
 ```
 
-The backend creates its tables on first boot (`create_all`). The frontend is a
-static nginx image (SPA). Neither is published directly — the reverse proxy
-fronts them.
+`npm run deploy` works from a Claude Code cloud session too (the environment's
+Cloudflare token is injected). The frontend is bundled into the Worker
+(`scripts/embed-static.mjs`) rather than uploaded as Workers Static Assets, so one
+`wrangler deploy` ships code + frontend atomically and `npx wrangler rollback` rolls
+both back together.
 
-## 3. TLS reverse proxy (Caddy — simplest)
+## One-time setup (already done)
 
-Caddy gets you automatic HTTPS. Install Caddy on the host (or run it as another
-container on the same Docker network) and use:
-
-```caddyfile
-inkpreview.example {
-    encode zstd gzip
-
-    # API + media → backend (same-origin keeps downloads working)
-    @backend path /api/* /media/*
-    reverse_proxy @backend backend:8000
-
-    # everything else → the SPA
-    reverse_proxy frontend:80
-}
+```bash
+npx wrangler r2 bucket create inkpreview-media --jurisdiction eu
+npx wrangler r2 bucket lifecycle add inkpreview-media ephemeral-backstop ephemeral/ \
+  --expire-days 2 --jurisdiction eu      # safety net for body photos (sweeper deletes after 24h)
+npx wrangler queues create inkpreview-jobs
+openssl rand -hex 32 | npx wrangler secret put SESSION_SECRET
 ```
 
-If Caddy runs on the host (not in the compose network), publish the container
-ports instead — add `ports: ["127.0.0.1:8000:8000"]` to `backend` and
-`["127.0.0.1:8080:80"]` to `frontend`, then `reverse_proxy 127.0.0.1:8000` /
-`127.0.0.1:8080`.
+The Durable Object and its SQLite schema are created by the first deploy
+(`migrations` in `wrangler.jsonc`, schema migrations in `worker/src/db/schema.ts`).
 
-(Traefik/nginx work too — route `/api/*` and `/media/*` to backend:8000, the
-rest to frontend:80.)
+> Never change `DB_JURISDICTION` on a live deployment — a different jurisdiction is a
+> different (empty) database.
 
-## 4. Verify
+## Verify
 
-- `https://inkpreview.example/api/health` → `{"status":"ok"}`
-- Open the site, generate a design (watch `docker compose logs -f worker`), try it
-  on a photo, export.
+- `https://ink-preview.com/api/health` → `{"status":"ok",…}`
+- `https://ink-preview.com/api/ready` → `{"status":"ready","checks":{"db":"ok","storage":"ok","openai":"ok"}}`
+- Generate a design, try it on a photo, export.
 
 ## Operations
 
-- **Update:** `git pull && docker compose up -d --build`
-- **Logs:** `docker compose logs -f backend worker`
-- **Backups:** the Postgres volume (`postgres-data`) holds designs/users; the
-  `media-data` volume holds generated images. Snapshot both. Body photos &
-  previews auto-expire (ephemeral sweeper).
-- **Scaling the worker:** `docker compose up -d --scale worker=3`
+- **Logs:** `npx wrangler tail inkpreview` (live) or the dashboard (Workers Logs are enabled).
+- **Data:** the Database Durable Object has 30-day point-in-time recovery; the dashboard's
+  Durable Objects data studio can browse the tables. Media lives in R2 (`inkpreview-media`, EU).
+- **Rollback:** `npx wrangler rollback` (code + frontend together).
+- **Privacy:** body photos + previews are deleted by the hourly cron after 24h
+  (`BODY_PHOTO_TTL_HOURS` / `PREVIEW_TTL_HOURS`); the R2 lifecycle rule removes any
+  leftovers under `ephemeral/` after 2 days. EXIF is stripped on upload. Data is stored in
+  the EU (Durable Object jurisdiction + R2 jurisdiction).
 
-## Migrations
+## Importing the old Hetzner data (optional)
 
-v0.1 uses `Base.metadata.create_all` on startup (fine for a fresh deploy). When
-you start evolving the schema in production, introduce **Alembic** (`uv run
-alembic init`) and gate `create_all` behind dev-only.
+The schema and the media key layout are the same as before (`designs/<id>.png`,
+`mockups/<id>.png`, …), and session tokens use the same format. A backup
+(`db-*.dump` + `media-*.tgz` from `/opt/inkpreview/backups`) can be imported:
+media → R2 under the same keys, rows → the Database object. With the old
+`SESSION_SECRET`, existing users would even stay logged in. This needs a small
+one-off import script — ask for it if you have the backup.
 
-## Object storage (optional scale-up)
+## Local development
 
-Filesystem media on a volume is the default and works great for a single host.
-To move media to S3/MinIO (multi-host, CDN), set on `backend` + `worker`:
-
+```bash
+cd worker && cp .dev.vars.example .dev.vars && npm ci
+npm run dev                      # Worker on http://localhost:8787 (mock image engine, local D.O./R2/Queue)
+cd ../frontend && npm ci && npm run dev   # Vite on :5173, proxies /api + /media to :8787
 ```
-STORAGE_BACKEND=s3
-S3_ENDPOINT=...   S3_ACCESS_KEY=...   S3_SECRET_KEY=...   S3_BUCKET=inkpreview
-```
 
-Note: `S3Storage` returns **presigned URLs**, so the frontend download helper
-(which currently fetches media same-origin) needs adjusting to fetch the
-presigned URL directly. Track that before flipping to S3.
-
-## Privacy / GDPR notes
-
-- Body photos & previews are ephemeral (TTL `BODY_PHOTO_TTL_HOURS` /
-  `PREVIEW_TTL_HOURS`, default 24h) with an in-app sweeper; EXIF is stripped on
-  upload. Host in the EU for DSGVO alignment.
-- Full self-serve export/delete UX + content moderation are planned follow-ups.
+Tests: `cd worker && npm test` (runs inside workerd; mock engine, no network).
