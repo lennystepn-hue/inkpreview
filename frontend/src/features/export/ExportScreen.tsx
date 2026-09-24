@@ -241,9 +241,25 @@ export function ExportScreen() {
               <p className="t-label mb-4 text-paper-mute">{t("export.ticket.files")}</p>
               {!exp ? (
                 <div className="flex flex-col gap-3">
-                  <div className="aspect-square animate-pulse rounded-[3px] bg-paper-2" />
-                  <p className="typewriter text-center text-[0.875rem] text-paper-mute">
+                  {/* the ticket printer at work */}
+                  <div className="relative aspect-square overflow-hidden rounded-[3px] bg-paper-2/70">
+                    <span
+                      aria-hidden
+                      className="absolute inset-x-[6%] h-[2px] rounded-full bg-stencil-ink/80 shadow-[0_0_12px_2px_color-mix(in_srgb,var(--color-stencil)_55%,transparent)]"
+                      style={{ animation: "needle-down 1.8s linear infinite" }}
+                    />
+                  </div>
+                  <p
+                    role="status"
+                    className="typewriter text-center text-[0.9375rem] text-paper-ink"
+                  >
                     {t("export.preparing")}
+                    <span
+                      aria-hidden
+                      className="motion-safe:animate-[blink_1s_steps(1,end)_infinite]"
+                    >
+                      _
+                    </span>
                   </p>
                 </div>
               ) : (

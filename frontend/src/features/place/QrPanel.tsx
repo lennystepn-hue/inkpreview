@@ -64,7 +64,7 @@ export function QrPanel({
           {url ? (
             <QRCodeSVG value={url} size={124} fgColor="#1c1714" bgColor="#ffffff" />
           ) : (
-            <div className="h-[124px] w-[124px] animate-pulse rounded-[2px] bg-paper-2" />
+            <div className="h-[124px] w-[124px] rounded-[2px] bg-paper-2" />
           )}
         </div>
         <div className="flex min-w-0 flex-col gap-2">

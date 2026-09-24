@@ -8,15 +8,16 @@ import { useT } from "@/lib/useT";
 import { useLightbox } from "@/store/useLightbox";
 
 /** The shop's own flash (bundled, curated) — the hero never depends on what
- *  the live feed happens to contain. */
+ *  the live feed happens to contain. Fixed numbers, so a sheet keeps its number
+ *  everywhere (hero, wait screen, OG image). */
 export const HOUSE_FLASH = [
-  { src: "/flash/snake-dagger.png", caption: "Fine line" },
-  { src: "/flash/heart.png", caption: "Traditional" },
-  { src: "/flash/moth.png", caption: "Blackwork" },
-  { src: "/flash/koi.png", caption: "Irezumi" },
-  { src: "/flash/mandala.png", caption: "Mandala" },
-  { src: "/flash/celestial.png", caption: "Fine line" },
-];
+  { id: "snake-dagger", no: "№ 641", caption: "Fine line" },
+  { id: "heart", no: "№ 214", caption: "Traditional" },
+  { id: "moth", no: "№ 900", caption: "Blackwork" },
+  { id: "koi", no: "№ 231", caption: "Irezumi" },
+  { id: "mandala", no: "№ 298", caption: "Mandala" },
+  { id: "celestial", no: "№ 377", caption: "Fine line" },
+].map((f) => ({ ...f, src: `/flash/${f.id}.webp` }));
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -48,7 +49,7 @@ export function HeroFan({ className }: { className?: string }) {
           <FlashCard
             src={c.src}
             alt={t("explore.alt")}
-            no={flashNo(c.src)}
+            no={c.no}
             tilt={c.rot}
             tape={c.z === "z-10" ? "t" : "none"}
             loading="eager"
@@ -86,7 +87,7 @@ export function HeroWall({ className }: { className?: string }) {
             <FlashCard
               src={f.src}
               alt={t("explore.alt")}
-              no={flashNo(f.src)}
+              no={f.no}
               caption={f.caption}
               tilt={l.rot}
               tape={l.tape}

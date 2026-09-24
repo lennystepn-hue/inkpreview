@@ -1,5 +1,5 @@
 import { Layers, PersonStanding, RotateCcw, Share2 } from "lucide-react";
-import { motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useState } from "react";
 
 import { ConjuringRitual } from "@/components/magic/ConjuringRitual";
@@ -74,7 +74,7 @@ export function ResultView({
 
   return (
     <div className="mx-auto grid max-w-md items-start gap-9 md:max-w-5xl md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] md:gap-14 md:pt-4">
-      {refining && <ConjuringRitual label={t("result.refine.label")} />}
+      <AnimatePresence>{refining && <ConjuringRitual mode="refine" />}</AnimatePresence>
 
       {/* The fresh flash, pinned */}
       <motion.div
@@ -163,12 +163,7 @@ export function ResultView({
                 );
               })}
               {variantsLoading &&
-                [0, 1].map((i) => (
-                  <div
-                    key={`sk-${i}`}
-                    className="aspect-square animate-pulse rounded-[var(--radius-paper)] bg-raised"
-                  />
-                ))}
+                [0, 1].map((i) => <div key={`sk-${i}`} className="skeleton-paper aspect-square" />)}
             </div>
           </div>
         )}

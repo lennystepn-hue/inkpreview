@@ -66,9 +66,7 @@ export function AccountScreen() {
   const [invited, setInvited] = useState(false);
 
   if (isLoading || !session) {
-    return (
-      <div className="mx-auto h-56 max-w-xl animate-pulse rounded-[var(--radius-panel)] bg-surface" />
-    );
+    return <div className="skeleton-paper mx-auto h-56 max-w-xl" />;
   }
 
   const loggedIn = !session.is_anonymous && Boolean(session.email || session.name);

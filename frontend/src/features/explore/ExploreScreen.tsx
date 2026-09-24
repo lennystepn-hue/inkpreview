@@ -29,10 +29,7 @@ export function ExploreScreen() {
       {isLoading ? (
         <div className="grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-3 lg:grid-cols-4">
           {Array.from({ length: 8 }).map((_, i) => (
-            <div
-              key={i}
-              className="aspect-[1/1.1] animate-pulse rounded-[var(--radius-paper)] bg-raised"
-            />
+            <div key={i} className="skeleton-paper aspect-[1/1.1]" />
           ))}
         </div>
       ) : feed.length === 0 ? (

@@ -185,7 +185,11 @@ export function StudioScreen() {
     <>
       <AnimatePresence>
         {comp.state === "placing" && (
-          <ConjuringRitual mode="place" motif={designGhost} label={t("studio.placing.label")} />
+          <ConjuringRitual
+            mode="place"
+            motif={designGhost}
+            photo={body ? { url: body.url, pos, scale, rotation } : null}
+          />
         )}
       </AnimatePresence>
 

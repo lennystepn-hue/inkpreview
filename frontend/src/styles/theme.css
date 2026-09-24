@@ -345,6 +345,39 @@
     mix-blend-mode: multiply;
   }
 
+  /* A layer that is drawn in top → bottom (see wipe-down). */
+  .wipe {
+    -webkit-mask-image: linear-gradient(to bottom, #000 45%, transparent 55%);
+    mask-image: linear-gradient(to bottom, #000 45%, transparent 55%);
+    -webkit-mask-size: 100% 220%;
+    mask-size: 100% 220%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: 0 100%;
+    mask-position: 0 100%;
+  }
+
+  /* Blank flash paper waiting to be pinned — skeleton with a slow sheen. */
+  .skeleton-paper {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-paper);
+    background: color-mix(in srgb, var(--color-paper) 7%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-paper) 9%, transparent);
+  }
+  .skeleton-paper::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in srgb, var(--color-paper) 9%, transparent),
+      transparent
+    );
+    animation: sheen 1.8s ease-in-out infinite;
+  }
+
   /* Ruler slider (studio size/rotation): tick-marked track, stencil thumb. */
   .ruler {
     appearance: none;
@@ -447,21 +480,67 @@
     filter: none;
   }
 }
-/* Stencil printer: the paper is printed top to bottom as the head passes. */
-@keyframes print-reveal {
+/* Drawing a flash: a soft-edged wipe from top to bottom (the pencil / the needle). */
+@keyframes wipe-down {
   from {
-    clip-path: inset(0 0 94% 0);
+    -webkit-mask-position: 0 100%;
+    mask-position: 0 100%;
   }
   to {
-    clip-path: inset(0 0 6% 0);
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
   }
 }
-@keyframes print-head {
+/* The needle rides the wipe edge (the edge travels from -10% to 110%). */
+@keyframes needle-down {
   from {
-    top: 6%;
+    top: -10%;
   }
   to {
-    top: 94%;
+    top: 110%;
+  }
+}
+@keyframes needle-zigzag {
+  0%,
+  100% {
+    transform: translateX(-38%);
+  }
+  50% {
+    transform: translateX(38%);
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+/* Fresh-ink shine sweeping across the photo. */
+@keyframes shine {
+  from {
+    transform: translateX(-120%) skewX(-18deg);
+  }
+  to {
+    transform: translateX(220%) skewX(-18deg);
+  }
+}
+/* Skeleton sheen on blank flash paper. */
+@keyframes sheen {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
   }
 }
 @keyframes blink {

@@ -1,9 +1,9 @@
 import { ArrowRight, Dices, Plus, WandSparkles, X, Zap } from "lucide-react";
 import { AnimatePresence } from "motion/react";
-import { useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { ConjuringRitual } from "@/components/magic/ConjuringRitual";
+import { ConjuringRitual, preloadRitual } from "@/components/magic/ConjuringRitual";
 import { FreshWall, HeroFan, HeroWall } from "@/components/magic/FlashWall";
 import { Paywall, QuotaMeter } from "@/components/Quota";
 import { Button } from "@/components/ui/Button";
@@ -65,6 +65,17 @@ export function CreateScreen() {
   const [lineWeight, setLineWeight] = useState("medium");
   const [sheetOpen, setSheetOpen] = useState(false);
   const [enhancing, setEnhancing] = useState(false);
+
+  // Warm the first flash of the wait screen once the page is idle, the rest
+  // as soon as someone starts typing an idea.
+  useEffect(() => {
+    const id = window.setTimeout(() => preloadRitual(false), 2500);
+    return () => window.clearTimeout(id);
+  }, []);
+  const typed = prompt.length > 0;
+  useEffect(() => {
+    if (typed) preloadRitual(true);
+  }, [typed]);
 
   const selected = styles.filter((s) => slugs.includes(s.slug));
   const toggle = (slug: string) =>
@@ -151,8 +162,16 @@ export function CreateScreen() {
                 {t("create.hero.titlePost")}
               </NeonWord>
             </h2>
-            <p className="max-w-[34ch] text-base text-balance text-text-2 md:max-w-none md:text-lg md:text-pretty">
-              {t("create.hero.tagline")}
+            <p className="max-w-[36ch] text-base text-text-2 md:max-w-none md:text-lg">
+              {/* break between sentences, never inside one */}
+              {t("create.hero.tagline")
+                .split(/(?<=\.)\s+/)
+                .map((sentence, i) => (
+                  <Fragment key={i}>
+                    {i > 0 && " "}
+                    <span className="inline-block">{sentence}</span>
+                  </Fragment>
+                ))}
             </p>
           </div>
 

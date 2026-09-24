@@ -189,8 +189,8 @@ export const dict = {
     de: "Beschreib es. Die KI sticht es. Sieh es auf deiner Haut.",
   },
   "create.prompt.placeholder": {
-    en: "e.g. a wolf, fine-line, minimal, geometric…",
-    de: "z. B. ein Wolf, Fine-Line, minimal, geometrisch…",
+    en: "e.g. a moth with moon phases, fine line, palm-sized…",
+    de: "z. B. eine Motte mit Mondphasen, Fine Line, handtellergroß…",
   },
   "create.enhance": { en: "Enhance", de: "Aufpolieren" },
   "create.enhance.loading": { en: "Enhancing…", de: "Poliert…" },
@@ -217,19 +217,19 @@ export const dict = {
     de: "Flash-Card fertig — nimm sie mit zu deinem Artist",
   },
   "result.variants": { en: "Variants", de: "Varianten" },
-  "result.variants.loading": { en: "conjuring…", de: "beschwört…" },
+  "result.variants.loading": { en: "Drawing…", de: "Zeichnet…" },
   "result.newDesign": { en: "New design", de: "Neues Design" },
   "result.share": { en: "Share", de: "Teilen" },
   "result.share.copied": { en: "Link copied", de: "Link kopiert" },
   "explore.eyebrow": { en: "Community Flash", de: "Community Flash" },
   "explore.title": { en: "Explore AI tattoo designs", de: "KI-Tattoo-Designs entdecken" },
   "explore.subtitle": {
-    en: "Fresh ink conjured by the community — tap any to view.",
-    de: "Frische Designs aus der Community — tippe für die Ansicht.",
+    en: "Straight off the community's drawing table — tap any flash for a closer look.",
+    de: "Frisch vom Zeichentisch der Community — tipp ein Flash an, um es genauer anzusehen.",
   },
   "explore.empty": {
-    en: "No designs yet — be the first.",
-    de: "Noch keine Designs — sei der erste.",
+    en: "The wall is still empty — pin the first flash.",
+    de: "Die Wand ist noch leer — häng das erste Flash auf.",
   },
   "explore.alt": { en: "AI-generated tattoo design", de: "KI-generiertes Tattoo-Design" },
   "explore.cta": { en: "Create your own", de: "Eigenes erstellen" },
@@ -238,28 +238,26 @@ export const dict = {
     de: "Detail ergänzen, Stil ändern…",
   },
   "result.refine.button": { en: "Adjust", de: "Anpassen" },
-  "result.refine.label": { en: "refining your design", de: "passt dein Design an" },
 
   "styleSheet.title": { en: "Pick a style", de: "Stil wählen" },
   "styleSheet.done": { en: "Done · {count} selected", de: "Fertig · {count} gewählt" },
 
-  "studio.empty.title": { en: "A design first", de: "Erst ein Design" },
+  "studio.empty.title": { en: "No flash on the table yet", de: "Noch kein Flash auf dem Tisch" },
   "studio.empty.body": {
-    en: "Conjure a tattoo first — then we'll place it on your photo.",
-    de: "Beschwör erst ein Tattoo — dann platzieren wir es auf deinem Foto.",
+    en: "Draw your flash first — then it goes onto your photo as a stencil.",
+    de: "Lass zuerst dein Flash zeichnen — dann kommt es als Schablone auf dein Foto.",
   },
-  "studio.empty.cta": { en: "To the generator", de: "Zum Generator" },
-  "studio.placing.label": { en: "placing it on your skin", de: "platziert es auf deiner Haut" },
+  "studio.empty.cta": { en: "Draw a flash", de: "Flash zeichnen" },
   "studio.eyebrow": { en: "Try-on Studio", de: "Anprobe-Studio" },
   "studio.header.title": { en: "On your skin", de: "Auf deiner Haut" },
   "studio.header.body": {
     en: "Snap the spot, place the stencil, set size and angle — the AI inks it onto your photo.",
     de: "Knips die Stelle, setz die Schablone, wähl Größe und Winkel — die KI sticht es auf dein Foto.",
   },
-  "studio.upload.cta": { en: "Take / choose a photo", de: "Foto machen / wählen" },
+  "studio.upload.cta": { en: "Snap or pick a photo", de: "Foto knipsen oder wählen" },
   "studio.upload.hint": {
-    en: "Arm, calf, back … stored only briefly",
-    de: "Arm, Wade, Rücken … nur kurz gespeichert",
+    en: "Forearm, calf, back … auto-deleted after 24 h",
+    de: "Unterarm, Wade, Rücken … nach 24 h automatisch gelöscht",
   },
   "studio.preview.disclaimer": {
     en: "Preview ≠ final tattoo — your studio adapts the design.",
@@ -317,15 +315,15 @@ export const dict = {
   },
 
   "gallery.eyebrow": { en: "Your flash book", de: "Dein Flash-Buch" },
-  "gallery.mockups.badge": { en: "On Skin", de: "Auf der Haut" },
+  "gallery.mockups.badge": { en: "On skin", de: "Auf der Haut" },
   "gallery.title": { en: "Your Ink", de: "Dein Ink" },
   "gallery.subtitle": {
     en: "Tap a design to try it on your skin.",
     de: "Tippe ein Design an, um es auf deiner Haut zu testen.",
   },
   "gallery.empty": {
-    en: "Empty for now — time for your first design.",
-    de: "Noch leer — Zeit für dein erstes Design.",
+    en: "Your flash book is empty — time to draw your first piece.",
+    de: "Dein Flash-Buch ist noch leer — Zeit für dein erstes Motiv.",
   },
 
   "export.eyebrow": { en: "Ready to ink", de: "Ready to ink" },
@@ -338,7 +336,10 @@ export const dict = {
     en: "Download the clean design file + your mockup and send both to your studio.",
     de: "Lad die saubere Design-Datei + dein Mockup runter und schick beides an dein Studio.",
   },
-  "export.preparing": { en: "preparing export…", de: "Export wird vorbereitet…" },
+  "export.preparing": {
+    en: "Printing your artist ticket…",
+    de: "Dein Artist-Ticket wird gedruckt…",
+  },
   "export.asset.cleanDesign": { en: "Clean design", de: "Sauberes Design" },
   "export.asset.bodyMockup": { en: "Body Mockup", de: "Body-Mockup" },
   "export.share": { en: "Share", de: "Teilen" },
@@ -379,9 +380,6 @@ export const dict = {
     de: "Vorschau ≠ fertiges Tattoo — dein Studio passt das Design an.",
   },
   "export.newDesign": { en: "New design", de: "Neues Design" },
-
-  "ritual.default": { en: "conjuring your design", de: "beschwört dein Design" },
-  "ritual.footer": { en: "the needle awaits", de: "die Nadel wartet" },
 
   "errors.uploadFailed": { en: "Upload failed", de: "Upload fehlgeschlagen" },
   "errors.generation.timeout": {
@@ -433,12 +431,6 @@ export const dict = {
   "result.label": { en: "Fresh flash", de: "Frisches Flash" },
   "result.refine.title": { en: "Note for the artist", de: "Notiz für den Artist" },
   "result.variants.label": { en: "Versions", de: "Versionen" },
-  "ritual.gen.1": { en: "sketching the linework", de: "skizziert die Linien" },
-  "ritual.gen.2": { en: "laying in the shading", de: "legt die Schattierung an" },
-  "ritual.gen.3": { en: "cleaning up the flash", de: "säubert das Flash" },
-  "ritual.place.1": { en: "transferring the stencil", de: "überträgt die Schablone" },
-  "ritual.place.2": { en: "wrapping it to your skin", de: "legt es um deine Haut" },
-  "ritual.place.3": { en: "matching light and shadow", de: "gleicht Licht und Schatten an" },
   "studio.step.photo": { en: "Photo", de: "Foto" },
   "studio.step.stencil": { en: "Stencil", de: "Schablone" },
   "studio.step.ink": { en: "Ink", de: "Tattoo" },
@@ -461,6 +453,49 @@ export const dict = {
   "consent.title": { en: "Cookies", de: "Cookies" },
   "pricing.label": { en: "Price board", de: "Preistafel" },
   "legal.back": { en: "Back to InkPreview", de: "Zurück zu InkPreview" },
+
+  // ── Wait states ──
+  "ritual.title.draw": { en: "Drawing your flash", de: "Dein Flash entsteht" },
+  "ritual.title.refine": { en: "Reworking your flash", de: "Dein Flash wird überarbeitet" },
+  "ritual.title.place": { en: "Inking your skin", de: "Jetzt wird gestochen" },
+  "ritual.gen.1": { en: "Sketching the idea", de: "Skizziert die Idee" },
+  "ritual.gen.2": { en: "Pulling the lines", de: "Zieht die Linien" },
+  "ritual.gen.3": { en: "Adding shading and colour", de: "Setzt Schatten und Farbe" },
+  "ritual.place.1": { en: "Transferring the stencil", de: "Überträgt die Schablone" },
+  "ritual.place.2": { en: "Inking the lines", de: "Sticht die Linien" },
+  "ritual.place.3": { en: "Matching light and skin", de: "Passt Licht und Haut an" },
+  "ritual.stage.sketch": { en: "Sketch", de: "Skizze" },
+  "ritual.stage.lines": { en: "Lines", de: "Linien" },
+  "ritual.stage.shade": { en: "Shading", de: "Schatten" },
+  "ritual.stage.stencil": { en: "Stencil", de: "Schablone" },
+  "ritual.stage.ink": { en: "Ink", de: "Tinte" },
+  "ritual.stage.skin": { en: "Skin", de: "Haut" },
+  "ritual.hint": { en: "Usually takes under a minute", de: "Dauert meist unter einer Minute" },
+  "ritual.tip.label": { en: "Studio tip", de: "Studio-Tipp" },
+  "ritual.tip.1": {
+    en: "Fine lines soften as they heal — size up a little to keep the detail crisp.",
+    de: "Feine Linien werden beim Abheilen weicher — plan lieber etwas größer, dann bleiben Details scharf.",
+  },
+  "ritual.tip.2": {
+    en: "Stencils are printed on thermal paper in violet — that's the colour you'll see at the studio.",
+    de: "Schablonen werden auf Thermopapier in Violett gedruckt — genau diese Farbe siehst du im Studio.",
+  },
+  "ritual.tip.3": {
+    en: "Old-school shops sold flash straight off the wall: pick a number, get it inked.",
+    de: "Old-School-Shops verkauften Flash direkt von der Wand: Nummer aussuchen, stechen lassen.",
+  },
+  "ritual.tip.4": {
+    en: "Bring the artist file to your consultation — it can save a round of sketches.",
+    de: "Bring die Artist-Datei zur Beratung mit — das kann eine Skizzenrunde sparen.",
+  },
+  "ritual.tip.5": {
+    en: "A healed tattoo looks calmer than a fresh one: the shine fades, the lines settle.",
+    de: "Ein abgeheiltes Tattoo wirkt ruhiger als ein frisches: Der Glanz geht, die Linien setzen sich.",
+  },
+  "ritual.tip.6": {
+    en: "Your artist will adapt the design to your body — that's part of the craft.",
+    de: "Dein Artist passt das Design an deinen Körper an — das gehört zum Handwerk.",
+  },
 } satisfies Record<string, Entry>;
 
 export type DictKey = keyof typeof dict;

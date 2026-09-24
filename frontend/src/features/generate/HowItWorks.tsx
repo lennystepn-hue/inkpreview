@@ -3,7 +3,7 @@ import { cn } from "@/lib/cn";
 import type { DictKey } from "@/lib/i18n";
 import { useT } from "@/lib/useT";
 
-const ART = "/flash/snake-dagger.png";
+const ART = "/flash/snake-dagger.webp";
 
 /** Sketch → stencil → ink: the three things that happen in a real shop,
  *  each shown as the material it produces. */
