@@ -211,7 +211,7 @@ export const dict = {
   "create.lines.fine": { en: "Fine", de: "Fein" },
   "create.lines.medium": { en: "Medium", de: "Mittel" },
   "create.lines.bold": { en: "Bold", de: "Kräftig" },
-  "create.submit": { en: "Conjure design", de: "Design beschwören" },
+  "create.submit": { en: "Draw my flash", de: "Mein Flash zeichnen" },
   "create.gallery.label": { en: "Fresh off the needle", de: "Frisch gestochen" },
 
   "result.tryOn": { en: "Try on skin", de: "Auf der Haut testen" },
