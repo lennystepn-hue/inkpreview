@@ -155,12 +155,14 @@ export function CreateScreen() {
           <div className="flex flex-col items-center gap-4 text-center md:items-start md:text-left">
             <Label dot="neon">{t("create.hero.eyebrow")}</Label>
             <h2 className="heading text-[2.6rem] text-text sm:text-6xl lg:text-[4.625rem]">
-              {t("create.hero.titlePre")}
-              <br />
-              <NeonWord className="text-[1.34em] leading-[0.95]">
-                {t("create.hero.titleGlow")}
-                {t("create.hero.titlePost")}
-              </NeonWord>
+              <span className="block">{t("create.hero.titlePre")}</span>
+              {/* the neon sign in the shop window */}
+              <span className="mt-2 block">
+                <NeonWord className="text-[1em] leading-[1.05] lg:text-[0.92em]">
+                  {t("create.hero.titleGlow")}
+                  {t("create.hero.titlePost")}
+                </NeonWord>
+              </span>
             </h2>
             <p className="max-w-[36ch] text-base text-text-2 md:max-w-none md:text-lg">
               {/* break between sentences, never inside one */}

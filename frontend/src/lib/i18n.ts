@@ -179,14 +179,17 @@ export const dict = {
     en: "See your tattoo on your own skin before the needle — AI tattoo designer and simulator",
     de: "Sieh dein Tattoo auf deiner eigenen Haut, bevor die Nadel kommt — KI-Tattoo-Designer und -Simulator",
   },
-  "create.hero.eyebrow": { en: "AI Tattoo Studio", de: "KI-Tattoo-Studio" },
+  "create.hero.eyebrow": {
+    en: "AI Tattoo Studio · Walk-ins welcome",
+    de: "KI-Tattoo-Studio · Walk-ins willkommen",
+  },
   "create.prompt.label": { en: "Your idea", de: "Deine Idee" },
-  "create.hero.titlePre": { en: "Conjure your ", de: "Beschwör dein " },
-  "create.hero.titleGlow": { en: "Tattoo", de: "Tattoo" },
+  "create.hero.titlePre": { en: "See it on your skin", de: "Sieh es auf deiner Haut" },
+  "create.hero.titleGlow": { en: "before the needle", de: "vor der Nadel" },
   "create.hero.titlePost": { en: ".", de: "." },
   "create.hero.tagline": {
-    en: "Describe it. The AI inks it. See it on your skin.",
-    de: "Beschreib es. Die KI sticht es. Sieh es auf deiner Haut.",
+    en: "Describe your idea. Get artist-ready flash. Try it on your own skin.",
+    de: "Idee beschreiben. Artist-fertiges Flash bekommen. Auf deiner Haut anprobieren.",
   },
   "create.prompt.placeholder": {
     en: "e.g. a moth with moon phases, fine line, palm-sized…",
