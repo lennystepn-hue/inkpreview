@@ -3,6 +3,7 @@ import { googleLoginUrl } from "@/lib/auth";
 import { cn } from "@/lib/cn";
 import { useBillingConfig } from "@/lib/useBilling";
 import { useSession } from "@/lib/useSession";
+import { useGoogleLogin } from "@/lib/useAuthConfig";
 import { useUsage } from "@/lib/useUsage";
 import { useLang, useT } from "@/lib/useT";
 import { useUpgrade } from "@/store/useUpgrade";
@@ -39,6 +40,7 @@ export function Paywall() {
   const { data: session } = useSession();
   const { data: billing } = useBillingConfig();
   const openUpgrade = useUpgrade((s) => s.openUpgrade);
+  const google = useGoogleLogin();
 
   // Only when a metered user has nothing left.
   if (!usage || usage.limit === null || (usage.remaining ?? 1) > 0) return null;
@@ -51,12 +53,18 @@ export function Paywall() {
         {t(isGuest ? "paywall.guest.title" : "paywall.free.title")}
       </p>
       <p className="mt-2 text-[0.9375rem] text-text-2">
-        {t(isGuest ? "paywall.guest.body" : "paywall.free.body")}
+        {isGuest
+          ? google
+            ? t("paywall.guest.body")
+            : t("paywall.guest.bodyNoAuth", { limit: usage.limit })
+          : t("paywall.free.body")}
       </p>
       {isGuest ? (
-        <a href={googleLoginUrl(lang)} className={btn}>
-          {t("paywall.guest.cta")}
-        </a>
+        google && (
+          <a href={googleLoginUrl(lang)} className={btn}>
+            {t("paywall.guest.cta")}
+          </a>
+        )
       ) : billing?.enabled ? (
         <button type="button" onClick={openUpgrade} className={btn}>
           {t("billing.upgrade")}

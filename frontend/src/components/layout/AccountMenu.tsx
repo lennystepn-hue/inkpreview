@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 
 import { trackEvent } from "@/lib/analytics";
 import { googleLoginUrl } from "@/lib/auth";
+import { useGoogleLogin } from "@/lib/useAuthConfig";
 import { useSession } from "@/lib/useSession";
 import { useLang, useLangPath, useT } from "@/lib/useT";
 
@@ -29,19 +30,21 @@ export function GoogleG({ className = "h-3.5 w-3.5" }: { className?: string }) {
 }
 
 /** Header account affordance — the ONLY entry point to the account page.
- *  Anon → Google sign-in; logged-in → avatar that links to /account. */
+ *  Anon → Google sign-in (only while it is configured); logged-in → avatar that
+ *  links to /account. */
 export function AccountMenu() {
   const { data, isLoading } = useSession();
   const t = useT();
   const lang = useLang();
   const lp = useLangPath();
+  const google = useGoogleLogin();
 
-  if (isLoading || !data)
-    return <span className="block h-8 w-8 rounded-full bg-raised" aria-hidden />;
+  if (isLoading || !data) return null;
 
   const loggedIn = !data.is_anonymous && Boolean(data.email || data.name);
 
   if (!loggedIn) {
+    if (!google) return null;
     return (
       <a
         href={googleLoginUrl(lang)}

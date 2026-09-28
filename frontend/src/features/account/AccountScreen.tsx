@@ -16,6 +16,7 @@ import { referralLink } from "@/lib/referral";
 import { clearToken } from "@/lib/session";
 import { useBillingActions, useBillingConfig } from "@/lib/useBilling";
 import { useSession } from "@/lib/useSession";
+import { useGoogleLogin } from "@/lib/useAuthConfig";
 import { useUsage } from "@/lib/useUsage";
 import { useLang, useLangPath, useT } from "@/lib/useT";
 import { useUpgrade } from "@/store/useUpgrade";
@@ -64,6 +65,7 @@ export function AccountScreen() {
   const { manage, busy } = useBillingActions();
   const openUpgrade = useUpgrade((s) => s.openUpgrade);
   const [invited, setInvited] = useState(false);
+  const google = useGoogleLogin();
 
   if (isLoading || !session) {
     return <div className="skeleton-paper mx-auto h-56 max-w-xl" />;
@@ -165,7 +167,7 @@ export function AccountScreen() {
       </section>
 
       {/* Sign-in for anonymous users */}
-      {!loggedIn && (
+      {!loggedIn && google && (
         <Panel>
           <h2 className="font-sans cond text-[1.25rem] font-extrabold tracking-[0.02em] text-text uppercase">
             {t("account.signIn.title")}

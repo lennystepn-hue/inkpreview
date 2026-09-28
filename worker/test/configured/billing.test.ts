@@ -13,6 +13,7 @@ async function stripeSig(payload: string, secret: string): Promise<string> {
 describe("billing (configured)", () => {
   it("config is enabled with the publishable key", async () => {
     expect(await (await call("/api/billing/config")).json()).toEqual({ enabled: true, publishable_key: "pk_test_x" });
+    expect(await (await call("/api/auth/config")).json()).toEqual({ google: true });
   });
 
   it("checkout requires login, then the withdrawal waiver", async () => {

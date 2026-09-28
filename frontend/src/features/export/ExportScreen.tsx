@@ -12,6 +12,7 @@ import { googleLoginUrl } from "@/lib/auth";
 import { cn } from "@/lib/cn";
 import { flashNo } from "@/lib/flash";
 import { useBillingConfig } from "@/lib/useBilling";
+import { useGoogleLogin } from "@/lib/useAuthConfig";
 import { useSession } from "@/lib/useSession";
 import { useLang, useLangPath, useT } from "@/lib/useT";
 import { useDraft } from "@/store/useDraft";
@@ -56,6 +57,7 @@ function WatermarkUnlock() {
   const { data: billing } = useBillingConfig();
   const openUpgrade = useUpgrade((s) => s.openUpgrade);
   const loggedIn = Boolean(session && !session.is_anonymous);
+  const google = useGoogleLogin();
 
   return (
     <div className="rounded-[var(--radius-panel)] bg-surface p-5 shadow-[inset_0_0_0_1px_var(--color-line)]">
@@ -64,7 +66,7 @@ function WatermarkUnlock() {
         {t("export.unlock.title")}
       </p>
       <p className="mt-2 text-[0.9375rem] text-text-2">{t("export.unlock.body")}</p>
-      {billing?.enabled ? (
+      {billing?.enabled && (loggedIn || google) ? (
         loggedIn ? (
           <button
             type="button"

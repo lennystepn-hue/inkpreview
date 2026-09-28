@@ -6,6 +6,7 @@ import { googleLoginUrl } from "@/lib/auth";
 import { cn } from "@/lib/cn";
 import { type DictKey } from "@/lib/i18n";
 import { useBillingConfig } from "@/lib/useBilling";
+import { useGoogleLogin } from "@/lib/useAuthConfig";
 import { useSession } from "@/lib/useSession";
 import { useLang, useT } from "@/lib/useT";
 import { useUpgrade } from "@/store/useUpgrade";
@@ -47,6 +48,7 @@ export function PricingScreen() {
   const { data: session } = useSession();
   const { data: billing } = useBillingConfig();
   const openUpgrade = useUpgrade((s) => s.openUpgrade);
+  const google = useGoogleLogin();
 
   const plan = session?.plan ?? "free";
   const isAnon = session?.is_anonymous ?? true;
@@ -76,10 +78,14 @@ export function PricingScreen() {
     if (tier.id === "pro") {
       if (isPro) return current("paper");
       if (isAnon)
-        return (
+        return google ? (
           <a href={googleLoginUrl(lang)} className={buttonClass("neon", "md", "w-full")}>
             {t("pricing.cta.signin")}
           </a>
+        ) : (
+          <p className="t-label flex h-11 items-center justify-center text-paper-mute">
+            {t("pricing.cta.soon")}
+          </p>
         );
       if (billing?.enabled)
         return (

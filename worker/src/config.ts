@@ -93,7 +93,7 @@ export function getSettings(env: Env): Settings {
     canonicalHost: opt(e, "CANONICAL_HOST"),
     anonRateLimit: int(e, "ANON_RATE_LIMIT", 30),
     rateLimitWindowS: int(e, "RATE_LIMIT_WINDOW_S", 3600),
-    guestGenerationLimit: int(e, "GUEST_GENERATION_LIMIT", 2),
+    guestGenerationLimit: int(e, "GUEST_GENERATION_LIMIT", 10),
     freeMonthlyGenerationLimit: int(e, "FREE_MONTHLY_GENERATION_LIMIT", 10),
     promoUnlimited: bool(e, "PROMO_UNLIMITED", false),
     bodyPhotoTtlHours: int(e, "BODY_PHOTO_TTL_HOURS", 24),

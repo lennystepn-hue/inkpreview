@@ -458,6 +458,7 @@ describe("billing guards (unconfigured)", () => {
   });
 
   it("google login 503 when unconfigured", async () => {
+    expect(await (await call("/api/auth/config")).json()).toEqual({ google: false });
     expect((await call("/api/auth/google/login?lang=de", { redirect: "manual" })).status).toBe(503);
   });
 

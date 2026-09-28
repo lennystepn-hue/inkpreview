@@ -17,6 +17,7 @@ import { cn } from "@/lib/cn";
 import { MAGIC } from "@/lib/magicPrompts";
 import { useGeneration } from "@/lib/useGeneration";
 import { useStyles } from "@/lib/useStyles";
+import { useUsage } from "@/lib/useUsage";
 import { useLang, useLangPath, useT } from "@/lib/useT";
 import { useDraft } from "@/store/useDraft";
 import { HowItWorks } from "./HowItWorks";
@@ -80,7 +81,10 @@ export function CreateScreen() {
   const selected = styles.filter((s) => slugs.includes(s.slug));
   const toggle = (slug: string) =>
     setSlugs((p) => (p.includes(slug) ? p.filter((s) => s !== slug) : [...p, slug]));
-  const ready = Boolean(prompt.trim());
+  const { data: usage } = useUsage();
+  // Out of free designs: the paywall card explains it, the tube stays unlit.
+  const exhausted = Boolean(usage && usage.limit !== null && (usage.remaining ?? 1) <= 0);
+  const ready = Boolean(prompt.trim()) && !exhausted;
 
   const onEnhance = async () => {
     if (!ready) return;

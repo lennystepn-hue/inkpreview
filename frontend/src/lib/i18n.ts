@@ -30,8 +30,8 @@ export const dict = {
   "pricing.free.name": { en: "Free", de: "Kostenlos" },
   "pricing.free.price": { en: "€0", de: "0 €" },
   "pricing.free.f1": {
-    en: "2 designs as guest · 10/month signed in",
-    de: "2 Designs als Gast · 10/Monat angemeldet",
+    en: "10 free designs · no signup",
+    de: "10 Gratis-Designs · ohne Anmeldung",
   },
   "pricing.free.f2": { en: "Try designs on your skin", de: "Designs auf der Haut anprobieren" },
   "pricing.free.f3": { en: "Export with watermark", de: "Export mit Wasserzeichen" },
@@ -161,6 +161,10 @@ export const dict = {
     de: "Melde dich kostenlos an und hol dir 10 Designs pro Monat.",
   },
   "paywall.guest.cta": { en: "Sign in free", de: "Kostenlos anmelden" },
+  "paywall.guest.bodyNoAuth": {
+    en: "You've used all {limit} free designs. Pro with unlimited designs is coming soon.",
+    de: "Du hast alle {limit} Gratis-Designs genutzt. Pro mit unbegrenzten Designs kommt bald.",
+  },
   "paywall.free.title": { en: "Monthly limit reached", de: "Monatslimit erreicht" },
   "paywall.free.body": {
     en: "Go Pro for unlimited designs.",
@@ -398,8 +402,8 @@ export const dict = {
     de: "Von der Inhaltssicherung blockiert. Versuch einen anderen Prompt oder ein dezenteres Foto.",
   },
   "errors.quota.guest": {
-    en: "You've used your free designs. Sign in to keep creating.",
-    de: "Deine Gratis-Designs sind aufgebraucht. Melde dich an, um weiterzumachen.",
+    en: "You've used all your free designs.",
+    de: "Deine Gratis-Designs sind aufgebraucht.",
   },
   "errors.quota.month": {
     en: "Monthly limit reached — it resets at the start of next month, or go Pro.",

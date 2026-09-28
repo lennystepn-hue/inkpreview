@@ -68,7 +68,7 @@
     "CORS_ORIGINS": "https://ink-preview.com,https://www.ink-preview.com,http://localhost:5173",
     "ANON_RATE_LIMIT": "30",
     "RATE_LIMIT_WINDOW_S": "3600",
-    "GUEST_GENERATION_LIMIT": "2",
+    "GUEST_GENERATION_LIMIT": "10",
     "FREE_MONTHLY_GENERATION_LIMIT": "10",
     "PROMO_UNLIMITED": "false",
     "BODY_PHOTO_TTL_HOURS": "24",

@@ -599,6 +599,13 @@ function frontendRedirect(c: C, lang: string, fragment: string): Response {
   return c.redirect(`${base}${lang === "de" ? "/de" : "/"}#${fragment}`, 302);
 }
 
+/** Which sign-in providers are configured — the SPA hides every sign-in entry
+ *  point while none is (e.g. Google credentials not set yet). */
+api.get("/auth/config", (c) => {
+  const s = settingsOf(c);
+  return c.json({ google: Boolean(s.googleClientId && s.googleClientSecret) });
+});
+
 api.get("/auth/google/login", async (c) => {
   const s = settingsOf(c);
   if (!(s.googleClientId && s.googleClientSecret)) throw new HttpError(503, "Google login not configured");

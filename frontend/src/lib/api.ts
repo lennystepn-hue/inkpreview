@@ -75,8 +75,7 @@ export type Session = {
 };
 
 /** Set the studio brand stamped on exports (Studio plan only). */
-export const setBrand = (brand_name: string) =>
-  api.post<Session>("/account/brand", { brand_name });
+export const setBrand = (brand_name: string) => api.post<Session>("/account/brand", { brand_name });
 
 /** Idempotent: an existing token returns the same session; otherwise a new anon user. */
 export async function ensureSession(): Promise<Session> {
@@ -101,6 +100,10 @@ export const fetchUsage = () => api.get<Usage>("/usage");
 export type BillingConfig = { enabled: boolean; publishable_key: string | null };
 
 export const fetchBillingConfig = () => api.get<BillingConfig>("/billing/config");
+
+/** Which sign-in providers are live (none → every sign-in entry point is hidden). */
+export type AuthConfig = { google: boolean };
+export const fetchAuthConfig = () => api.get<AuthConfig>("/auth/config");
 /** Create a Stripe Checkout session and return its hosted URL to redirect to.
  *  `waiveWithdrawal` records the consumer's consent to immediate performance. */
 export const startCheckout = (waiveWithdrawal: boolean) =>
@@ -238,7 +241,9 @@ async function prepareUpload(file: File): Promise<Blob> {
     if (!ctx) return file;
     ctx.drawImage(bitmap, 0, 0, w, h);
     bitmap.close();
-    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.9));
+    const blob = await new Promise<Blob | null>((resolve) =>
+      canvas.toBlob(resolve, "image/jpeg", 0.9),
+    );
     return blob ?? file;
   } catch {
     return file;
@@ -273,8 +278,7 @@ export const createCapture = (designId?: string) =>
   api.post<{ token: string }>("/captures", designId ? { design_id: designId } : undefined);
 export const getCapture = (token: string) => api.get<CaptureStatus>(`/captures/${token}`);
 /** Public (token-authorized): what the phone should overlay on its live camera. */
-export const getCaptureInfo = (token: string) =>
-  api.get<CaptureInfo>(`/captures/${token}/info`);
+export const getCaptureInfo = (token: string) => api.get<CaptureInfo>(`/captures/${token}/info`);
 
 export async function uploadCapturePhoto(
   token: string,
